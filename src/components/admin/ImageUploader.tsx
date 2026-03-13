@@ -25,13 +25,11 @@ export default function ImageUploader({ onUpload, currentImage }: ImageUploaderP
       return;
     }
 
-    // 30MB limit
     if (file.size > 30 * 1024 * 1024) {
       setError('파일 크기는 30MB 이하여야 합니다');
       return;
     }
 
-    // Show preview immediately
     const reader = new FileReader();
     reader.onload = (e) => setPreview(e.target?.result as string);
     reader.readAsDataURL(file);
@@ -40,53 +38,44 @@ export default function ImageUploader({ onUpload, currentImage }: ImageUploaderP
     setProgress(0);
 
     try {
-      // Step 1: Get signed URLs from API (10%)
+      // Step 1: Get Cloudinary upload signature
       setProgress(10);
-      const signedUrlResponse = await fetch(
+      const sigResponse = await fetch(
         `/api/portfolio/upload?filename=${encodeURIComponent(file.name)}&contentType=${encodeURIComponent(file.type)}`
       );
 
-      if (!signedUrlResponse.ok) {
-        const errorData = await signedUrlResponse.json();
-        throw new Error(errorData.error || '업로드 URL 생성 실패');
+      if (!sigResponse.ok) {
+        const errorData = await sigResponse.json();
+        throw new Error(errorData.error || '업로드 준비 실패');
       }
 
-      const {
-        originalUploadUrl,
-        thumbnailUploadUrl,
-        imageUrl,
-        thumbnailUrl,
-        contentType,
-      } = await signedUrlResponse.json();
+      const { signature, timestamp, publicId, folder, cloudName, apiKey } = await sigResponse.json();
 
-      // Step 2: Upload original directly to Supabase Storage (10% -> 60%)
+      // Step 2: Upload directly to Cloudinary
       setProgress(20);
-      const originalUploadResponse = await fetch(originalUploadUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': contentType,
-        },
-        body: file,
-      });
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('api_key', apiKey);
+      formData.append('timestamp', timestamp.toString());
+      formData.append('signature', signature);
+      formData.append('folder', folder);
+      formData.append('public_id', publicId);
 
-      if (!originalUploadResponse.ok) {
-        throw new Error('원본 이미지 업로드 실패');
+      const uploadResponse = await fetch(
+        `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`,
+        { method: 'POST', body: formData }
+      );
+
+      if (!uploadResponse.ok) {
+        throw new Error('이미지 업로드 실패');
       }
 
-      setProgress(60);
+      const result = await uploadResponse.json();
+      setProgress(90);
 
-      // Step 3: Upload thumbnail (same file for now, could be resized client-side later)
-      const thumbnailUploadResponse = await fetch(thumbnailUploadUrl, {
-        method: 'PUT',
-        headers: {
-          'Content-Type': contentType,
-        },
-        body: file,
-      });
-
-      if (!thumbnailUploadResponse.ok) {
-        throw new Error('썸네일 업로드 실패');
-      }
+      const imageUrl = result.secure_url;
+      // Generate thumbnail using Cloudinary transformation
+      const thumbnailUrl = imageUrl.replace('/upload/', '/upload/c_fill,w_400,h_400/');
 
       setProgress(100);
       onUpload(imageUrl, thumbnailUrl);

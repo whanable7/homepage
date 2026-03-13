@@ -2,6 +2,7 @@
 
 import { useState, useCallback } from 'react';
 import Image from 'next/image';
+import { cloudinaryLoader } from '@/lib/cloudinary-loader';
 import { Artwork } from '@/types/artwork';
 import ArtworkModal from '@/components/artwork/ArtworkModal';
 import { useLocale } from '@/i18n';
@@ -58,6 +59,7 @@ export default function ArtworkList({ artworks }: ArtworkListProps) {
               loading="lazy"
               className="object-contain transition-transform duration-500 group-hover:scale-105"
               sizes="(max-width: 640px) 50vw, (max-width: 768px) 33vw, (max-width: 1024px) 25vw, 25vw"
+              {...((artwork.thumbnail_url || artwork.image_url)?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
             />
 
             {/* 하단 회색 영역에 제목+연도 한 줄 표시 */}

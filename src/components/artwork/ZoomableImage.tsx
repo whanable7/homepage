@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect, forwardRef, useImperativeHandle } from 'react';
 import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
 import Image from 'next/image';
+import { cloudinaryLoader } from '@/lib/cloudinary-loader';
 
 export interface ZoomableImageRef {
   zoomIn: () => void;
@@ -238,6 +239,7 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
               className="object-contain"
               priority
               onLoad={handleImageLoad}
+              {...(src?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
             />
 
             {showMagnifier && (

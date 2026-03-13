@@ -5,6 +5,7 @@ import Image from 'next/image';
 import { Artwork } from '@/types/artwork';
 import { useLocale } from '@/i18n';
 import { getLocalizedValue } from '@/lib/i18n-utils';
+import { cloudinaryLoader } from '@/lib/cloudinary-loader';
 
 interface SlideshowProps {
   artworks: Artwork[];
@@ -228,6 +229,7 @@ export default function Slideshow({ artworks }: SlideshowProps) {
                   sizes="(max-width: 768px) 100vw, 80vw"
                   draggable={false}
                   priority={index <= 2}
+                  {...(artwork.image_url?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
                 />
               </div>
             </div>

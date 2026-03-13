@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import cloudinary from '@/lib/cloudinary';
 
 const SESSION_COOKIE_NAME = 'admin_session';
 
@@ -10,7 +10,7 @@ async function isAuthenticated(): Promise<boolean> {
   return !!session;
 }
 
-// GET: Generate signed URLs for direct upload (bypasses Vercel body size limit)
+// GET: Generate Cloudinary upload signature for direct upload
 export async function GET(request: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -33,50 +33,26 @@ export async function GET(request: NextRequest) {
   }
 
   const fileId = crypto.randomUUID();
-  const ext = filename.split('.').pop()?.toLowerCase() || 'jpg';
-  const originalPath = `originals/${fileId}.${ext}`;
-  const thumbnailPath = `thumbnails/${fileId}.${ext}`;
+  const publicId = `portfolio/originals/${fileId}`;
+  const timestamp = Math.round(Date.now() / 1000);
 
-  // Create signed URLs for upload (valid for 5 minutes)
-  const { data: originalSignedUrl, error: originalError } = await supabaseAdmin.storage
-    .from('portfolio')
-    .createSignedUploadUrl(originalPath);
-
-  if (originalError) {
-    return NextResponse.json({ error: originalError.message }, { status: 500 });
-  }
-
-  const { data: thumbnailSignedUrl, error: thumbnailError } = await supabaseAdmin.storage
-    .from('portfolio')
-    .createSignedUploadUrl(thumbnailPath);
-
-  if (thumbnailError) {
-    return NextResponse.json({ error: thumbnailError.message }, { status: 500 });
-  }
-
-  // Get public URLs
-  const { data: { publicUrl: imageUrl } } = supabaseAdmin.storage
-    .from('portfolio')
-    .getPublicUrl(originalPath);
-
-  const { data: { publicUrl: thumbnailUrl } } = supabaseAdmin.storage
-    .from('portfolio')
-    .getPublicUrl(thumbnailPath);
+  // Generate signature for direct upload
+  const signature = cloudinary.utils.api_sign_request(
+    { timestamp, folder: 'portfolio/originals', public_id: fileId },
+    process.env.CLOUDINARY_API_SECRET!
+  );
 
   return NextResponse.json({
-    originalUploadUrl: originalSignedUrl.signedUrl,
-    originalUploadToken: originalSignedUrl.token,
-    originalPath,
-    thumbnailUploadUrl: thumbnailSignedUrl.signedUrl,
-    thumbnailUploadToken: thumbnailSignedUrl.token,
-    thumbnailPath,
-    imageUrl,
-    thumbnailUrl,
-    contentType,
+    signature,
+    timestamp,
+    publicId: fileId,
+    folder: 'portfolio/originals',
+    cloudName: process.env.CLOUDINARY_CLOUD_NAME,
+    apiKey: process.env.CLOUDINARY_API_KEY,
   });
 }
 
-// POST: Legacy fallback (kept for backward compatibility, but limited by Vercel)
+// POST: Server-side upload to Cloudinary
 export async function POST(request: NextRequest) {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
@@ -107,44 +83,27 @@ export async function POST(request: NextRequest) {
     }
 
     const fileId = crypto.randomUUID();
-    const ext = file.name.split('.').pop()?.toLowerCase() || 'jpg';
-
-    const originalPath = `originals/${fileId}.${ext}`;
-    const thumbnailPath = `thumbnails/${fileId}.${ext}`;
-
     const arrayBuffer = await file.arrayBuffer();
-    const buffer = new Uint8Array(arrayBuffer);
+    const buffer = Buffer.from(arrayBuffer);
 
-    const { error: uploadError } = await supabaseAdmin.storage
-      .from('portfolio')
-      .upload(originalPath, buffer, {
-        contentType: file.type,
-        upsert: false,
-      });
+    // Upload to Cloudinary
+    const result = await new Promise<{ secure_url: string; public_id: string }>((resolve, reject) => {
+      cloudinary.uploader.upload_stream(
+        {
+          folder: 'portfolio/originals',
+          public_id: fileId,
+          resource_type: 'image',
+        },
+        (error, result) => {
+          if (error) reject(error);
+          else resolve(result!);
+        }
+      ).end(buffer);
+    });
 
-    if (uploadError) {
-      return NextResponse.json({ error: uploadError.message }, { status: 500 });
-    }
-
-    const { error: thumbnailError } = await supabaseAdmin.storage
-      .from('portfolio')
-      .upload(thumbnailPath, buffer, {
-        contentType: file.type,
-        upsert: false,
-      });
-
-    if (thumbnailError) {
-      await supabaseAdmin.storage.from('portfolio').remove([originalPath]);
-      return NextResponse.json({ error: thumbnailError.message }, { status: 500 });
-    }
-
-    const { data: { publicUrl: imageUrl } } = supabaseAdmin.storage
-      .from('portfolio')
-      .getPublicUrl(originalPath);
-
-    const { data: { publicUrl: thumbnailUrl } } = supabaseAdmin.storage
-      .from('portfolio')
-      .getPublicUrl(thumbnailPath);
+    // Generate thumbnail URL using Cloudinary transformation
+    const imageUrl = result.secure_url;
+    const thumbnailUrl = imageUrl.replace('/upload/', '/upload/c_fill,w_400,h_400/');
 
     return NextResponse.json({
       image_url: imageUrl,

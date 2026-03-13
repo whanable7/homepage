@@ -2,6 +2,7 @@
 
 import Link from 'next/link';
 import Image from 'next/image';
+import { cloudinaryLoader } from '@/lib/cloudinary-loader';
 import { Category } from '@/types/artwork';
 import { useState, useEffect } from 'react';
 import { useLocale } from '@/i18n';
@@ -124,6 +125,7 @@ export default function CategoryGrid({ categories }: CategoryGridProps) {
                     ${isHovered ? 'scale-110 brightness-75' : 'scale-100 brightness-50'}
                   `}
                   sizes="250px"
+                  {...(category.cover_image_url?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
                 />
               )}
 
