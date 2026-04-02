@@ -24,7 +24,10 @@ export default function ArtworkCard({ artwork, onClick, priority = false }: Artw
       aria-label={`${t.aria.viewArtwork}: ${title}`}
     >
       {/* 이미지 영역 */}
-      <div className="relative aspect-[4/5] w-full overflow-hidden bg-[var(--background)]">
+      <div
+        className="relative aspect-[4/5] w-full overflow-hidden"
+        style={{ backgroundColor: artwork.dominant_color || 'var(--background)' }}
+      >
         <Image
           src={artwork.image_url}
           alt={title}
@@ -33,8 +36,6 @@ export default function ArtworkCard({ artwork, onClick, priority = false }: Artw
           className="object-contain transition-transform duration-500 group-hover:scale-105"
           priority={priority}
           {...(isCloudinary ? { loader: cloudinaryLoader } : {})}
-          placeholder={isCloudinary ? 'blur' : 'empty'}
-          blurDataURL={isCloudinary ? artwork.image_url.replace('/upload/', '/upload/w_20,q_10,f_auto,e_blur:1000/') : undefined}
         />
       </div>
       {/* 하단 정보 영역 - 항상 표시 */}

@@ -16,50 +16,83 @@ export default function Slideshow({ artworks }: SlideshowProps) {
   const [currentIndex, setCurrentIndex] = useState(0);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
   const autoPlayTimer = useRef<NodeJS.Timeout | null>(null);
-  const resetTimer = useRef<NodeJS.Timeout | null>(null);
   const scrollTimeout = useRef<NodeJS.Timeout | null>(null);
+  const autoPlayStopped = useRef(false); // 수동 조작 시 자동재생 영구 정지
   
   // 마우스 드래그 상태
   const isDragging = useRef(false);
   const startX = useRef(0);
   const scrollLeft = useRef(0);
+  
+  // 터치 스와이프 상태 (감도 조절용)
+  const touchStartX = useRef(0);
+  const touchStartY = useRef(0);
+  const isTouchSwiping = useRef(false);
 
-  // 특정 인덱스로 스크롤
+  // 무한 루프를 위해 앞뒤 클론 포함한 슬라이드 배열
+  // [last, ...artworks, first] → 실제 인덱스는 +1 오프셋
+  const hasMultiple = artworks.length > 1;
+  const cloneOffset = hasMultiple ? 1 : 0;
+
+  // 특정 인덱스로 스크롤 (클론 오프셋 적용)
   const scrollToIndex = useCallback((index: number, smooth = true) => {
     const container = scrollContainerRef.current;
     if (!container) return;
     
-    const targetScroll = index * container.offsetWidth;
+    const targetScroll = (index + cloneOffset) * container.offsetWidth;
     container.scrollTo({
       left: targetScroll,
       behavior: smooth ? 'smooth' : 'auto',
     });
-  }, []);
+  }, [cloneOffset]);
 
   const goToNext = useCallback(() => {
     if (artworks.length <= 1) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
     setCurrentIndex(prev => {
-      const nextIndex = (prev + 1) % artworks.length;
-      // 비동기로 스크롤 (state 업데이트 후)
+      const nextIndex = prev + 1;
+      if (nextIndex >= artworks.length) {
+        // 마지막 → 클론 첫번째로 smooth 이동, 이후 진짜 첫번째로 점프
+        const clonePos = (artworks.length + cloneOffset) * container.offsetWidth;
+        container.scrollTo({ left: clonePos, behavior: 'smooth' });
+        setTimeout(() => {
+          container.scrollTo({ left: cloneOffset * container.offsetWidth, behavior: 'auto' });
+        }, 500);
+        return 0;
+      }
       setTimeout(() => scrollToIndex(nextIndex), 0);
       return nextIndex;
     });
-  }, [artworks.length, scrollToIndex]);
+  }, [artworks.length, scrollToIndex, cloneOffset]);
 
   const goToPrev = useCallback(() => {
     if (artworks.length <= 1) return;
+    const container = scrollContainerRef.current;
+    if (!container) return;
+    
     setCurrentIndex(prev => {
-      const prevIndex = (prev - 1 + artworks.length) % artworks.length;
+      const prevIndex = prev - 1;
+      if (prevIndex < 0) {
+        // 첫번째 → 클론 마지막으로 smooth 이동, 이후 진짜 마지막으로 점프
+        container.scrollTo({ left: 0, behavior: 'smooth' });
+        setTimeout(() => {
+          const realLastPos = (artworks.length - 1 + cloneOffset) * container.offsetWidth;
+          container.scrollTo({ left: realLastPos, behavior: 'auto' });
+        }, 500);
+        return artworks.length - 1;
+      }
       setTimeout(() => scrollToIndex(prevIndex), 0);
       return prevIndex;
     });
-  }, [artworks.length, scrollToIndex]);
+  }, [artworks.length, scrollToIndex, cloneOffset]);
 
-  // 자동 재생
+  // 자동 재생 (7초 간격, 기존 5초에서 +2초)
   const startAutoPlay = useCallback(() => {
-    if (artworks.length <= 1) return;
+    if (artworks.length <= 1 || autoPlayStopped.current) return;
     if (autoPlayTimer.current) clearInterval(autoPlayTimer.current);
-    autoPlayTimer.current = setInterval(goToNext, 5000);
+    autoPlayTimer.current = setInterval(goToNext, 7000);
   }, [artworks.length, goToNext]);
 
   const stopAutoPlay = useCallback(() => {
@@ -69,26 +102,26 @@ export default function Slideshow({ artworks }: SlideshowProps) {
     }
   }, []);
 
-  const resetAutoPlay = useCallback(() => {
+  // 수동 조작 시 자동재생 영구 정지
+  const stopAutoPlayPermanently = useCallback(() => {
+    autoPlayStopped.current = true;
     stopAutoPlay();
-    // 기존 reset 타이머 취소
-    if (resetTimer.current) {
-      clearTimeout(resetTimer.current);
+  }, [stopAutoPlay]);
+
+  // 초기 스크롤 위치 (클론 오프셋만큼)
+  useEffect(() => {
+    if (hasMultiple) {
+      const container = scrollContainerRef.current;
+      if (container) {
+        container.scrollTo({ left: cloneOffset * container.offsetWidth, behavior: 'auto' });
+      }
     }
-    // 3초 후 다음 슬라이드로 이동 + 자동재생 재시작
-    resetTimer.current = setTimeout(() => {
-      goToNext();
-      startAutoPlay();
-    }, 3000);
-  }, [stopAutoPlay, startAutoPlay, goToNext]);
+  }, [hasMultiple, cloneOffset]);
 
   useEffect(() => {
     startAutoPlay();
     return () => {
       stopAutoPlay();
-      if (resetTimer.current) {
-        clearTimeout(resetTimer.current);
-      }
     };
   }, [startAutoPlay, stopAutoPlay]);
 
@@ -102,7 +135,8 @@ export default function Slideshow({ artworks }: SlideshowProps) {
     scrollTimeout.current = setTimeout(() => {
       const scrollPos = container.scrollLeft;
       const slideWidth = container.offsetWidth;
-      const newIndex = Math.round(scrollPos / slideWidth);
+      const rawIndex = Math.round(scrollPos / slideWidth);
+      const newIndex = rawIndex - cloneOffset; // 클론 오프셋 제거
       
       if (newIndex !== currentIndex && newIndex >= 0 && newIndex < artworks.length) {
         setCurrentIndex(newIndex);
@@ -148,17 +182,24 @@ export default function Slideshow({ artworks }: SlideshowProps) {
     container.style.cursor = 'grab';
     container.style.scrollSnapType = 'x mandatory'; // 스냅 다시 활성화
     
-    // 가장 가까운 슬라이드로 스냅
+    // 가장 가까운 슬라이드로 스냅 (클론 오프셋 고려)
     const scrollPos = container.scrollLeft;
     const slideWidth = container.offsetWidth;
-    const newIndex = Math.round(scrollPos / slideWidth);
+    const rawIndex = Math.round(scrollPos / slideWidth);
+    const newIndex = rawIndex - cloneOffset;
     
     if (newIndex >= 0 && newIndex < artworks.length) {
       setCurrentIndex(newIndex);
       scrollToIndex(newIndex);
+    } else if (newIndex < 0) {
+      setCurrentIndex(artworks.length - 1);
+      scrollToIndex(artworks.length - 1);
+    } else if (newIndex >= artworks.length) {
+      setCurrentIndex(0);
+      scrollToIndex(0);
     }
     
-    resetAutoPlay();
+    stopAutoPlayPermanently();
   };
 
   const handleMouseLeave = () => {
@@ -167,20 +208,53 @@ export default function Slideshow({ artworks }: SlideshowProps) {
     }
   };
 
-  // 화살표 클릭
-  const handleArrowClick = (direction: 'prev' | 'next') => {
-    stopAutoPlay();
-    if (direction === 'prev') goToPrev();
-    else goToNext();
-    resetAutoPlay();
+  // 터치 스와이프 — 감도 낮추기 (최소 80px 이동 필요)
+  const SWIPE_THRESHOLD = 80;
+  
+  const handleTouchStart = (e: React.TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    isTouchSwiping.current = false;
   };
 
-  // 도트 클릭
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isTouchSwiping.current) {
+      const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+      const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+      // 수평 스와이프 감지 (수평 > 수직)
+      if (dx > dy && dx > 10) {
+        isTouchSwiping.current = true;
+      }
+    }
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    if (!isTouchSwiping.current) return;
+    
+    const dx = e.changedTouches[0].clientX - touchStartX.current;
+    
+    if (Math.abs(dx) >= SWIPE_THRESHOLD) {
+      stopAutoPlayPermanently();
+      if (dx < 0) {
+        goToNext(); // 왼쪽 스와이프 → 다음
+      } else {
+        goToPrev(); // 오른쪽 스와이프 → 이전
+      }
+    }
+  };
+
+  // 화살표 클릭 — 수동 조작 시 자동재생 영구 정지
+  const handleArrowClick = (direction: 'prev' | 'next') => {
+    stopAutoPlayPermanently();
+    if (direction === 'prev') goToPrev();
+    else goToNext();
+  };
+
+  // 도트 클릭 — 수동 조작 시 자동재생 영구 정지
   const handleDotClick = (index: number) => {
-    stopAutoPlay();
+    stopAutoPlayPermanently();
     setCurrentIndex(index);
     scrollToIndex(index);
-    resetAutoPlay();
   };
 
   if (artworks.length === 0) {
@@ -212,28 +286,39 @@ export default function Slideshow({ artworks }: SlideshowProps) {
         onMouseMove={handleMouseMove}
         onMouseUp={handleMouseUp}
         onMouseLeave={handleMouseLeave}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        {/* 모든 슬라이드 */}
+        {/* 모든 슬라이드 (무한루프: [클론마지막, ...원본, 클론첫번째]) */}
         <div className="flex h-full">
-          {artworks.map((artwork, index) => (
-            <div 
-              key={artwork.id}
-              className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-8"
-            >
-              <div className="relative w-full h-full max-w-5xl mx-auto">
-                <Image
-                  src={artwork.image_url}
-                  alt={artwork.title}
-                  fill
-                  className="object-contain pointer-events-none"
-                  sizes="(max-width: 768px) 100vw, 80vw"
-                  draggable={false}
-                  priority={index <= 2}
-                  {...(artwork.image_url?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
-                />
+          {(() => {
+            const slides = [...artworks];
+            // 무한루프용 클론 슬라이드 추가
+            if (hasMultiple) {
+              slides.unshift(artworks[artworks.length - 1]); // 앞에 마지막 클론
+              slides.push(artworks[0]); // 뒤에 첫번째 클론
+            }
+            return slides.map((artwork, index) => (
+              <div 
+                key={`slide-${index}`}
+                className="flex-shrink-0 w-full h-full snap-center flex items-center justify-center p-8"
+              >
+                <div className="relative w-full h-full max-w-5xl mx-auto">
+                  <Image
+                    src={artwork.image_url}
+                    alt={artwork.title}
+                    fill
+                    className="object-contain pointer-events-none"
+                    sizes="(max-width: 768px) 100vw, 80vw"
+                    draggable={false}
+                    priority={index <= 3}
+                    {...(artwork.image_url?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
+                  />
+                </div>
               </div>
-            </div>
-          ))}
+            ));
+          })()}
         </div>
       </div>
 

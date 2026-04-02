@@ -8,7 +8,7 @@ export const ko = {
   nav: {
     home: 'Home',
     portfolio: 'Works',
-    about: 'About',
+    cv: 'CV',
     exhibitions: 'Exhibitions',
     news: 'News',
     contact: 'Contact',
@@ -37,18 +37,6 @@ export const ko = {
     defaultName: '정환',
   },
 
-  // About 페이지
-  about: {
-    education: 'Education',
-    exhibitions: 'Exhibitions',
-    contact: 'Contact',
-    downloadCv: 'DOWNLOAD CV',
-    defaultBio: [
-      '작가 소개 텍스트를 여기에 입력하세요.',
-      '작업 철학, 영감의 원천, 예술적 여정 등을 기술할 수 있습니다.',
-    ],
-  },
-
   // Exhibitions 페이지 (Phase 4에서 삭제 예정)
   exhibitions: {
     title: 'Exhibitions',
@@ -57,11 +45,18 @@ export const ko = {
     noExhibitions: 'No exhibitions to display',
   },
 
-  // CV 섹션 (About 페이지 내)
+  // CV 페이지 (구 About)
   cv: {
+    education: 'Education',
+    exhibitions: 'Exhibitions',
+    contact: 'Contact',
+    downloadCv: 'DOWNLOAD CV',
+    defaultBio: [
+      '작가 소개 텍스트를 여기에 입력하세요.',
+      '작업 철학, 영감의 원천, 예술적 여정 등을 기술할 수 있습니다.',
+    ],
     bornIn: 'Born in',
     liveAndWorkIn: 'Live & Work in',
-    education: 'Education',
     residencies: 'Residency',
     fellowships: 'Fellowships',
     awards: 'Awards',
@@ -148,8 +143,8 @@ export const ko = {
 
   // Portfolio 뷰 탭
   portfolioViews: {
-    graph: '그래프',
-    colors: '색상',
+    graph: '생태계',
+    colors: '크로마',
     years: '연도',
   },
 
@@ -193,6 +188,9 @@ export const ko = {
     centerForce: '중심 인력',
     linkDistance: '링크 거리',
     linkStrength: '링크 강도',
+    nodeSize: '점 크기',
+    small: '작게',
+    large: '크게',
     
     // 슬라이더 라벨
     weak: '약함',

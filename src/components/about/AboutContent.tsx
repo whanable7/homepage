@@ -227,7 +227,7 @@ export default function AboutContent({ aboutInfo, exhibitions }: AboutContentPro
             rel="noopener noreferrer"
             className="inline-block px-6 py-3 border border-white text-[var(--foreground)] text-sm tracking-wider hover:bg-white hover:text-black transition-colors"
           >
-            {t.about.downloadCv}
+            {t.cv.downloadCv}
           </a>
         </div>
       )}

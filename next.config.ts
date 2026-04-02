@@ -29,6 +29,11 @@ const nextConfig: NextConfig = {
         destination: '/portfolio/:slug',
         permanent: true,
       },
+      {
+        source: '/about',
+        destination: '/cv',
+        permanent: true,
+      },
     ];
   },
 };

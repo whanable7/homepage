@@ -9,7 +9,7 @@ export default function Navigation() {
   const links = [
     { href: '/', label: 'Home' },
     { href: '/portfolio', label: 'Portfolio' },
-    { href: '/about', label: 'About' },
+    { href: '/cv', label: 'CV' },
   ];
 
   return (

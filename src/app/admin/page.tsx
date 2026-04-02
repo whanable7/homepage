@@ -95,7 +95,7 @@ export default function AdminPage() {
 
   const fetchArtworks = async () => {
     try {
-      const response = await fetch('/api/portfolio');
+      const response = await fetch('/api/portfolio?t=' + Date.now(), { cache: 'no-store' });
       if (response.ok) {
         const data = await response.json();
         setArtworks(data);
@@ -213,8 +213,12 @@ export default function AdminPage() {
       fetchArtworks();
       setToast(editingArtwork ? '수정되었습니다' : '저장되었습니다');
     } else {
-      const { error } = await response.json();
-      throw new Error(error || '저장 실패');
+      let errorMsg = '저장 실패';
+      try {
+        const body = await response.json();
+        errorMsg = body.error || errorMsg;
+      } catch { /* empty response */ }
+      throw new Error(errorMsg);
     }
   };
 

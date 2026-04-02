@@ -43,7 +43,7 @@ export default function Hero({ featuredArtwork }: HeroProps) {
             Portfolio
           </Link>
           <Link
-            href="/about"
+            href="/cv"
             className="text-[var(--foreground)]/70 hover:text-[var(--foreground)] text-sm transition-colors"
           >
             About

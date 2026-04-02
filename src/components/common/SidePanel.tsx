@@ -50,7 +50,7 @@ export default function SidePanel() {
   const navItems = [
     { href: '/', label: t.nav.home },
     { href: '/portfolio', label: t.nav.portfolio },
-    { href: '/about', label: t.nav.about },
+    { href: '/cv', label: t.nav.cv || 'CV' },
     { href: '/news', label: t.nav.news },
     { href: '/contact', label: t.nav.contact },
   ];

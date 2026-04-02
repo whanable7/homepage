@@ -1,26 +1,7 @@
-'use client';
-
-import Header from '@/components/common/Header';
-import ViewTabs from '@/components/portfolio/ViewTabs';
-import { useLocale } from '@/i18n';
-
 export default function PortfolioLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const { t } = useLocale();
-  
-  return (
-    <main className="min-h-screen bg-[var(--background)]">
-      <Header />
-      <div className="max-w-6xl mx-auto pt-24 pb-16 px-6">
-        <h1 className="text-3xl font-light tracking-wide text-center mb-8 text-[var(--foreground)]">
-          {t.portfolio.title}
-        </h1>
-        <ViewTabs />
-        {children}
-      </div>
-    </main>
-  );
+  return <>{children}</>;
 }

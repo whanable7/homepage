@@ -29,6 +29,12 @@ const notoSerifKr = Noto_Serif_KR({
 export const metadata: Metadata = {
   title: "Jungwhan | Artist Portfolio",
   description: "Artwork portfolio of Jungwhan",
+  icons: {
+    icon: [
+      { url: '/icon-192.png', sizes: '192x192', type: 'image/png' },
+    ],
+    apple: '/apple-icon.png',
+  },
 };
 
 export default function RootLayout({

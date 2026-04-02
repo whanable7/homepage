@@ -6,6 +6,7 @@ import ZoomableImage, { ZoomableImageRef } from './ZoomableImage';
 import LanguageSwitch from '@/components/common/LanguageSwitch';
 import { useLocale } from '@/i18n';
 import { getLocalizedValue } from '@/lib/i18n-utils';
+import { cloudinaryLoader } from '@/lib/cloudinary-loader';
 
 interface ArtworkModalProps {
   artwork: Artwork;
@@ -14,6 +15,10 @@ interface ArtworkModalProps {
   onNext?: () => void;
   hasPrev?: boolean;
   hasNext?: boolean;
+  groupLabel?: string; // 예: "#Recovery 3/12"
+  artworkTags?: string[]; // 작품의 태그 목록
+  onTagClick?: (tagName: string) => void; // 태그 클릭 시 콜백
+  preloadImages?: string[]; // 좌우 작품 이미지 프리로드 URL
 }
 
 export default function ArtworkModal({
@@ -23,6 +28,10 @@ export default function ArtworkModal({
   onNext,
   hasPrev = false,
   hasNext = false,
+  groupLabel,
+  artworkTags,
+  onTagClick,
+  preloadImages,
 }: ArtworkModalProps) {
   const { locale, t } = useLocale();
   const [showCopyrightPopup, setShowCopyrightPopup] = useState(false);
@@ -32,6 +41,32 @@ export default function ArtworkModal({
   const swipeRef = useRef<{ startX: number; startY: number; startTime: number } | null>(null);
   const zoomRef = useRef<ZoomableImageRef>(null);
 
+  // 뒤로가기 시 모달 닫기 (히스토리 연동)
+  useEffect(() => {
+    // 모달 열릴 때 히스토리에 상태 추가
+    window.history.pushState({ modal: true }, '');
+    
+    const handlePopState = () => {
+      // 뒤로가기 시 모달 닫기
+      onClose();
+    };
+    
+    window.addEventListener('popstate', handlePopState);
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+    };
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // 모달 닫기 시 히스토리 정리
+  const handleClose = useCallback(() => {
+    // pushState로 추가한 히스토리 제거
+    if (window.history.state?.modal) {
+      window.history.back();
+    } else {
+      onClose();
+    }
+  }, [onClose]);
+
   const handleKeyDown = useCallback(
     (e: KeyboardEvent) => {
       switch (e.key) {
@@ -39,7 +74,7 @@ export default function ArtworkModal({
           if (showCopyrightPopup) {
             setShowCopyrightPopup(false);
           } else {
-            onClose();
+            handleClose();
           }
           break;
         case 'ArrowLeft':
@@ -56,8 +91,32 @@ export default function ArtworkModal({
           break;
       }
     },
-    [onClose, onPrev, onNext, hasPrev, hasNext, showCopyrightPopup]
+    [handleClose, onPrev, onNext, hasPrev, hasNext, showCopyrightPopup]
   );
+
+  // 좌우 작품 이미지 프리로드 (Cloudinary transform 적용 + GC 방지)
+  const preloadedImagesRef = useRef<HTMLImageElement[]>([]);
+  useEffect(() => {
+    if (!preloadImages || preloadImages.length === 0) return;
+    preloadedImagesRef.current = [];
+    
+    // 뷰포트 너비 기준으로 실제 로드될 URL 생성
+    const viewportWidth = window.innerWidth;
+    // Next.js Image는 deviceSizes 기준으로 srcset 생성: 640, 750, 828, 1080, 1200, 1920, 2048, 3840
+    const targetWidth = [640, 750, 828, 1080, 1200, 1920, 2048, 3840].find(w => w >= viewportWidth) || 1920;
+    
+    preloadImages.forEach(url => {
+      if (url) {
+        // Cloudinary URL이면 transform 적용
+        const preloadUrl = url.includes('res.cloudinary.com')
+          ? cloudinaryLoader({ src: url, width: targetWidth })
+          : url;
+        const img = new window.Image();
+        img.src = preloadUrl;
+        preloadedImagesRef.current.push(img);
+      }
+    });
+  }, [preloadImages]);
 
   useEffect(() => {
     document.addEventListener('keydown', handleKeyDown);
@@ -89,11 +148,9 @@ export default function ArtworkModal({
   useEffect(() => {
     const fetchContactEmail = async () => {
       try {
-        const res = await fetch('/api/about');
-        if (res.ok) {
-          const data = await res.json();
-          setContactEmail(data.contact_email);
-        }
+        const { cachedFetch } = await import('@/lib/client-cache');
+        const data = await cachedFetch<{ contact_email?: string }>('/api/about');
+        if (data.contact_email) setContactEmail(data.contact_email);
       } catch {
         // Ignore errors
       }
@@ -220,7 +277,7 @@ export default function ArtworkModal({
       <div className="absolute top-4 right-4 z-20 flex items-center gap-2">
         <LanguageSwitch />
         <button
-          onClick={onClose}
+          onClick={handleClose}
           className="w-10 h-10 flex items-center justify-center text-[var(--foreground)]/70 hover:text-[var(--foreground)] transition-colors"
           aria-label={t.aria.closeModal}
         >
@@ -267,16 +324,25 @@ export default function ArtworkModal({
             onScaleChange={(scale) => setIsZoomed(scale > 1.05)}
             onLongPress={() => setShowCopyrightPopup(true)}
           />
-          {/* Copyright watermark overlay */}
+          {/* Copyright watermark overlay — 5개: 4 모서리 + 중앙 */}
           {(artwork.show_watermark ?? true) && (
-            <div className="absolute inset-0 pointer-events-none grid grid-cols-2 grid-rows-2">
-              {[...Array(4)].map((_, i) => (
-                <div key={i} className="flex items-center justify-center">
-                  <span className="text-[var(--foreground)]/10 text-3xl md:text-5xl font-bold select-none rotate-[-30deg]">
-                    COPYRIGHT
-                  </span>
-                </div>
-              ))}
+            <div className="absolute inset-0 pointer-events-none">
+              {/* 2x2 그리드 (모서리 4개) */}
+              <div className="absolute inset-0 grid grid-cols-2 grid-rows-2">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="flex items-center justify-center">
+                    <span className="text-[var(--foreground)]/[0.13] text-3xl md:text-5xl font-bold select-none rotate-[-30deg]">
+                      COPYRIGHT
+                    </span>
+                  </div>
+                ))}
+              </div>
+              {/* 중앙 1개 */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <span className="text-[var(--foreground)]/[0.13] text-3xl md:text-5xl font-bold select-none rotate-[-30deg]">
+                  COPYRIGHT
+                </span>
+              </div>
             </div>
           )}
         </div>
@@ -305,8 +371,70 @@ export default function ArtworkModal({
           slideDirection === 'right' ? 'animate-slide-in-left' : ''
         }`}
       >
-        {/* 왼쪽 빈 공간 */}
-        <div />
+        {/* 왼쪽: 그룹 라벨 또는 태그 목록 */}
+        <div className="flex flex-wrap gap-2">
+          {groupLabel && groupLabel.startsWith('__COLOR_BLOCK__') ? (() => {
+            // 색상 블록 모드: "__COLOR_BLOCK__#e53e3e__3/12"
+            const parts = groupLabel.split('__');
+            const color = parts[2] || '#999';
+            const position = parts[3] || '';
+            return (
+              <button
+                onClick={() => onTagClick?.('__COLOR_BACK__')}
+                className="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-70"
+              >
+                <div
+                  className="w-5 h-5 rounded"
+                  style={{ backgroundColor: color }}
+                />
+                <span className="text-sm text-[var(--text-secondary)]">
+                  {position}
+                </span>
+              </button>
+            );
+          })() : groupLabel && groupLabel.startsWith('__YEAR_BLOCK__') ? (() => {
+            // 연도 블록 모드: "__YEAR_BLOCK__2024__3/12"
+            const parts = groupLabel.split('__');
+            const year = parts[2] || '';
+            const position = parts[3] || '';
+            return (
+              <button
+                onClick={() => onTagClick?.('__YEAR_BACK__')}
+                className="flex items-center gap-2 cursor-pointer transition-opacity hover:opacity-70"
+              >
+                <span className="text-sm font-medium text-[var(--foreground)]">
+                  {year}
+                </span>
+                <span className="text-sm text-[var(--text-secondary)]">
+                  {position}
+                </span>
+              </button>
+            );
+          })() : groupLabel ? (
+            <button
+              onClick={() => {
+                // groupLabel에서 태그명 추출: "#Recovery 3/12" → "Recovery"
+                const match = groupLabel.match(/^#(.+?)\s+\d/);
+                if (match) onTagClick?.(match[1]);
+              }}
+              className="text-sm hover:underline cursor-pointer transition-opacity hover:opacity-70"
+              style={{ color: 'rgb(178, 34, 34)' }}
+            >
+              {groupLabel}
+            </button>
+          ) : artworkTags && artworkTags.length > 0 ? (
+            artworkTags.map(tag => (
+              <button
+                key={tag}
+                onClick={() => onTagClick?.(tag)}
+                className="text-sm hover:underline cursor-pointer transition-opacity hover:opacity-70"
+                style={{ color: 'rgb(178, 34, 34)' }}
+              >
+                #{tag}
+              </button>
+            ))
+          ) : null}
+        </div>
 
         {/* Zoom controls - 정중앙 */}
         <div className="flex items-center gap-1">

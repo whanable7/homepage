@@ -74,16 +74,27 @@ export default function YearView({ artworksByYear, years }: YearViewProps) {
       )}
 
       {/* 모달 */}
-      {modalOpen && selectedArtwork && (
-        <ArtworkModal
-          artwork={selectedArtwork}
-          onClose={() => setModalOpen(false)}
-          onPrev={handlePrevious}
-          onNext={handleNext}
-          hasPrev={artworks.findIndex((a) => a.id === selectedArtwork.id) > 0}
-          hasNext={artworks.findIndex((a) => a.id === selectedArtwork.id) < artworks.length - 1}
-        />
-      )}
+      {modalOpen && selectedArtwork && (() => {
+        const currentIndex = artworks.findIndex((a) => a.id === selectedArtwork.id);
+        return (
+          <ArtworkModal
+            artwork={selectedArtwork}
+            onClose={() => setModalOpen(false)}
+            onPrev={handlePrevious}
+            onNext={handleNext}
+            hasPrev={currentIndex > 0}
+            hasNext={currentIndex < artworks.length - 1}
+            groupLabel={`__YEAR_BLOCK__${selectedYear}__${currentIndex + 1}/${artworks.length}`}
+            onTagClick={() => {
+              setModalOpen(false);
+            }}
+            preloadImages={[
+              currentIndex > 0 ? artworks[currentIndex - 1]?.image_url || '' : '',
+              currentIndex < artworks.length - 1 ? artworks[currentIndex + 1]?.image_url || '' : '',
+            ].filter(u => u !== '')}
+          />
+        );
+      })()}
     </div>
   );
 }

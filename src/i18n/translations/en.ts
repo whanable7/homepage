@@ -10,7 +10,7 @@ export const en: Translations = {
   nav: {
     home: 'Home',
     portfolio: 'Works',
-    about: 'About',
+    cv: 'CV',
     exhibitions: 'Exhibitions',
     news: 'News',
     contact: 'Contact',
@@ -39,18 +39,6 @@ export const en: Translations = {
     defaultName: 'Jungwhan',
   },
 
-  // About 페이지
-  about: {
-    education: 'Education',
-    exhibitions: 'Exhibitions',
-    contact: 'Contact',
-    downloadCv: 'DOWNLOAD CV',
-    defaultBio: [
-      'Enter artist introduction text here.',
-      'You can describe your artistic philosophy, sources of inspiration, and artistic journey.',
-    ],
-  },
-
   // Exhibitions 페이지 (Phase 4에서 삭제 예정)
   exhibitions: {
     title: 'Exhibitions',
@@ -59,11 +47,18 @@ export const en: Translations = {
     noExhibitions: 'No exhibitions to display',
   },
 
-  // CV 섹션 (About 페이지 내)
+  // CV 페이지 (구 About)
   cv: {
+    education: 'Education',
+    exhibitions: 'Exhibitions',
+    contact: 'Contact',
+    downloadCv: 'DOWNLOAD CV',
+    defaultBio: [
+      'Enter artist introduction text here.',
+      'You can describe your artistic philosophy, sources of inspiration, and artistic journey.',
+    ],
     bornIn: 'Born in',
     liveAndWorkIn: 'Live & Work in',
-    education: 'Education',
     residencies: 'Residency',
     fellowships: 'Fellowships',
     awards: 'Awards',
@@ -150,8 +145,8 @@ export const en: Translations = {
 
   // Portfolio 뷰 탭
   portfolioViews: {
-    graph: 'Graph',
-    colors: 'Colors',
+    graph: 'Ecosystem',
+    colors: 'Chroma',
     years: 'Years',
   },
 
@@ -195,6 +190,9 @@ export const en: Translations = {
     centerForce: 'Center Force',
     linkDistance: 'Link Distance',
     linkStrength: 'Link Strength',
+    nodeSize: 'Node Size',
+    small: 'Small',
+    large: 'Large',
     
     // 슬라이더 라벨
     weak: 'Weak',

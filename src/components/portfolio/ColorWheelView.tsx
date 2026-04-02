@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch';
 import ArtworkModal from '@/components/artwork/ArtworkModal';
 import { Artwork } from '@/types/artwork';
+import { cachedFetch } from '@/lib/client-cache';
 
 interface ColorNode {
   id: string;
@@ -39,10 +40,7 @@ export default function ColorWheelView() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/portfolio/colors');
-        if (!res.ok) throw new Error('Failed to fetch color data');
-        
-        const colorData: ColorData = await res.json();
+        const colorData = await cachedFetch<ColorData>('/api/portfolio/colors');
         setData(colorData);
         setLoading(false);
       } catch (err) {
@@ -57,12 +55,9 @@ export default function ColorWheelView() {
 
   const fetchArtworkDetail = async (artworkId: string) => {
     try {
-      const res = await fetch(`/api/portfolio/${artworkId}`);
-      if (res.ok) {
-        const artwork = await res.json();
-        setSelectedArtwork(artwork);
-        setModalOpen(true);
-      }
+      const artwork = await cachedFetch<Artwork>(`/api/portfolio/${artworkId}`);
+      setSelectedArtwork(artwork);
+      setModalOpen(true);
     } catch (err) {
       console.error('Error fetching artwork:', err);
     }

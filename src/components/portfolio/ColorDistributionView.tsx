@@ -1,9 +1,9 @@
 'use client';
 
 import { useEffect, useState, useMemo, useCallback } from 'react';
-import Image from 'next/image';
 import ArtworkModal from '@/components/artwork/ArtworkModal';
 import { Artwork } from '@/types/artwork';
+import { cachedFetch, getCached } from '@/lib/client-cache';
 
 interface DominantColor {
   h: number;
@@ -24,61 +24,73 @@ interface ColorArtwork {
   dominant_color: DominantColor | null;
 }
 
-function getHueBucket(h: number): number {
-  if (h >= 330 || h < 30) return 0;
-  if (h < 60) return 1;
-  if (h < 90) return 2;
-  if (h < 150) return 3;
-  if (h < 210) return 4;
-  if (h < 270) return 5;
-  return 6;
+// 6그룹: 빨(0) 주(1) 노(2) 청록(3: 초+파) 보라(4: 남+보) 흑백(5)
+function getColorGroup(dc: DominantColor): number {
+  if (dc.isAchromatic) return 5;
+  const h = dc.h;
+  if (h >= 345 || h < 15) return 0;   // 빨
+  if (h < 45) return 1;               // 주
+  if (h < 75) return 2;               // 노
+  if (h < 210) return 3;              // 초+파 → 청록
+  return 4;                            // 남+보 → 보라
 }
 
+const GROUP_COLORS = ['#e53e3e', '#ed8936', '#ecc94b', '#38b2ac', '#9f7aea', '#a0aec0'];
+
 export default function ColorDistributionView() {
-  const [artworks, setArtworks] = useState<ColorArtwork[]>([]);
-  const [loading, setLoading] = useState(true);
+  // 캐시에 데이터가 있으면 즉시 파싱하여 초기 상태로 사용 (깜빡임 방지)
+  const initialData = useMemo(() => {
+    const cached = getCached<Record<string, unknown>[]>('/api/portfolio');
+    if (!cached) return null;
+    return cached.map((a: Record<string, unknown>) => {
+      let dominantColor: DominantColor | null = null;
+      if (a.dominant_color) {
+        if (typeof a.dominant_color === 'string') {
+          try { dominantColor = JSON.parse(a.dominant_color); } catch { dominantColor = null; }
+        } else {
+          dominantColor = a.dominant_color as DominantColor;
+        }
+      }
+      return {
+        id: a.id as string, title: a.title as string,
+        title_en: a.title_en as string | null, year: a.year as number,
+        image_url: a.image_url as string, thumbnail_url: a.thumbnail_url as string,
+        width: a.width as number | null, height: a.height as number | null,
+        dominant_color: dominantColor,
+      };
+    });
+  }, []);
+
+  const [artworks, setArtworks] = useState<ColorArtwork[]>(initialData || []);
+  const [loading, setLoading] = useState(!initialData);
   const [error, setError] = useState<string | null>(null);
   const [selectedArtwork, setSelectedArtwork] = useState<Artwork | null>(null);
   const [modalOpen, setModalOpen] = useState(false);
-
-  const ITEM_WIDTH = 150; // 각 이미지 너비
+  const [colorGroupArtworks, setColorGroupArtworks] = useState<ColorArtwork[]>([]);
+  const [colorGroupColor, setColorGroupColor] = useState<string>('');
+  const [colorGroupIndex, setColorGroupIndex] = useState<number>(0);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await fetch('/api/portfolio');
-        if (!res.ok) throw new Error('Failed to fetch data');
-        
-        const data = await res.json();
-        
+        const data = await cachedFetch<Record<string, unknown>[]>('/api/portfolio');
         const parsed = data.map((a: Record<string, unknown>) => {
           let dominantColor: DominantColor | null = null;
-          
           if (a.dominant_color) {
             if (typeof a.dominant_color === 'string') {
-              try {
-                dominantColor = JSON.parse(a.dominant_color);
-              } catch {
-                dominantColor = null;
-              }
+              try { dominantColor = JSON.parse(a.dominant_color); } catch { dominantColor = null; }
             } else {
               dominantColor = a.dominant_color as DominantColor;
             }
           }
-          
           return {
-            id: a.id as string,
-            title: a.title as string,
-            title_en: a.title_en as string | null,
-            year: a.year as number,
-            image_url: a.image_url as string,
-            thumbnail_url: a.thumbnail_url as string,
-            width: a.width as number | null,
-            height: a.height as number | null,
+            id: a.id as string, title: a.title as string,
+            title_en: a.title_en as string | null, year: a.year as number,
+            image_url: a.image_url as string, thumbnail_url: a.thumbnail_url as string,
+            width: a.width as number | null, height: a.height as number | null,
             dominant_color: dominantColor,
           };
         });
-        
         setArtworks(parsed);
         setLoading(false);
       } catch (err) {
@@ -87,68 +99,102 @@ export default function ColorDistributionView() {
         setLoading(false);
       }
     };
-
     fetchData();
   }, []);
 
-  // 색상 버킷별로 그룹화 + 명도순 정렬
-  // 색상 버킷별로 그룹화 후 펼치기 (CSS columns가 위→아래로 채우므로 자연스럽게 같은 색상끼리 모임)
-  const { sortedArtworks, achromaticArtworks } = useMemo(() => {
-    const buckets: Map<number, ColorArtwork[]> = new Map();
-    const achromatic: ColorArtwork[] = [];
-    
+  // 5그룹 분류 → 작품 수 비례 컬럼 할당 → 균등 높이
+  const displayColumns = useMemo(() => {
+    // 1단계: 5그룹으로 분류 + 명도순 정렬
+    const groups: ColorArtwork[][] = Array.from({ length: 6 }, () => []);
     artworks.forEach(a => {
       if (!a.dominant_color) return;
+      groups[getColorGroup(a.dominant_color)].push(a);
+    });
+    
+    // 청록(그룹3), 보라(그룹4) 내에서는 hue순 → 명도순
+    [3, 4].forEach(i => {
+      groups[i].sort((a, b) => {
+        const hDiff = (a.dominant_color?.h || 0) - (b.dominant_color?.h || 0);
+        if (Math.abs(hDiff) > 30) return hDiff;
+        return (b.dominant_color?.l || 0) - (a.dominant_color?.l || 0);
+      });
+    });
+    // 나머지 그룹은 명도순만
+    [0, 1, 2, 5].forEach(i => {
+      groups[i].sort((a, b) => (b.dominant_color?.l || 0) - (a.dominant_color?.l || 0));
+    });
+
+    // 2단계: 총 컬럼 수 결정 (목표 ~10열)
+    const totalArtworks = groups.reduce((sum, g) => sum + g.length, 0);
+    const TARGET_COLS = 10;
+    const targetPerCol = Math.ceil(totalArtworks / TARGET_COLS);
+
+    // 3단계: 각 그룹에 컬럼 수 비례 할당 (최소 1열, 작품 없으면 0)
+    const columns: { artworks: ColorArtwork[]; color: string }[] = [];
+    
+    groups.forEach((group, gIdx) => {
+      if (group.length === 0) return;
       
-      if (a.dominant_color.isAchromatic) {
-        achromatic.push(a);
-      } else {
-        const bucket = getHueBucket(a.dominant_color.h);
-        if (!buckets.has(bucket)) buckets.set(bucket, []);
-        buckets.get(bucket)!.push(a);
+      // 작품 수 / 목표 = 필요 컬럼 수 (반올림)
+      const numCols = Math.max(1, Math.round(group.length / targetPerCol));
+      const perCol = Math.ceil(group.length / numCols);
+      
+      for (let c = 0; c < numCols; c++) {
+        const start = c * perCol;
+        const end = Math.min(start + perCol, group.length);
+        if (start < group.length) {
+          columns.push({
+            artworks: group.slice(start, end),
+            color: GROUP_COLORS[gIdx],
+          });
+        }
       }
     });
-    
-    // 각 버킷 내에서 명도순 정렬 (밝은 것 먼저 = CSS columns에서 위에 배치)
-    buckets.forEach(arr => {
-      arr.sort((a, b) => (b.dominant_color?.l || 0) - (a.dominant_color?.l || 0));
-    });
-    
-    // 무채색도 명도순 정렬
-    achromatic.sort((a, b) => (b.dominant_color?.l || 0) - (a.dominant_color?.l || 0));
-    
-    // 버킷 순서대로 펼치기 (빨→주→노→초→파→보→무채색)
-    const sorted: ColorArtwork[] = [];
-    for (let i = 0; i <= 6; i++) {
-      if (buckets.has(i)) {
-        sorted.push(...buckets.get(i)!);
-      }
-    }
-    sorted.push(...achromatic);
-    
-    return { sortedArtworks: sorted, achromaticArtworks: achromatic };
+
+    return columns;
   }, [artworks]);
 
-  const fetchArtworkDetail = useCallback(async (artworkId: string) => {
+  // 색상 그룹 내 작품 클릭 → 모달 열기 + 그룹 네비게이션 설정
+  const openArtworkInGroup = useCallback(async (artworkId: string, groupColor: string) => {
     try {
-      const res = await fetch(`/api/portfolio/${artworkId}`);
-      if (res.ok) {
-        const artwork = await res.json();
-        setSelectedArtwork(artwork);
-        setModalOpen(true);
-      }
+      const artwork = await cachedFetch<Artwork>(`/api/portfolio/${artworkId}`);
+      
+      // 같은 색상의 모든 컬럼 작품을 합침
+      const groupArtworks = displayColumns
+        .filter(col => col.color === groupColor)
+        .flatMap(col => col.artworks);
+      
+      const idx = groupArtworks.findIndex(a => a.id === artworkId);
+      
+      setColorGroupArtworks(groupArtworks);
+      setColorGroupColor(groupColor);
+      setColorGroupIndex(idx >= 0 ? idx : 0);
+      setSelectedArtwork(artwork);
+      setModalOpen(true);
     } catch (err) {
       console.error('Error fetching artwork:', err);
     }
-  }, []);
-
-  // 이미지 비율 계산 (원본 비율 유지)
-  const getAspectRatio = (artwork: ColorArtwork) => {
-    if (artwork.width && artwork.height) {
-      return artwork.width / artwork.height;
-    }
-    return 1; // 기본값
-  };
+  }, [displayColumns]);
+  
+  // 그룹 내 이전/다음 작품으로 이동 (동기적으로 즉시 전환)
+  const navigateGroup = useCallback((newIndex: number) => {
+    if (newIndex < 0 || newIndex >= colorGroupArtworks.length) return;
+    const target = colorGroupArtworks[newIndex];
+    setColorGroupIndex(newIndex);
+    setSelectedArtwork({
+      id: target.id,
+      title: target.title,
+      title_en: target.title_en,
+      year: target.year,
+      image_url: target.image_url,
+      thumbnail_url: target.thumbnail_url,
+      width: target.width,
+      height: target.height,
+      order: 0,
+      is_featured: false,
+      show_watermark: true,
+    } as Artwork);
+  }, [colorGroupArtworks]);
 
   if (loading) {
     return (
@@ -170,46 +216,75 @@ export default function ColorDistributionView() {
   }
 
   return (
-    <div className="w-full">
-      {/* 핀터레스트 스타일 Masonry - 색상 버킷순, 각 컬럼 내 명도순 */}
+    <div className="w-full px-2">
       <div 
-        style={{
-          columnCount: 10,
-          columnGap: '2px',
-          columnWidth: '80px',
-        }}
+        className="grid gap-1"
+        style={{ gridTemplateColumns: `repeat(${displayColumns.length}, 1fr)` }}
       >
-        {sortedArtworks.map((artwork) => {
-          const aspectRatio = getAspectRatio(artwork);
-          return (
-            <div
-              key={artwork.id}
-              className="cursor-pointer hover:opacity-80 transition-all mb-1"
-              onClick={() => fetchArtworkDetail(artwork.id)}
-              style={{ breakInside: 'avoid' }}
-            >
-              <div 
-                className="relative w-full"
-                style={{ paddingBottom: `${(1 / aspectRatio) * 100}%` }}
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={artwork.image_url}
-                  alt={artwork.title}
-                  className="absolute inset-0 w-full h-full object-contain"
-                  loading="lazy"
-                />
-              </div>
-            </div>
-          );
-        })}
+        {displayColumns.map((col, colIdx) => (
+          <div key={colIdx} className="flex flex-col gap-1">
+            
+            {col.artworks.map((artwork) => {
+              const rawRatio = (artwork.width && artwork.height) ? artwork.width / artwork.height : 1;
+              const aspectRatio = Math.max(0.5, Math.min(rawRatio, 2.0));
+              return (
+                <div
+                  key={artwork.id}
+                  className="cursor-pointer group relative"
+                  onClick={() => openArtworkInGroup(artwork.id, col.color)}
+                >
+                  <div
+                    className="relative w-full transition-transform duration-200 group-hover:scale-[1.03]"
+                    style={{ paddingBottom: `${(1 / aspectRatio) * 100}%` }}
+                  >
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img
+                      src={artwork.image_url?.includes('res.cloudinary.com') 
+                        ? artwork.image_url.replace('/upload/', '/upload/c_fit,w_300,q_auto,f_auto/') 
+                        : (artwork.thumbnail_url || artwork.image_url)}
+                      alt={artwork.title}
+                      className="absolute inset-0 w-full h-full object-contain"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                    <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors duration-200 flex items-end justify-center">
+                      <span className="text-white text-[9px] leading-tight text-center px-1 pb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-200 drop-shadow-md">
+                        {artwork.title}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        ))}
       </div>
 
-      {/* 모달 */}
       {modalOpen && selectedArtwork && (
         <ArtworkModal
           artwork={selectedArtwork}
-          onClose={() => setModalOpen(false)}
+          onClose={() => {
+            setModalOpen(false);
+            setColorGroupArtworks([]);
+            setColorGroupColor('');
+            setColorGroupIndex(0);
+          }}
+          hasPrev={colorGroupIndex > 0}
+          hasNext={colorGroupIndex < colorGroupArtworks.length - 1}
+          onPrev={() => navigateGroup(colorGroupIndex - 1)}
+          onNext={() => navigateGroup(colorGroupIndex + 1)}
+          groupLabel={colorGroupArtworks.length > 0 ? `__COLOR_BLOCK__${colorGroupColor}__${colorGroupIndex + 1}/${colorGroupArtworks.length}` : undefined}
+          preloadImages={[
+            colorGroupIndex > 0 ? colorGroupArtworks[colorGroupIndex - 1]?.image_url : '',
+            colorGroupIndex < colorGroupArtworks.length - 1 ? colorGroupArtworks[colorGroupIndex + 1]?.image_url : '',
+          ].filter(Boolean)}
+          onTagClick={() => {
+            // 색상 블록 클릭 → 모달 닫기 → 색상 뷰로 복귀
+            setModalOpen(false);
+            setColorGroupArtworks([]);
+            setColorGroupColor('');
+            setColorGroupIndex(0);
+          }}
         />
       )}
     </div>
