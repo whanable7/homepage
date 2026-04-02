@@ -131,6 +131,8 @@ function TagInput({
 
   const handleSuggestionClick = (tagName: string) => {
     addTags([tagName]);
+    // Keep suggestions open after adding a tag
+    setTimeout(() => setShowSuggestions(true), 100);
   };
 
   return (

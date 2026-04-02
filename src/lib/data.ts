@@ -161,6 +161,7 @@ export async function addArtwork(artwork: AnyData): Promise<AnyData> {
     const newArtwork = {
       ...artwork,
       id: artwork.id || crypto.randomUUID(),
+      tags: artwork.tags || [],
       order: maxOrder + 1,
       created_at: new Date().toISOString(),
       updated_at: new Date().toISOString(),
