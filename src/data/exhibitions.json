@@ -1,0 +1,58 @@
+[
+  {
+    "id": "004da72b-4cb9-4e30-a6e1-f224822d1ced",
+    "title": "마주하는 부동",
+    "venue": "국회 아트 갤러리",
+    "location": "서울",
+    "year": 2023,
+    "type": "group",
+    "external_url": null,
+    "display_order": 0,
+    "created_at": "2026-01-26T17:00:33.416237+00:00",
+    "title_en": "Facing Stillness",
+    "venue_en": "Korean National Assembly Art Gallery",
+    "location_en": "Seoul, KR"
+  },
+  {
+    "id": "8f97198f-5b8e-4b8d-b900-5fd0c10a562a",
+    "title": "여기, 바람이 머물다",
+    "venue": "박석원 뉴스 갤러리",
+    "location": "제주",
+    "year": 2024,
+    "type": "group",
+    "external_url": null,
+    "display_order": 0,
+    "created_at": "2026-01-26T11:18:44.083628+00:00",
+    "title_en": "Where the Wind Dwells",
+    "venue_en": "Park Sukwon News Gallery",
+    "location_en": "Jeju, KR"
+  },
+  {
+    "id": "b315a987-1d43-41cd-9c6e-843e8efdb997",
+    "title": "타고난 원형  BURN BORN CYCLE",
+    "venue": "갤러리 녹초",
+    "location": "제천",
+    "year": 2025,
+    "type": "solo",
+    "external_url": null,
+    "display_order": 0,
+    "created_at": "2026-01-26T08:40:31.831897+00:00",
+    "title_en": "BURN BORN CYCLE",
+    "venue_en": "Gallery Noccho",
+    "location_en": "Jecheon, KR"
+  },
+  {
+    "id": "f54d52e3-c26a-43a0-8f19-65d9df41d974",
+    "title": "박정환 전",
+    "venue": "Window Dol",
+    "location": "서울",
+    "year": 2025,
+    "type": "popup",
+    "external_url": null,
+    "display_order": 0,
+    "created_at": "2026-02-04T04:50:03.28435+00:00",
+    "title_en": "A Solo Presentation by Jungwhan Park",
+    "venue_en": "Window Dol",
+    "location_en": "Seoul"
+  }
+]

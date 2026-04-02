@@ -1,0 +1,67 @@
+{
+  "id": "4986ef75-f413-4d09-acdc-9f0f83f578ad",
+  "artist_name": "박정환",
+  "bio_paragraphs": [
+    "Born in Seoul, Korea\nLive & Work in Seoul, Korea"
+  ],
+  "education": [
+    {
+      "year": "2024",
+      "description": "한국예술종합학교 미술원 조형예술과",
+      "description_en": "Korea National University of Arts, BFA Fine Art, Seoul, KR"
+    },
+    {
+      "year": "2026~",
+      "description": "서울대학교 대학원 서양화과 서양화전공",
+      "description_en": "Seoul National University, MFA Painting, Seoul, KR"
+    }
+  ],
+  "contact_email": "parkmorran4@gmail.com",
+  "profile_image_url": "https://hdepkpnmmjcqejhfnevr.supabase.co/storage/v1/object/public/portfolio/originals/fbb66967-a201-46f4-80bf-bd0c6bbb2344.jpg",
+  "updated_at": "2026-03-13T08:36:48.065+00:00",
+  "cv_file_url": null,
+  "contact_phone": "+82)010.9343.7101",
+  "phone_visible": false,
+  "social_links": [
+    {
+      "url": "https://www.instagram.com/whanable/",
+      "platform": "instagram"
+    }
+  ],
+  "footer_bio": " ",
+  "artist_name_en": "Jungwhan Park",
+  "bio_paragraphs_en": [
+    "Born in Seoul, Korea\nLive & Work in Seoul, Korea"
+  ],
+  "footer_bio_en": " ",
+  "studio_address": "서울시 관악구 서울대학교74동 예술복합교육연구동 308호",
+  "studio_address_en": "308ho, 74dong, Art College, Seoul National University, Kwanak-Gu, Seoul, Korea",
+  "birth_city": "서울",
+  "birth_city_en": "Seoul",
+  "birth_country": "대한민국",
+  "birth_country_en": "South Korea",
+  "live_city": "서울",
+  "live_city_en": "Seoul",
+  "live_country": "대한민국",
+  "live_country_en": "South Korea",
+  "residencies": [
+    {
+      "year": "2025",
+      "program": "Great Western Landscape Residency (Todd Marshall Contemporary in partnership with Entrada Institute and Searchlight Mystery Ranch.)",
+      "location": "미국",
+      "program_en": "Great Western Landscape Residency (Todd Marshall Contemporary in partnership with Entrada Institute and Searchlight Mystery Ranch.)",
+      "location_en": "USA"
+    }
+  ],
+  "fellowships": [],
+  "awards": [],
+  "publications": [
+    {
+      "year": "2015",
+      "title": "꿈꾸는 나무, 헥사곤",
+      "title_en": "A dreaming tree, Hexagon, KR"
+    }
+  ],
+  "contact_note": "작품전시, 협업에 관한 문의는 이메일로 연락바랍니다. ",
+  "contact_note_en": "For inquiries about exhibitions or collaborations, please contact via e-mail."
+}

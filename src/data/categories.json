@@ -1,0 +1,110 @@
+[
+  {
+    "id": "05880a6b-ab86-45a6-ba2a-f5772c873095",
+    "name": "purple",
+    "slug": "purple",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-01-25T13:17:41.205056+00:00",
+    "updated_at": "2026-02-06T03:27:12.981+00:00",
+    "name_en": "purple",
+    "description_en": null
+  },
+  {
+    "id": "1c8ca03f-cabd-40b6-a205-ae9c8325d27e",
+    "name": "black",
+    "slug": "black",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-02-06T03:28:00.697601+00:00",
+    "updated_at": "2026-02-06T03:28:00.697601+00:00",
+    "name_en": "black",
+    "description_en": null
+  },
+  {
+    "id": "24b2c3bb-1397-44ec-9062-139c264b83c3",
+    "name": "brown",
+    "slug": "brown",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-02-06T06:07:10.444904+00:00",
+    "updated_at": "2026-02-06T06:07:10.444904+00:00",
+    "name_en": "brown",
+    "description_en": null
+  },
+  {
+    "id": "37cb6653-6cf8-453d-a587-22ad6324124e",
+    "name": "white",
+    "slug": "white",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-02-06T03:27:50.977259+00:00",
+    "updated_at": "2026-02-06T03:27:50.977259+00:00",
+    "name_en": "white",
+    "description_en": null
+  },
+  {
+    "id": "54c52155-2e6b-4ff4-93db-b3a23d14e9c6",
+    "name": "green",
+    "slug": "green",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-02-06T03:27:25.971744+00:00",
+    "updated_at": "2026-02-06T03:27:25.971744+00:00",
+    "name_en": "green",
+    "description_en": null
+  },
+  {
+    "id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "name": "gray",
+    "slug": "gray",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-01-25T13:17:28.188362+00:00",
+    "updated_at": "2026-02-06T03:25:56.956+00:00",
+    "name_en": "gray",
+    "description_en": null
+  },
+  {
+    "id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "name": "blue",
+    "slug": "blue",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-01-25T13:17:49.472925+00:00",
+    "updated_at": "2026-02-06T03:26:57.351+00:00",
+    "name_en": "blue",
+    "description_en": null
+  },
+  {
+    "id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "name": "yellow",
+    "slug": "yellow",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-01-26T11:19:40.09337+00:00",
+    "updated_at": "2026-02-06T03:26:21.274+00:00",
+    "name_en": "yellow",
+    "description_en": null
+  },
+  {
+    "id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "name": "red",
+    "slug": "red",
+    "description": null,
+    "cover_image_url": null,
+    "order": 0,
+    "created_at": "2026-01-26T08:18:23.856542+00:00",
+    "updated_at": "2026-02-06T03:26:39.004+00:00",
+    "name_en": "red",
+    "description_en": null
+  }
+]

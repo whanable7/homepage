@@ -1,0 +1,4143 @@
+[
+  {
+    "id": "274def0c-01c7-43cd-aedc-efdf899eb969",
+    "title": "그 후에 3",
+    "year": 2023,
+    "width": 31,
+    "height": 43,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376057/portfolio/originals/52bc75c0-00a9-41d5-b547-8d737a6a6f86.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376057/portfolio/originals/52bc75c0-00a9-41d5-b547-8d737a6a6f86.jpg",
+    "is_featured": false,
+    "order": 15,
+    "created_at": "2026-02-06T06:30:25.907495+00:00",
+    "updated_at": "2026-03-05T16:25:54.95+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 44,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "15549434-b438-402e-ad2a-4a1fe9725584",
+    "title": "그 후에 5",
+    "year": 2023,
+    "width": 43,
+    "height": 31,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376117/portfolio/originals/7c25514b-f010-4bdc-8227-eded8883ae5f.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376117/portfolio/originals/7c25514b-f010-4bdc-8227-eded8883ae5f.jpg",
+    "is_featured": false,
+    "order": 17,
+    "created_at": "2026-02-06T06:32:15.914138+00:00",
+    "updated_at": "2026-03-05T16:26:12.273+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 5",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 50,
+      "l": 44,
+      "s": 45,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "24f9d3ee-1310-49db-b989-5e99ecf5d3b8",
+    "title": "그 후에 7",
+    "year": 2023,
+    "width": 43,
+    "height": 31,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376245/portfolio/originals/d818e6ed-c963-427a-ada6-3df09b0329d5.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376245/portfolio/originals/d818e6ed-c963-427a-ada6-3df09b0329d5.jpg",
+    "is_featured": false,
+    "order": 19,
+    "created_at": "2026-02-06T06:33:02.833946+00:00",
+    "updated_at": "2026-03-05T16:26:32.225+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 52,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "0d2e7257-864f-4e1e-aa91-2e563e4ba6b8",
+    "title": "불의 단면 2",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376102/portfolio/originals/71803be3-18cb-4f46-9f8b-d6c5874844af.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376102/portfolio/originals/71803be3-18cb-4f46-9f8b-d6c5874844af.jpg",
+    "is_featured": false,
+    "order": 83,
+    "created_at": "2026-02-14T17:08:30.670122+00:00",
+    "updated_at": "2026-03-05T16:32:23.8+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "A Slice of Flame 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 199,
+      "l": 26,
+      "s": 29,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "1956723d-6938-44e3-b1c5-b1d8d8662bc2",
+    "title": "풀과 불 관찰 시리즈 5",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376267/portfolio/originals/e806514b-003d-4291-8932-5c62ebe2a904.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376267/portfolio/originals/e806514b-003d-4291-8932-5c62ebe2a904.jpg",
+    "is_featured": false,
+    "order": 40,
+    "created_at": "2026-02-06T09:48:50.33013+00:00",
+    "updated_at": "2026-03-05T16:33:35.783+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 5",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 38,
+      "l": 31,
+      "s": 67,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "1d70f693-c0d4-48c3-b2f1-f3769df0bf1b",
+    "title": "Smoke and Water 7",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376065/portfolio/originals/54ca177a-c510-436b-8a24-63d94b23e85d.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376065/portfolio/originals/54ca177a-c510-436b-8a24-63d94b23e85d.jpg",
+    "is_featured": false,
+    "order": 72,
+    "created_at": "2026-02-14T11:27:54.823628+00:00",
+    "updated_at": "2026-03-05T16:36:01.656+00:00",
+    "category_id": "24b2c3bb-1397-44ec-9062-139c264b83c3",
+    "description": null,
+    "title_en": "Smoke and Water 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 14,
+      "l": 33,
+      "s": 40,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "0080ac0d-7cd0-44cc-82af-e83ca897712f",
+    "title": "부감도 2",
+    "year": 2022,
+    "width": 53,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376094/portfolio/originals/69345e89-ae35-453c-b135-4cbc8574ebdc.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376094/portfolio/originals/69345e89-ae35-453c-b135-4cbc8574ebdc.jpg",
+    "is_featured": false,
+    "order": 81,
+    "created_at": "2026-02-14T17:04:44.249648+00:00",
+    "updated_at": "2026-03-05T16:37:05.593+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Overhead view 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 314,
+      "l": 14,
+      "s": 11,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "30ee8377-012e-4e49-8d5b-d59c9aa67eb0",
+        "name": "Overhead view",
+        "created_at": "2026-03-05T17:00:08.795829+00:00"
+      }
+    ]
+  },
+  {
+    "id": "1d5004d1-e510-4c72-b1d6-ad491fd35ebb",
+    "title": "소멸 2",
+    "year": 2022,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 먹",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376030/portfolio/originals/443c719c-7f63-40b2-9361-5c3a6146d5ab.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376030/portfolio/originals/443c719c-7f63-40b2-9361-5c3a6146d5ab.jpg",
+    "is_featured": false,
+    "order": 100,
+    "created_at": "2026-02-22T18:08:03.905566+00:00",
+    "updated_at": "2026-03-05T16:37:22.316+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Extinguished 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Muk on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 41,
+      "l": 10,
+      "s": 12,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "f70f5958-fa01-465f-ae80-5f3bffa1c199",
+        "name": "Extinguished",
+        "created_at": "2026-03-05T16:57:32.670162+00:00"
+      }
+    ]
+  },
+  {
+    "id": "21c4fc01-5875-48db-9b65-2bec6a34370e",
+    "title": "아무 일도 일어나지 않았다 7",
+    "year": 2022,
+    "width": 5045,
+    "height": 6479,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376248/portfolio/originals/dd41db1e-76c7-4351-9bf8-1c89577a8f87.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376248/portfolio/originals/dd41db1e-76c7-4351-9bf8-1c89577a8f87.jpg",
+    "is_featured": false,
+    "order": 47,
+    "created_at": "2026-02-06T10:32:29.729112+00:00",
+    "updated_at": "2026-03-05T16:38:27.964+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 39,
+      "l": 53,
+      "s": 32,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "1a36e95d-ea75-4872-8688-70159689a40c",
+    "title": "아무 일도 일어나지 않았다 8",
+    "year": 2022,
+    "width": 4990,
+    "height": 6725,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376001/portfolio/originals/36facdae-236c-4cea-b25e-fa3856f79251.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376001/portfolio/originals/36facdae-236c-4cea-b25e-fa3856f79251.jpg",
+    "is_featured": false,
+    "order": 26,
+    "created_at": "2026-02-06T06:49:14.404508+00:00",
+    "updated_at": "2026-03-05T16:38:38.185+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 8",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 58,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "17a8fddb-e413-430e-87ae-bbe8ebff2d84",
+    "title": "확산 4",
+    "year": 2022,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376285/portfolio/originals/f324256d-6989-4978-80fa-3363451f4953.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376285/portfolio/originals/f324256d-6989-4978-80fa-3363451f4953.jpg",
+    "is_featured": false,
+    "order": 89,
+    "created_at": "2026-02-14T17:28:48.12255+00:00",
+    "updated_at": "2026-03-05T16:40:18.623+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 13,
+      "l": 14,
+      "s": 32,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "22e67a5d-1854-4020-9933-ffe2392e0f4b",
+    "title": "아무 일도 일어나지 않았다 시리즈",
+    "year": 2022,
+    "width": 1329,
+    "height": 836,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376130/portfolio/originals/865f1f2f-c3cb-4a44-867a-653ea2ec3385.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376130/portfolio/originals/865f1f2f-c3cb-4a44-867a-653ea2ec3385.jpg",
+    "is_featured": true,
+    "order": 8,
+    "created_at": "2026-01-26T18:40:16.280587+00:00",
+    "updated_at": "2026-03-05T16:48:56.43+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Nothing happened Series",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plates",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 56,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "201e8521-068e-42b5-a812-c37ecdab4425",
+        "name": "Series",
+        "created_at": "2026-02-14T12:13:03.488387+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "245de2fc-8aba-41ec-a02a-49c4a203df93",
+    "title": "pouring geological layers",
+    "year": 2024,
+    "width": 58,
+    "height": 129,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376224/portfolio/originals/cebb4591-4453-4003-9a4b-5b9c12939b93.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376224/portfolio/originals/cebb4591-4453-4003-9a4b-5b9c12939b93.jpg",
+    "is_featured": false,
+    "order": 61,
+    "created_at": "2026-02-06T12:07:06.973911+00:00",
+    "updated_at": "2026-03-05T16:24:29.651+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "pouring geological layers",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 40,
+      "s": 49,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "386b5565-cf42-4dbe-aa64-246663f1343c",
+    "title": "들여다보고 멀어지기 5",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376054/portfolio/originals/52333c1d-668c-4b00-be39-8d9377cd7522.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376054/portfolio/originals/52333c1d-668c-4b00-be39-8d9377cd7522.jpg",
+    "is_featured": false,
+    "order": 55,
+    "created_at": "2026-02-06T11:33:40.365293+00:00",
+    "updated_at": "2026-03-05T16:28:29.936+00:00",
+    "category_id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 5",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 69,
+      "l": 44,
+      "s": 16,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "41915932-f3e2-4bd0-ac66-6d65569c9f26",
+    "title": "들여다보고 멀어지기 7",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375948/portfolio/originals/14db90c9-4b59-44f9-a1e9-c602292592bd.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375948/portfolio/originals/14db90c9-4b59-44f9-a1e9-c602292592bd.jpg",
+    "is_featured": false,
+    "order": 56,
+    "created_at": "2026-02-06T11:56:39.702302+00:00",
+    "updated_at": "2026-03-05T16:28:54.184+00:00",
+    "category_id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 44,
+      "l": 32,
+      "s": 15,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "42f5d06a-3a91-4eca-a65b-1668d7f6cf36",
+    "title": "들여다보고 멀어지기 9",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375933/portfolio/originals/0a0b33a1-a7b6-4c3f-9a0c-938b8a944cb2.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375933/portfolio/originals/0a0b33a1-a7b6-4c3f-9a0c-938b8a944cb2.jpg",
+    "is_featured": false,
+    "order": 58,
+    "created_at": "2026-02-06T11:57:31.008513+00:00",
+    "updated_at": "2026-03-05T16:29:16.647+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 9",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 17,
+      "l": 26,
+      "s": 29,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "4d47c6ea-8cf6-4f63-99df-02298dd0e8eb",
+    "title": "들여다보고 멀어지기 11",
+    "year": 2023,
+    "width": 90,
+    "height": 90,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375972/portfolio/originals/23c39cc5-ecba-4ffd-877f-2af5c3c1ed06.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375972/portfolio/originals/23c39cc5-ecba-4ffd-877f-2af5c3c1ed06.jpg",
+    "is_featured": false,
+    "order": 60,
+    "created_at": "2026-02-06T11:58:36.78766+00:00",
+    "updated_at": "2026-03-05T16:29:41.766+00:00",
+    "category_id": "54c52155-2e6b-4ff4-93db-b3a23d14e9c6",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 11",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 76,
+      "l": 40,
+      "s": 12,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "4c612369-a0b0-4bc8-8dd1-81fb972008d3",
+    "title": "멀리서 가까이보기",
+    "year": 2023,
+    "width": 65,
+    "height": 53,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376068/portfolio/originals/55219e3d-8443-4c30-b047-142f517aa34e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376068/portfolio/originals/55219e3d-8443-4c30-b047-142f517aa34e.jpg",
+    "is_featured": false,
+    "order": 77,
+    "created_at": "2026-02-14T12:44:37.500816+00:00",
+    "updated_at": "2026-03-05T16:30:08.009+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "A Distant Close-up",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 18,
+      "l": 29,
+      "s": 48,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "296a06fa-8bb0-4ff8-98db-da053177daf5",
+    "title": "Smoke and Water 2",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376300/portfolio/originals/f8c3fdf8-bb4c-42fe-b8af-0db0a573c534.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376300/portfolio/originals/f8c3fdf8-bb4c-42fe-b8af-0db0a573c534.jpg",
+    "is_featured": false,
+    "order": 68,
+    "created_at": "2026-02-14T11:25:39.646308+00:00",
+    "updated_at": "2026-03-05T16:35:23.157+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Smoke and Water 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 58,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      }
+    ]
+  },
+  {
+    "id": "4055051e-29ed-48ba-a8c9-cb6a4fbbf5c6",
+    "title": "Smoke and Water 5",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375940/portfolio/originals/0f66169a-9738-4778-8f50-d13e0b53a95a.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375940/portfolio/originals/0f66169a-9738-4778-8f50-d13e0b53a95a.jpg",
+    "is_featured": false,
+    "order": 71,
+    "created_at": "2026-02-14T11:27:08.782779+00:00",
+    "updated_at": "2026-03-05T16:35:44.975+00:00",
+    "category_id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "description": null,
+    "title_en": "Smoke and Water 5",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 196,
+      "l": 22,
+      "s": 18,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "2e8a8ebe-98ff-4650-82ad-cc63f94a19b2",
+    "title": "Smoke and water 6",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376105/portfolio/originals/72713483-95e0-4f77-b3f3-1e3026708f43.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376105/portfolio/originals/72713483-95e0-4f77-b3f3-1e3026708f43.jpg",
+    "is_featured": false,
+    "order": 93,
+    "created_at": "2026-02-14T18:13:42.773801+00:00",
+    "updated_at": "2026-03-05T16:35:54.07+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Smoke and water 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": null,
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "2753f10a-2505-4357-a338-68b0e7b1f7e0",
+    "title": "아무 일도 일어나지 않았다 2",
+    "year": 2022,
+    "width": 4868,
+    "height": 6600,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376158/portfolio/originals/a28142aa-fcea-4123-b528-96e7a43fd9c3.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376158/portfolio/originals/a28142aa-fcea-4123-b528-96e7a43fd9c3.jpg",
+    "is_featured": false,
+    "order": 22,
+    "created_at": "2026-02-06T06:47:50.956946+00:00",
+    "updated_at": "2026-03-05T16:37:51.017+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 50,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "35cb9c26-93c8-4012-bc7c-4b5f5e5e8481",
+    "title": "확산 7",
+    "year": 2022,
+    "width": 65,
+    "height": 91,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376144/portfolio/originals/8fb10393-af3c-49b8-a218-95b1e680709c.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376144/portfolio/originals/8fb10393-af3c-49b8-a218-95b1e680709c.jpg",
+    "is_featured": false,
+    "order": 92,
+    "created_at": "2026-02-14T17:34:02.800158+00:00",
+    "updated_at": "2026-03-05T16:40:27.913+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 1,
+      "l": 23,
+      "s": 92,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "37040c92-8c39-4f3e-921f-d43097bba083",
+    "title": "연기",
+    "year": 2019,
+    "width": 75,
+    "height": 60,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376198/portfolio/originals/b9a1a83f-8334-403f-b694-3d6c1769cfb2.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376198/portfolio/originals/b9a1a83f-8334-403f-b694-3d6c1769cfb2.jpg",
+    "is_featured": false,
+    "order": 94,
+    "created_at": "2026-02-22T17:13:16.553327+00:00",
+    "updated_at": "2026-03-05T16:41:25.996+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Smoke",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 138,
+      "l": 53,
+      "s": 33,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      }
+    ]
+  },
+  {
+    "id": "31f057c8-4162-4df1-8341-154bb3f10fc1",
+    "title": "판도라",
+    "year": 2019,
+    "width": 130,
+    "height": 97,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375976/portfolio/originals/2535c161-f745-4b40-9518-d406a1595a6a.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375976/portfolio/originals/2535c161-f745-4b40-9518-d406a1595a6a.jpg",
+    "is_featured": false,
+    "order": 98,
+    "created_at": "2026-02-22T17:54:46.649163+00:00",
+    "updated_at": "2026-03-05T16:41:35.345+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Pandora",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 60,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "ace74e15-4f37-42fe-99f6-ec0fb737a03c",
+        "name": "Pollution",
+        "created_at": "2026-02-14T14:46:49.463417+00:00"
+      }
+    ]
+  },
+  {
+    "id": "46dcbcfd-5053-478e-a3ff-4be4e5a82543",
+    "title": "들여다보고 멀어지기 1",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376173/portfolio/originals/a89bb376-96ac-43f3-9814-8722fbc52346.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376173/portfolio/originals/a89bb376-96ac-43f3-9814-8722fbc52346.jpg",
+    "is_featured": false,
+    "order": 51,
+    "created_at": "2026-02-06T11:32:10.906479+00:00",
+    "updated_at": "2026-03-05T16:27:38.451+00:00",
+    "category_id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 43,
+      "l": 22,
+      "s": 35,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "6aac7609-ba5b-4623-b24b-593ce96756aa",
+    "title": "With every ending a new birth begins",
+    "year": 2024,
+    "width": 126,
+    "height": 128,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375967/portfolio/originals/23742e2f-9b8c-41e2-b54f-6809d4a3e722.png",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375967/portfolio/originals/23742e2f-9b8c-41e2-b54f-6809d4a3e722.png",
+    "is_featured": true,
+    "order": 0,
+    "created_at": "2026-02-06T10:28:10.597033+00:00",
+    "updated_at": "2026-03-05T16:25:08.29+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "With every ending a new birth begins",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 14,
+      "l": 30,
+      "s": 65,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "1676fbe3-82bc-49d1-a49e-932cf35ed3a3",
+        "name": "Monolith",
+        "created_at": "2026-02-14T13:16:19.170273+00:00"
+      },
+      {
+        "id": "c06d7a56-71d8-4685-9136-883239e81980",
+        "name": "desert",
+        "created_at": "2026-02-14T14:22:33.19152+00:00"
+      },
+      {
+        "id": "e4d27cc4-ce75-4ff7-af39-f35f33dc42a6",
+        "name": "America",
+        "created_at": "2026-02-14T13:30:54.339015+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "5a0d8768-e5ab-4641-ad9c-e890d932e96c",
+    "title": "그 후에 4",
+    "year": 2023,
+    "width": 31,
+    "height": 43,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376047/portfolio/originals/51361573-e2c4-4c15-96ad-502ad7e57846.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376047/portfolio/originals/51361573-e2c4-4c15-96ad-502ad7e57846.jpg",
+    "is_featured": false,
+    "order": 16,
+    "created_at": "2026-02-06T06:31:00.578187+00:00",
+    "updated_at": "2026-03-05T16:26:04.322+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 23,
+      "l": 45,
+      "s": 15,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "6b9f74d9-1598-4d3f-93bc-e0bdddcc984d",
+    "title": "들여다보고 멀어지기 2",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376098/portfolio/originals/69f77606-44e7-4912-b2dd-3b26074bd9c4.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376098/portfolio/originals/69f77606-44e7-4912-b2dd-3b26074bd9c4.jpg",
+    "is_featured": false,
+    "order": 52,
+    "created_at": "2026-02-06T11:32:30.838744+00:00",
+    "updated_at": "2026-03-05T16:27:53.354+00:00",
+    "category_id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 50,
+      "l": 13,
+      "s": 48,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "67042e5c-6890-46cc-a3ac-dcd806e0fb55",
+    "title": "들여다보고 멀어지기 10",
+    "year": 2023,
+    "width": 80,
+    "height": 80,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376304/portfolio/originals/fc9805f5-2b70-4d12-8a94-87deef3a00eb.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376304/portfolio/originals/fc9805f5-2b70-4d12-8a94-87deef3a00eb.jpg",
+    "is_featured": false,
+    "order": 59,
+    "created_at": "2026-02-06T11:57:56.107368+00:00",
+    "updated_at": "2026-03-05T16:29:29.643+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 10",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 21,
+      "l": 15,
+      "s": 66,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      },
+      {
+        "id": "30ee8377-012e-4e49-8d5b-d59c9aa67eb0",
+        "name": "Overhead view",
+        "created_at": "2026-03-05T17:00:08.795829+00:00"
+      }
+    ]
+  },
+  {
+    "id": "67ebd9fa-dfbe-46fd-aa76-afd9b1363de4",
+    "title": "복원-내버려두고 기다려서",
+    "year": 2023,
+    "width": 388,
+    "height": 194,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376275/portfolio/originals/ee96a4e8-aca8-4e91-a389-9583692c111d.png",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376275/portfolio/originals/ee96a4e8-aca8-4e91-a389-9583692c111d.png",
+    "is_featured": true,
+    "order": 2,
+    "created_at": "2026-02-06T11:23:47.227292+00:00",
+    "updated_at": "2026-03-05T16:30:18.718+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Restoration: Leave it and Wait",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 13,
+      "l": 36,
+      "s": 24,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "5fac4cdf-05b1-4c10-b8f6-b847de8085c8",
+    "title": "풀과 불 관찰 시리즈 2",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375937/portfolio/originals/0ee32f4f-eb01-46a6-9032-0e038238caf0.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375937/portfolio/originals/0ee32f4f-eb01-46a6-9032-0e038238caf0.jpg",
+    "is_featured": false,
+    "order": 37,
+    "created_at": "2026-02-06T09:47:43.29204+00:00",
+    "updated_at": "2026-03-05T16:33:11.527+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 46,
+      "l": 34,
+      "s": 45,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "6515030c-9b88-498c-9633-3dfdaa0478be",
+    "title": "풀과 불 관찰 시리즈 3",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376087/portfolio/originals/621b38aa-ab68-4d5a-9d27-e7b9ab0f7058.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376087/portfolio/originals/621b38aa-ab68-4d5a-9d27-e7b9ab0f7058.jpg",
+    "is_featured": false,
+    "order": 38,
+    "created_at": "2026-02-06T09:48:10.612077+00:00",
+    "updated_at": "2026-03-05T16:33:19.226+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 40,
+      "l": 28,
+      "s": 73,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "6cb5d59c-0bbf-46b2-93d3-959de5527712",
+    "title": "풀과 불 관찰 시리즈 11",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376036/portfolio/originals/4b163bba-f5a6-4269-a21c-257c14007b20.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376036/portfolio/originals/4b163bba-f5a6-4269-a21c-257c14007b20.jpg",
+    "is_featured": false,
+    "order": 35,
+    "created_at": "2026-02-06T09:33:21.679523+00:00",
+    "updated_at": "2026-03-05T16:34:22.42+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 11",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 27,
+      "s": 43,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "67b73170-5d37-4f1f-83b9-2ce5a4a6a5bb",
+    "title": "발굴",
+    "year": 2022,
+    "width": 97,
+    "height": 97,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376190/portfolio/originals/ae68a10b-6399-405c-b853-f27d0a012f73.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376190/portfolio/originals/ae68a10b-6399-405c-b853-f27d0a012f73.jpg",
+    "is_featured": false,
+    "order": 63,
+    "created_at": "2026-02-14T11:07:12.033433+00:00",
+    "updated_at": "2026-03-05T16:36:36.653+00:00",
+    "category_id": "05880a6b-ab86-45a6-ba2a-f5772c873095",
+    "description": null,
+    "title_en": "excavation",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 26,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "30ee8377-012e-4e49-8d5b-d59c9aa67eb0",
+        "name": "Overhead view",
+        "created_at": "2026-03-05T17:00:08.795829+00:00"
+      }
+    ]
+  },
+  {
+    "id": "677ddbf7-d3e2-4f07-9be9-591c2ac7af99",
+    "title": "부감도 1",
+    "year": 2022,
+    "width": 162,
+    "height": 130,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375929/portfolio/originals/028a9c62-734e-4c7e-b7a9-0a29a36b1b30.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375929/portfolio/originals/028a9c62-734e-4c7e-b7a9-0a29a36b1b30.jpg",
+    "is_featured": false,
+    "order": 80,
+    "created_at": "2026-02-14T17:01:05.216746+00:00",
+    "updated_at": "2026-03-05T16:36:56.886+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Overhead view 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 38,
+      "l": 26,
+      "s": 20,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "30ee8377-012e-4e49-8d5b-d59c9aa67eb0",
+        "name": "Overhead view",
+        "created_at": "2026-03-05T17:00:08.795829+00:00"
+      }
+    ]
+  },
+  {
+    "id": "5c926016-98f4-4f84-ad81-baade37b3211",
+    "title": "소멸 1",
+    "year": 2022,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 먹",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375955/portfolio/originals/1ec11e40-e9a1-4314-8878-bc060fe6b7f9.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375955/portfolio/originals/1ec11e40-e9a1-4314-8878-bc060fe6b7f9.jpg",
+    "is_featured": false,
+    "order": 96,
+    "created_at": "2026-02-22T17:18:35.312554+00:00",
+    "updated_at": "2026-03-05T16:37:14.871+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Extinguished 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Muk on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 41,
+      "l": 11,
+      "s": 11,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "f70f5958-fa01-465f-ae80-5f3bffa1c199",
+        "name": "Extinguished",
+        "created_at": "2026-03-05T16:57:32.670162+00:00"
+      }
+    ]
+  },
+  {
+    "id": "51afed29-12cb-4ca2-8117-2bfa4b756277",
+    "title": "풀, 숯",
+    "year": 2022,
+    "width": 130,
+    "height": 162,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376219/portfolio/originals/ce75f0c9-ede7-4217-8343-86e227fc9253.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376219/portfolio/originals/ce75f0c9-ede7-4217-8343-86e227fc9253.jpg",
+    "is_featured": false,
+    "order": 64,
+    "created_at": "2026-02-14T11:12:15.38531+00:00",
+    "updated_at": "2026-03-05T16:39:40.967+00:00",
+    "category_id": "1c8ca03f-cabd-40b6-a205-ae9c8325d27e",
+    "description": null,
+    "title_en": "From Verdure to Charcoal",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 28,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "599bc026-fca0-4327-8fc2-7538cf96cd81",
+    "title": "확산 1",
+    "year": 2022,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376016/portfolio/originals/40c018f9-ccf5-4370-a703-fa054fe2ace0.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376016/portfolio/originals/40c018f9-ccf5-4370-a703-fa054fe2ace0.jpg",
+    "is_featured": false,
+    "order": 86,
+    "created_at": "2026-02-14T17:27:08.649844+00:00",
+    "updated_at": "2026-03-05T16:40:00.188+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 9,
+      "l": 10,
+      "s": 58,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "890a0f93-72fb-4ad5-b4c0-7851e92acd42",
+    "title": "그 후에 1",
+    "year": 2023,
+    "width": 31,
+    "height": 43,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376050/portfolio/originals/51901f3a-94c6-454f-af1a-4d62aedd9943.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376050/portfolio/originals/51901f3a-94c6-454f-af1a-4d62aedd9943.jpg",
+    "is_featured": false,
+    "order": 13,
+    "created_at": "2026-02-06T06:29:05.667997+00:00",
+    "updated_at": "2026-03-05T16:25:34.54+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 41,
+      "l": 51,
+      "s": 33,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "737fbf5e-c07a-4caa-94b8-b5c1020b4a05",
+    "title": "들여다보고 멀어지기 8",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376227/portfolio/originals/cf0b3720-ea3e-4297-89f1-073ef92f3005.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376227/portfolio/originals/cf0b3720-ea3e-4297-89f1-073ef92f3005.jpg",
+    "is_featured": false,
+    "order": 57,
+    "created_at": "2026-02-06T11:57:10.106575+00:00",
+    "updated_at": "2026-03-05T16:29:05.524+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 8",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 13,
+      "l": 18,
+      "s": 14,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "76b9a88a-979e-4266-a941-2149eb1cc4e3",
+    "title": "들여다보고 멀어지기 시리즈",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375979/portfolio/originals/25b8e034-b25d-420b-97ce-4acfdff9317b.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375979/portfolio/originals/25b8e034-b25d-420b-97ce-4acfdff9317b.jpg",
+    "is_featured": false,
+    "order": 78,
+    "created_at": "2026-02-14T16:44:24.937434+00:00",
+    "updated_at": "2026-03-05T16:29:54.449+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives Series",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 44,
+      "l": 29,
+      "s": 17,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "201e8521-068e-42b5-a812-c37ecdab4425",
+        "name": "Series",
+        "created_at": "2026-02-14T12:13:03.488387+00:00"
+      },
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "7ee5f775-3496-4272-88b2-86b63d6cf967",
+    "title": "풀과 불 관찰 시리즈 1",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376026/portfolio/originals/43ba5731-0aa7-4ec1-9d8a-f15bad12c45f.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376026/portfolio/originals/43ba5731-0aa7-4ec1-9d8a-f15bad12c45f.jpg",
+    "is_featured": false,
+    "order": 36,
+    "created_at": "2026-02-06T09:47:23.933836+00:00",
+    "updated_at": "2026-03-05T16:33:01.582+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 39,
+      "l": 23,
+      "s": 64,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "85f9f806-fb1f-4d8a-ae2f-d205b2893eca",
+    "title": "풀과 불 관찰 시리즈 7",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376260/portfolio/originals/df3afd4f-cc18-47fe-a29e-e018d621c96e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376260/portfolio/originals/df3afd4f-cc18-47fe-a29e-e018d621c96e.jpg",
+    "is_featured": false,
+    "order": 28,
+    "created_at": "2026-02-06T06:55:00.72089+00:00",
+    "updated_at": "2026-03-05T16:33:51.831+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 7",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 13,
+      "l": 28,
+      "s": 51,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "7aa3d051-bbbd-4ece-95ff-ae74c08bd139",
+    "title": "풀과 불 관찰 시리즈 8",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376033/portfolio/originals/45364aaa-37ec-4195-9c01-4bd59b30a0ed.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376033/portfolio/originals/45364aaa-37ec-4195-9c01-4bd59b30a0ed.jpg",
+    "is_featured": false,
+    "order": 29,
+    "created_at": "2026-02-06T06:55:33.104547+00:00",
+    "updated_at": "2026-03-05T16:33:58.745+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 8",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 16,
+      "l": 37,
+      "s": 57,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "877ebc94-f5b9-4275-8de3-23460dba0500",
+    "title": "Smoke and Water 3",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375963/portfolio/originals/2367d65e-1c68-4cc9-a2a0-f0b885a041bf.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375963/portfolio/originals/2367d65e-1c68-4cc9-a2a0-f0b885a041bf.jpg",
+    "is_featured": false,
+    "order": 69,
+    "created_at": "2026-02-14T11:26:03.238298+00:00",
+    "updated_at": "2026-03-05T16:35:30.449+00:00",
+    "category_id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "description": null,
+    "title_en": "Smoke and Water 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 52,
+      "l": 33,
+      "s": 27,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "89c13e55-4732-4784-afea-33b8eeed7730",
+    "title": "Smoke and Water 4",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376176/portfolio/originals/a9f3eaaf-9709-42f3-80cf-9c5b4360e6b5.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376176/portfolio/originals/a9f3eaaf-9709-42f3-80cf-9c5b4360e6b5.jpg",
+    "is_featured": false,
+    "order": 70,
+    "created_at": "2026-02-14T11:26:25.512442+00:00",
+    "updated_at": "2026-03-05T16:35:37.275+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Smoke and Water 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 46,
+      "l": 36,
+      "s": 35,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "808dbc32-c3db-4b09-91f1-4221d9a6eb1d",
+    "title": "아무 일도 일어나지 않았다 4",
+    "year": 2022,
+    "width": 4697,
+    "height": 5949,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376120/portfolio/originals/82c03d5c-a41b-4f05-beaa-bfa9b78bff54.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376120/portfolio/originals/82c03d5c-a41b-4f05-beaa-bfa9b78bff54.jpg",
+    "is_featured": false,
+    "order": 24,
+    "created_at": "2026-02-06T06:48:28.553861+00:00",
+    "updated_at": "2026-03-05T16:38:06.097+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 56,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "91cbda2f-01bb-4b9c-b3d7-384ca3a67cd5",
+    "title": "Smoke variations",
+    "year": 2022,
+    "width": 97,
+    "height": 97,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376166/portfolio/originals/a702212a-966c-4868-a90b-3d97e02b9dae.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376166/portfolio/originals/a702212a-966c-4868-a90b-3d97e02b9dae.jpg",
+    "is_featured": false,
+    "order": 73,
+    "created_at": "2026-02-14T12:26:36.809003+00:00",
+    "updated_at": "2026-03-05T16:40:46.767+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Smoke variations",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 349,
+      "l": 33,
+      "s": 46,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "894ceadd-8fd9-4cbd-9b8c-69e342588aca",
+    "title": "4월의 고성",
+    "year": 2019,
+    "width": 130,
+    "height": 194,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376271/portfolio/originals/ee08d8e6-c539-41fc-96a2-79dfe2913f3b.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376271/portfolio/originals/ee08d8e6-c539-41fc-96a2-79dfe2913f3b.jpg",
+    "is_featured": false,
+    "order": 95,
+    "created_at": "2026-02-22T17:15:16.644513+00:00",
+    "updated_at": "2026-03-05T16:41:11.668+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "April, Gosung Gangwon-do",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 6,
+      "l": 37,
+      "s": 53,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "d90f67fe-0f6a-495d-9e1d-d58a32bdc60a",
+    "title": "그 후에 시리즈",
+    "year": 2023,
+    "width": 43,
+    "height": 31,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376124/portfolio/originals/82c10e47-2b36-4798-a432-de95aaa36424.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376124/portfolio/originals/82c10e47-2b36-4798-a432-de95aaa36424.jpg",
+    "is_featured": true,
+    "order": 12,
+    "created_at": "2026-01-26T18:33:35.802222+00:00",
+    "updated_at": "2026-03-05T16:48:00.288+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "After then Series",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 44,
+      "l": 47,
+      "s": 21,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "201e8521-068e-42b5-a812-c37ecdab4425",
+        "name": "Series",
+        "created_at": "2026-02-14T12:13:03.488387+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      }
+    ]
+  },
+  {
+    "id": "852845f1-87db-4637-a98c-6663a44b5ba1",
+    "title": "The inward drift",
+    "year": 2025,
+    "width": 129,
+    "height": 93,
+    "medium": "삼합지에 수채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376241/portfolio/originals/d6a5ffb1-0de8-483c-9ca1-926e68168465.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376241/portfolio/originals/d6a5ffb1-0de8-483c-9ca1-926e68168465.jpg",
+    "is_featured": false,
+    "order": 0,
+    "created_at": "2026-02-14T12:42:01.482599+00:00",
+    "updated_at": "2026-03-05T16:23:56.035+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "The inward drift",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 44,
+      "l": 30,
+      "s": 71,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a71a1690-9b31-40db-8d98-e9b63bad7bee",
+    "title": "불을 끌 수 있었다는 상상 2",
+    "year": 2023,
+    "width": 162,
+    "height": 96,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376292/portfolio/originals/f33409c8-8ece-4b24-806b-2ae4fa1ca090.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376292/portfolio/originals/f33409c8-8ece-4b24-806b-2ae4fa1ca090.jpg",
+    "is_featured": true,
+    "order": 9,
+    "created_at": "2026-02-06T11:20:44.035363+00:00",
+    "updated_at": "2026-03-05T16:32:05.042+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "The Imagination of Extinguishing the Fire 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 199,
+      "l": 37,
+      "s": 17,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "9c6ddecf-9ae2-4908-8242-f5218e05c03f",
+    "title": "움직임 관찰 시리즈 1",
+    "year": 2023,
+    "width": 72,
+    "height": 116,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375996/portfolio/originals/359c4940-009f-4f9e-9abf-f510524ad169.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375996/portfolio/originals/359c4940-009f-4f9e-9abf-f510524ad169.jpg",
+    "is_featured": false,
+    "order": 31,
+    "created_at": "2026-02-06T07:16:01.376344+00:00",
+    "updated_at": "2026-03-05T16:32:38.219+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of Movements: On Regeneration 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 17,
+      "s": 72,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      }
+    ]
+  },
+  {
+    "id": "9f115efd-d74e-48ba-8abd-e72354cb0290",
+    "title": "움직임 관찰 시리즈 2",
+    "year": 2023,
+    "width": 72,
+    "height": 91,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375982/portfolio/originals/2a7f81df-519d-4735-8778-d1c9b803566d.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375982/portfolio/originals/2a7f81df-519d-4735-8778-d1c9b803566d.jpg",
+    "is_featured": false,
+    "order": 32,
+    "created_at": "2026-02-06T07:16:44.480186+00:00",
+    "updated_at": "2026-03-05T16:32:47.361+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of Movements: On Regeneration 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 16,
+      "l": 14,
+      "s": 83,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a286d70a-4c9f-41e7-87d5-6bf003fd0769",
+    "title": "풀과 불 관찰 시리즈 10",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376282/portfolio/originals/f033141d-3afd-41c9-954c-04094a5830c4.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376282/portfolio/originals/f033141d-3afd-41c9-954c-04094a5830c4.jpg",
+    "is_featured": false,
+    "order": 34,
+    "created_at": "2026-02-06T09:32:15.019131+00:00",
+    "updated_at": "2026-03-05T16:34:15.167+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 10",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 34,
+      "s": 54,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ac4f4607-de4a-4b2c-969d-7c49a6300c21",
+    "title": "풀과 불 관찰 시리즈 12",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376044/portfolio/originals/4e7ab304-3a98-47b8-ae8e-3315e9427485.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376044/portfolio/originals/4e7ab304-3a98-47b8-ae8e-3315e9427485.jpg",
+    "is_featured": false,
+    "order": 42,
+    "created_at": "2026-02-06T10:02:07.336215+00:00",
+    "updated_at": "2026-03-05T16:34:29.576+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 12",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 12,
+      "l": 14,
+      "s": 88,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "b203d863-2710-4e48-80cf-7c982b867458",
+    "title": "확산 5",
+    "year": 2023,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376201/portfolio/originals/bf898ad1-d0cb-434b-958f-3317e1d04ae4.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376201/portfolio/originals/bf898ad1-d0cb-434b-958f-3317e1d04ae4.jpg",
+    "is_featured": false,
+    "order": 90,
+    "created_at": "2026-02-14T17:29:41.701114+00:00",
+    "updated_at": "2026-03-05T16:34:50.467+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 5",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 12,
+      "l": 11,
+      "s": 53,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a015ee3e-4b22-4959-a0e3-f1277830b17e",
+    "title": "Smoke and Water 1",
+    "year": 2023,
+    "width": 25,
+    "height": 25,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376008/portfolio/originals/3c28c748-4ea2-4f1e-acd2-a2a1599e2f3a.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376008/portfolio/originals/3c28c748-4ea2-4f1e-acd2-a2a1599e2f3a.jpg",
+    "is_featured": false,
+    "order": 67,
+    "created_at": "2026-02-14T11:25:16.289842+00:00",
+    "updated_at": "2026-03-05T16:35:12.199+00:00",
+    "category_id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "description": null,
+    "title_en": "Smoke and Water 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 47,
+      "l": 36,
+      "s": 44,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a2bc0452-cf57-41a1-b151-aafca3bbbbf4",
+    "title": "다가오는 연기",
+    "year": 2022,
+    "width": 130,
+    "height": 162,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375952/portfolio/originals/1cc04888-c8b2-4145-a312-aa19590f39f8.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375952/portfolio/originals/1cc04888-c8b2-4145-a312-aa19590f39f8.jpg",
+    "is_featured": false,
+    "order": 45,
+    "created_at": "2026-02-06T10:30:40.190891+00:00",
+    "updated_at": "2026-03-05T16:36:26.436+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Approaching Smoke",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 41,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "9ce0efb3-e027-44bc-8af2-32edcb7c275b",
+    "title": "아무 일도 일어나지 않았다 6",
+    "year": 2022,
+    "width": 4690,
+    "height": 5628,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375959/portfolio/originals/1f94ef5f-b084-482d-aaf9-3d17a7eb3cea.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375959/portfolio/originals/1f94ef5f-b084-482d-aaf9-3d17a7eb3cea.jpg",
+    "is_featured": false,
+    "order": 25,
+    "created_at": "2026-02-06T06:48:46.595489+00:00",
+    "updated_at": "2026-03-05T16:38:14.04+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 58,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a3964486-bb36-4bef-ad3f-8126883d9f91",
+    "title": "아무 일도 일어나지 않았다 9",
+    "year": 2022,
+    "width": 4841,
+    "height": 5701,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376149/portfolio/originals/91575665-5160-4063-b787-a65fe75e7191.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376149/portfolio/originals/91575665-5160-4063-b787-a65fe75e7191.jpg",
+    "is_featured": false,
+    "order": 27,
+    "created_at": "2026-02-06T06:49:32.736779+00:00",
+    "updated_at": "2026-03-05T16:38:46.125+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 9",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 56,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a9c0739c-2c35-47bc-b9e2-b35c0ab34c97",
+    "title": "자화상",
+    "year": 2022,
+    "width": 130,
+    "height": 162,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376183/portfolio/originals/ab9efd81-6aa2-467a-8ef7-707abc235996.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376183/portfolio/originals/ab9efd81-6aa2-467a-8ef7-707abc235996.jpg",
+    "is_featured": false,
+    "order": 97,
+    "created_at": "2026-02-22T17:50:18.855223+00:00",
+    "updated_at": "2026-03-05T16:39:06.652+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Self portrait",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 135,
+      "l": 44,
+      "s": 20,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ab3c32cc-7a41-412b-83fe-e94b3704aca3",
+    "title": "확산",
+    "year": 2018,
+    "width": 53,
+    "height": 45,
+    "medium": "캔버스에 아크릴",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375993/portfolio/originals/345308f4-8311-4aa6-bf1b-25adba847aad.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375993/portfolio/originals/345308f4-8311-4aa6-bf1b-25adba847aad.jpg",
+    "is_featured": false,
+    "order": 99,
+    "created_at": "2026-02-22T17:59:09.989838+00:00",
+    "updated_at": "2026-03-05T16:41:55.723+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Diffusion",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Acrylic on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 51,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "ace74e15-4f37-42fe-99f6-ec0fb737a03c",
+        "name": "Pollution",
+        "created_at": "2026-02-14T14:46:49.463417+00:00"
+      },
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "b2af945b-b16e-4780-aad0-e65815bd9ffe",
+    "title": "불 연구 시리즈 2",
+    "year": 2023,
+    "width": 45,
+    "height": 53,
+    "medium": "종이에 수채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376041/portfolio/originals/4dfb2806-6be5-4d3d-8e41-475521bb5d48.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376041/portfolio/originals/4dfb2806-6be5-4d3d-8e41-475521bb5d48.jpg",
+    "is_featured": false,
+    "order": 12,
+    "created_at": "2026-02-06T06:26:04.257286+00:00",
+    "updated_at": "2026-03-05T16:31:30.222+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Fire Study Series 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 35,
+      "s": 50,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "c06c8251-c72a-45b5-948b-3ccb4cdfe22b",
+    "title": "탄",
+    "year": 2025,
+    "width": 135,
+    "height": 198,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376084/portfolio/originals/5c170c7f-85f6-4ceb-a47e-d4271ad3be47.png",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376084/portfolio/originals/5c170c7f-85f6-4ceb-a47e-d4271ad3be47.png",
+    "is_featured": true,
+    "order": 4,
+    "created_at": "2026-02-06T10:31:35.449045+00:00",
+    "updated_at": "2026-03-05T16:23:08.719+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "burned",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 38,
+      "l": 25,
+      "s": 23,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "c06d7a56-71d8-4685-9136-883239e81980",
+        "name": "desert",
+        "created_at": "2026-02-14T14:22:33.19152+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      },
+      {
+        "id": "e4d27cc4-ce75-4ff7-af39-f35f33dc42a6",
+        "name": "America",
+        "created_at": "2026-02-14T13:30:54.339015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "d72b9570-6d17-44e2-b354-24595934f8db",
+    "title": "그 후에 2",
+    "year": 2023,
+    "width": 31,
+    "height": 43,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376194/portfolio/originals/b0127251-222a-4775-8c1a-0158bd0e945d.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376194/portfolio/originals/b0127251-222a-4775-8c1a-0158bd0e945d.jpg",
+    "is_featured": false,
+    "order": 14,
+    "created_at": "2026-02-06T06:29:54.290196+00:00",
+    "updated_at": "2026-03-05T16:25:43.618+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 41,
+      "l": 45,
+      "s": 16,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "b2dce5a0-3ace-4ac2-9dc8-a7ee97ec2e06",
+    "title": "그 후에 6",
+    "year": 2023,
+    "width": 43,
+    "height": 31,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376209/portfolio/originals/c7191f8f-3a81-442f-b414-891325d63618.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376209/portfolio/originals/c7191f8f-3a81-442f-b414-891325d63618.jpg",
+    "is_featured": false,
+    "order": 18,
+    "created_at": "2026-02-06T06:32:39.310061+00:00",
+    "updated_at": "2026-03-05T16:26:23.707+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 48,
+      "l": 48,
+      "s": 23,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "d493b537-3de2-40a4-9554-a39c612608c0",
+    "title": "그 후에 8",
+    "year": 2023,
+    "width": 43,
+    "height": 31,
+    "medium": "종이에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376169/portfolio/originals/a79b64cb-ab17-40f8-ae0c-315bac7359c3.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376169/portfolio/originals/a79b64cb-ab17-40f8-ae0c-315bac7359c3.jpg",
+    "is_featured": false,
+    "order": 20,
+    "created_at": "2026-02-06T06:33:26.463435+00:00",
+    "updated_at": "2026-03-05T16:26:40.98+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "The Aftermath 8",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 17,
+      "l": 64,
+      "s": 20,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "bc66e2d4-bc74-418b-bcb3-96a71dc1a742",
+    "title": "난 덩어리",
+    "year": 2023,
+    "width": 130,
+    "height": 162,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376076/portfolio/originals/5912c0cb-1391-441b-a01a-1d18b9fd7861.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376076/portfolio/originals/5912c0cb-1391-441b-a01a-1d18b9fd7861.jpg",
+    "is_featured": false,
+    "order": 75,
+    "created_at": "2026-02-14T12:34:20.997602+00:00",
+    "updated_at": "2026-03-05T16:27:25.067+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Orchid Lump",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 10,
+      "l": 25,
+      "s": 16,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "c3771639-a003-47b0-baca-30cc2c06f40c",
+    "title": "불길",
+    "year": 2023,
+    "width": 130,
+    "height": 162,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376205/portfolio/originals/c4cbb8f8-d3d6-44d7-bd14-96746fd54fa1.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376205/portfolio/originals/c4cbb8f8-d3d6-44d7-bd14-96746fd54fa1.jpg",
+    "is_featured": false,
+    "order": 79,
+    "created_at": "2026-02-14T16:48:24.916325+00:00",
+    "updated_at": "2026-03-05T16:31:39.895+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "A Path of Flame",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 41,
+      "s": 44,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      },
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "d7aacb26-80b3-473f-a9cb-a1244ca093e2",
+    "title": "불의 단면 1",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375925/portfolio/originals/021f3a07-ede9-4b68-9770-bb7cd21a5f3e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375925/portfolio/originals/021f3a07-ede9-4b68-9770-bb7cd21a5f3e.jpg",
+    "is_featured": false,
+    "order": 82,
+    "created_at": "2026-02-14T17:08:05.728839+00:00",
+    "updated_at": "2026-03-05T16:32:15.266+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "A Slice of Flame 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 24,
+      "l": 33,
+      "s": 86,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "cc284913-a14a-4d6d-bb2c-5146e1bf4170",
+    "title": "풀과 불 관찰 시리즈 4",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376278/portfolio/originals/ef71920c-e43f-4d97-a716-6272b5bfb69a.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376278/portfolio/originals/ef71920c-e43f-4d97-a716-6272b5bfb69a.jpg",
+    "is_featured": false,
+    "order": 39,
+    "created_at": "2026-02-06T09:48:31.115383+00:00",
+    "updated_at": "2026-03-05T16:33:27.45+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 21,
+      "l": 24,
+      "s": 75,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "bf0226b8-e08d-451d-a1ff-6cdb480b96a7",
+    "title": "풀과 불 관찰 시리즈 6",
+    "year": 2023,
+    "width": 30,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376187/portfolio/originals/ad764228-9e13-4139-9c19-83dbf6b4bc97.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376187/portfolio/originals/ad764228-9e13-4139-9c19-83dbf6b4bc97.jpg",
+    "is_featured": false,
+    "order": 41,
+    "created_at": "2026-02-06T09:49:10.711821+00:00",
+    "updated_at": "2026-03-05T16:33:43.753+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 42,
+      "l": 26,
+      "s": 62,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "caebc245-d9d7-4ec7-bbe3-d95eeabb4d4d",
+    "title": "쌓인 난",
+    "year": 2022,
+    "width": 112,
+    "height": 145,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375989/portfolio/originals/32ae7466-40ec-4e1f-bec8-ff84c3ef041e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375989/portfolio/originals/32ae7466-40ec-4e1f-bec8-ff84c3ef041e.jpg",
+    "is_featured": false,
+    "order": 65,
+    "created_at": "2026-02-14T11:19:35.919393+00:00",
+    "updated_at": "2026-03-05T16:37:32.261+00:00",
+    "category_id": "54c52155-2e6b-4ff4-93db-b3a23d14e9c6",
+    "description": null,
+    "title_en": "Stacked Orchids",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 61,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      }
+    ]
+  },
+  {
+    "id": "c2cfbec0-ede7-4d57-b240-aa7f861993fd",
+    "title": "아무 일도 일어나지 않았다 3",
+    "year": 2022,
+    "width": 4620,
+    "height": 5885,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376113/portfolio/originals/7b612867-1aa3-47a0-8d3c-3fd02ec3b350.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376113/portfolio/originals/7b612867-1aa3-47a0-8d3c-3fd02ec3b350.jpg",
+    "is_featured": false,
+    "order": 23,
+    "created_at": "2026-02-06T06:48:07.971001+00:00",
+    "updated_at": "2026-03-05T16:37:58.554+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 66,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "bab1759c-001a-4a1f-b415-beb4ee186e64",
+    "title": "창 밖 나무",
+    "year": 2022,
+    "width": 26,
+    "height": 37,
+    "medium": "종이에 오일파스텔",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376011/portfolio/originals/3e6f22ce-6307-48e1-880b-c100cc5fea36.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376011/portfolio/originals/3e6f22ce-6307-48e1-880b-c100cc5fea36.jpg",
+    "is_featured": false,
+    "order": 101,
+    "created_at": "2026-02-22T18:36:19.925538+00:00",
+    "updated_at": "2026-03-05T16:39:31.344+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Tree through Window",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil pastel on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 199,
+      "l": 46,
+      "s": 45,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "0652fedf-b29e-4a20-a7ad-74da57080833",
+        "name": "Aftermath",
+        "created_at": "2026-03-05T17:05:22.713451+00:00"
+      }
+    ]
+  },
+  {
+    "id": "d2c51824-1320-41fb-8343-353b171793a6",
+    "title": "하나씩",
+    "year": 2022,
+    "width": 53,
+    "height": 45,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376141/portfolio/originals/8a001fc0-fa86-460d-9c2e-be0ad84fdd03.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376141/portfolio/originals/8a001fc0-fa86-460d-9c2e-be0ad84fdd03.jpg",
+    "is_featured": false,
+    "order": 85,
+    "created_at": "2026-02-14T17:16:27.105626+00:00",
+    "updated_at": "2026-03-05T16:39:50.194+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "One by One",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 24,
+      "l": 33,
+      "s": 30,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "53de06b2-09d6-42fc-976d-41425bdedda9",
+        "name": "Recovery",
+        "created_at": "2026-03-05T17:12:27.72862+00:00"
+      }
+    ]
+  },
+  {
+    "id": "c797151c-7b06-464b-8092-d8aa37e696ef",
+    "title": "얼마 뒤에",
+    "year": 2025,
+    "width": 131,
+    "height": 44,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376154/portfolio/originals/92db0de7-75b1-4fda-a043-f2ec02192481.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376154/portfolio/originals/92db0de7-75b1-4fda-a043-f2ec02192481.jpg",
+    "is_featured": true,
+    "order": 11,
+    "created_at": "2026-01-26T18:24:42.287437+00:00",
+    "updated_at": "2026-03-05T16:22:51.304+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "After a While",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 43,
+      "l": 38,
+      "s": 21,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "1676fbe3-82bc-49d1-a49e-932cf35ed3a3",
+        "name": "Monolith",
+        "created_at": "2026-02-14T13:16:19.170273+00:00"
+      },
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "fff2f7e6-59d0-4234-9573-80cb730bba0c",
+    "title": "무엇을 위해 살아야 할까",
+    "year": 2025,
+    "width": 129,
+    "height": 93,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376216/portfolio/originals/c9f7b56a-5e52-449e-9606-0af4af71920c.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376216/portfolio/originals/c9f7b56a-5e52-449e-9606-0af4af71920c.jpg",
+    "is_featured": true,
+    "order": 7,
+    "created_at": "2026-01-26T18:22:03.077714+00:00",
+    "updated_at": "2026-03-05T16:22:09.449+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "What Should I Live For",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 197,
+      "l": 63,
+      "s": 22,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "23a7b286-b3be-4f29-b2ff-ab01a3b90606",
+        "name": "Mimicked Cycle",
+        "created_at": "2026-02-14T14:56:34.991331+00:00"
+      },
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "b2837a04-8640-447b-bb6c-8370f1441b7e",
+        "name": "marine",
+        "created_at": "2026-02-14T13:39:12.16156+00:00"
+      },
+      {
+        "id": "e4d27cc4-ce75-4ff7-af39-f35f33dc42a6",
+        "name": "America",
+        "created_at": "2026-02-14T13:30:54.339015+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "7159ab4b-d749-4bc9-9435-b7c0ba394d02",
+    "title": "바다의 바닥",
+    "year": 2025,
+    "width": 91,
+    "height": 65,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376179/portfolio/originals/aa8d4668-97f0-4539-9e1e-b363d156f1ef.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376179/portfolio/originals/aa8d4668-97f0-4539-9e1e-b363d156f1ef.jpg",
+    "is_featured": false,
+    "order": 0,
+    "created_at": "2026-02-06T06:21:21.234713+00:00",
+    "updated_at": "2026-03-05T16:22:24.797+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Seabed",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 43,
+      "l": 45,
+      "s": 68,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "b2837a04-8640-447b-bb6c-8370f1441b7e",
+        "name": "marine",
+        "created_at": "2026-02-14T13:39:12.16156+00:00"
+      }
+    ]
+  },
+  {
+    "id": "e8310fd3-d552-4882-a512-fe5783ac79c7",
+    "title": "풀과 불 관찰 시리즈 9",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375986/portfolio/originals/2dae43b8-4d9c-4f15-aca2-1e36069eb48b.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375986/portfolio/originals/2dae43b8-4d9c-4f15-aca2-1e36069eb48b.jpg",
+    "is_featured": false,
+    "order": 30,
+    "created_at": "2026-02-06T06:56:17.705196+00:00",
+    "updated_at": "2026-03-05T16:34:06.521+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Observation of grass and fire 9",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 15,
+      "l": 28,
+      "s": 51,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "7f80c816-74af-4388-a847-019a1a60b775",
+        "name": "Observation Research",
+        "created_at": "2026-02-14T14:09:51.842686+00:00"
+      },
+      {
+        "id": "ce0143e0-46e5-4abe-b5f0-61a3c89cc929",
+        "name": "grass and fire",
+        "created_at": "2026-02-06T15:21:22.741832+00:00"
+      }
+    ]
+  },
+  {
+    "id": "dafee2ee-7c7a-4a08-915e-9fb7f70b0048",
+    "title": "확산 3",
+    "year": 2023,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376238/portfolio/originals/d53e2d7a-20fe-4a85-bfed-069f793133a6.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376238/portfolio/originals/d53e2d7a-20fe-4a85-bfed-069f793133a6.jpg",
+    "is_featured": false,
+    "order": 88,
+    "created_at": "2026-02-14T17:28:11.538478+00:00",
+    "updated_at": "2026-03-05T16:34:41.449+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 12,
+      "l": 19,
+      "s": 34,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "fa155d8b-fa85-4a4d-8e4a-ed10d90346e6",
+    "title": "확산 6",
+    "year": 2023,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376252/portfolio/originals/de5e9b2f-5946-472c-815c-de563ae66d59.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376252/portfolio/originals/de5e9b2f-5946-472c-815c-de563ae66d59.jpg",
+    "is_featured": false,
+    "order": 91,
+    "created_at": "2026-02-14T17:32:54.7035+00:00",
+    "updated_at": "2026-03-05T16:34:58.747+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 10,
+      "l": 24,
+      "s": 50,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "f3ddc19e-0db3-4944-a5b7-38898afbfe64",
+    "title": "Tangled inner self",
+    "year": 2023,
+    "width": 130,
+    "height": 97,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376023/portfolio/originals/42f06f91-9bab-4872-8ef5-5de48e5b5a3d.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376023/portfolio/originals/42f06f91-9bab-4872-8ef5-5de48e5b5a3d.jpg",
+    "is_featured": false,
+    "order": 74,
+    "created_at": "2026-02-14T12:32:43.497982+00:00",
+    "updated_at": "2026-03-05T16:36:11.745+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Tangled inner self",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 350,
+      "l": 22,
+      "s": 22,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "e3b17556-aaa3-4c53-9c56-37b62a0a6b25",
+    "title": "발화",
+    "year": 2022,
+    "width": 130,
+    "height": 194,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376231/portfolio/originals/d1743299-a0d3-4624-aad0-f9535e029e80.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376231/portfolio/originals/d1743299-a0d3-4624-aad0-f9535e029e80.jpg",
+    "is_featured": false,
+    "order": 50,
+    "created_at": "2026-02-06T11:31:16.042935+00:00",
+    "updated_at": "2026-03-05T16:36:45.62+00:00",
+    "category_id": "54c52155-2e6b-4ff4-93db-b3a23d14e9c6",
+    "description": null,
+    "title_en": "Ignition",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 46,
+      "l": 27,
+      "s": 15,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "fd2da8fd-43ef-4ab1-a1bc-7dc6a87e1e22",
+    "title": "재의 단면",
+    "year": 2022,
+    "width": 130,
+    "height": 97,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376127/portfolio/originals/85ce3c2e-9b9e-49b9-9e3d-77f06ab59d1e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376127/portfolio/originals/85ce3c2e-9b9e-49b9-9e3d-77f06ab59d1e.jpg",
+    "is_featured": false,
+    "order": 84,
+    "created_at": "2026-02-14T17:14:07.877268+00:00",
+    "updated_at": "2026-03-05T16:39:18.078+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Ash Section",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 222,
+      "l": 38,
+      "s": 11,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "f70f5958-fa01-465f-ae80-5f3bffa1c199",
+        "name": "Extinguished",
+        "created_at": "2026-03-05T16:57:32.670162+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ed43258d-931a-4e39-a927-5a2158f64cf2",
+    "title": "확산 2",
+    "year": 2022,
+    "width": 97,
+    "height": 97,
+    "medium": "캔버스에 유채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376061/portfolio/originals/5378ddf1-4112-44d4-be94-9de75cc50d2b.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376061/portfolio/originals/5378ddf1-4112-44d4-be94-9de75cc50d2b.jpg",
+    "is_featured": false,
+    "order": 87,
+    "created_at": "2026-02-14T17:27:40.208499+00:00",
+    "updated_at": "2026-03-05T16:40:09.593+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Spread 2",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 11,
+      "l": 16,
+      "s": 25,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "41a70994-3188-48b7-afd7-629d1948df1c",
+        "name": "Spread",
+        "created_at": "2026-03-05T16:56:07.7001+00:00"
+      }
+    ]
+  },
+  {
+    "id": "fdc5f1d2-85c1-48a8-8d1f-2dfdf2ad7900",
+    "title": "흩날리는 재",
+    "year": 2022,
+    "width": 76,
+    "height": 76,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376072/portfolio/originals/581ba597-71db-40e6-94d7-d397af30dc64.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376072/portfolio/originals/581ba597-71db-40e6-94d7-d397af30dc64.jpg",
+    "is_featured": false,
+    "order": 62,
+    "created_at": "2026-02-14T09:35:05.885144+00:00",
+    "updated_at": "2026-03-05T16:40:37.951+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Scattering Ashes",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 54,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "0e12bebc-d53b-49a6-a7b3-83730da5fad8",
+        "name": "Ash and Smoke",
+        "created_at": "2026-02-14T12:02:42.458066+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      },
+      {
+        "id": "f70f5958-fa01-465f-ae80-5f3bffa1c199",
+        "name": "Extinguished",
+        "created_at": "2026-03-05T16:57:32.670162+00:00"
+      }
+    ]
+  },
+  {
+    "id": "442c7837-4b7d-4eb7-aada-3e02c0608c75",
+    "title": "땅의 바닥",
+    "year": 2025,
+    "width": 63,
+    "height": 45,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376162/portfolio/originals/a662955b-cfb9-4db2-b8c7-876bf67a7742.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376162/portfolio/originals/a662955b-cfb9-4db2-b8c7-876bf67a7742.jpg",
+    "is_featured": false,
+    "order": 0,
+    "created_at": "2026-01-26T18:18:25.370527+00:00",
+    "updated_at": "2026-03-05T16:21:58.26+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Ground floor",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 40,
+      "l": 34,
+      "s": 24,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "a933638d-216a-4fc6-bcc3-107fc19412da",
+        "name": "Gosung, Gangwon-do",
+        "created_at": "2026-02-14T11:51:02.923687+00:00"
+      }
+    ]
+  },
+  {
+    "id": "b80606de-7878-42ed-946f-5d761e683dc3",
+    "title": "고요한 붕괴",
+    "year": 2025,
+    "width": 210,
+    "height": 152,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376080/portfolio/originals/5b75a51b-2112-4ee3-8a1f-78ff1e7cc06f.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376080/portfolio/originals/5b75a51b-2112-4ee3-8a1f-78ff1e7cc06f.jpg",
+    "is_featured": true,
+    "order": 5,
+    "created_at": "2026-01-26T18:16:47.477576+00:00",
+    "updated_at": "2026-03-05T14:45:08.347+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Quiet Collapse",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 74,
+      "l": 39,
+      "s": 50,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "12c5c7e7-5d58-4ee9-80b4-c060512030e1",
+        "name": "Canada",
+        "created_at": "2026-02-14T13:27:45.991793+00:00"
+      },
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "ace74e15-4f37-42fe-99f6-ec0fb737a03c",
+        "name": "Pollution",
+        "created_at": "2026-02-14T14:46:49.463417+00:00"
+      },
+      {
+        "id": "b591cb50-f15f-4782-9d41-e710651f4f30",
+        "name": "Jeju",
+        "created_at": "2026-02-14T13:18:25.077596+00:00"
+      },
+      {
+        "id": "c06d7a56-71d8-4685-9136-883239e81980",
+        "name": "desert",
+        "created_at": "2026-02-14T14:22:33.19152+00:00"
+      }
+    ]
+  },
+  {
+    "id": "8d876a4b-e8c7-4650-8ebb-2d3b6f193915",
+    "title": "순환을 따라가도 닿지 않는",
+    "year": 2025,
+    "width": 258,
+    "height": 71,
+    "medium": "종이에 오일파스텔",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376133/portfolio/originals/86de3126-f4a8-46b3-80bf-0f49d7dea008.png",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376133/portfolio/originals/86de3126-f4a8-46b3-80bf-0f49d7dea008.png",
+    "is_featured": true,
+    "order": 10,
+    "created_at": "2026-01-26T18:36:20.457755+00:00",
+    "updated_at": "2026-03-05T16:22:35.979+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Following the Cycle, Never Reaching",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Oil pastel on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 43,
+      "l": 42,
+      "s": 33,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "23a7b286-b3be-4f29-b2ff-ab01a3b90606",
+        "name": "Mimicked Cycle",
+        "created_at": "2026-02-14T14:56:34.991331+00:00"
+      },
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "b2837a04-8640-447b-bb6c-8370f1441b7e",
+        "name": "marine",
+        "created_at": "2026-02-14T13:39:12.16156+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "dbf17820-55ce-4835-9d69-3a934bccfa41",
+    "title": "불 연구 시리즈 1",
+    "year": 2023,
+    "width": 53,
+    "height": 65,
+    "medium": "종이에 수채",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376109/portfolio/originals/7941cfe7-1f20-4148-bc90-e8771ccd4e8b.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376109/portfolio/originals/7941cfe7-1f20-4148-bc90-e8771ccd4e8b.jpg",
+    "is_featured": false,
+    "order": 11,
+    "created_at": "2026-02-06T06:25:09.748671+00:00",
+    "updated_at": "2026-03-05T16:30:26.809+00:00",
+    "category_id": "e0d3285b-de39-43a1-9548-e621fdf5da20",
+    "description": null,
+    "title_en": "Fire Study Series 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Watercolor on paper",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 13,
+      "l": 43,
+      "s": 30,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "04fc5bb1-8a77-497a-982a-27433fa59bb1",
+    "title": "불을 끌 수 있었다는 상상 1",
+    "year": 2023,
+    "width": 130,
+    "height": 97,
+    "medium": "캔버스에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376137/portfolio/originals/89840f10-192f-440d-a59e-1b8cada2a879.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376137/portfolio/originals/89840f10-192f-440d-a59e-1b8cada2a879.jpg",
+    "is_featured": false,
+    "order": 66,
+    "created_at": "2026-02-14T11:21:41.562987+00:00",
+    "updated_at": "2026-03-05T16:31:53.118+00:00",
+    "category_id": "05880a6b-ab86-45a6-ba2a-f5772c873095",
+    "description": null,
+    "title_en": "The Imagination of Extinguishing the Fire 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on canvas",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 335,
+      "l": 38,
+      "s": 18,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "02ec490e-016f-42df-a0ac-23af3fcfb306",
+        "name": "Fiction",
+        "created_at": "2026-02-14T12:32:40.725217+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "454c380d-f7ec-4ae3-97db-d4e428a3ae5d",
+    "title": "아무 일도 일어나지 않았다 1",
+    "year": 2022,
+    "width": 1,
+    "height": 1,
+    "medium": "철판에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376212/portfolio/originals/c8f261a1-1d69-4bb7-9029-b0c5d95cb374.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376212/portfolio/originals/c8f261a1-1d69-4bb7-9029-b0c5d95cb374.jpg",
+    "is_featured": false,
+    "order": 21,
+    "created_at": "2026-02-06T06:47:31.732034+00:00",
+    "updated_at": "2026-03-05T16:37:41.684+00:00",
+    "category_id": "5f1fe2bf-a95e-451e-aa8d-b5723669756a",
+    "description": null,
+    "title_en": "Nothing Happened 1",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on cut steel plate",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": true,
+    "dominant_color": {
+      "h": 0,
+      "l": 57,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "aa914c96-1fe8-49ea-9811-b8ce465044a0",
+        "name": "cut steel plate",
+        "created_at": "2026-02-14T11:54:00.150079+00:00"
+      }
+    ]
+  },
+  {
+    "id": "68b34fc7-47c1-4539-b891-2e803f233fe4",
+    "title": "Returning the land to the rightful owner",
+    "year": 2024,
+    "width": 279,
+    "height": 200,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376296/portfolio/originals/f7778ced-be9d-4e3d-b0b1-b5af197113ca.png",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376296/portfolio/originals/f7778ced-be9d-4e3d-b0b1-b5af197113ca.png",
+    "is_featured": true,
+    "order": 3,
+    "created_at": "2026-02-06T10:26:58.112832+00:00",
+    "updated_at": "2026-03-05T16:24:50.228+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Returning the land to the rightful owner",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 11,
+      "l": 40,
+      "s": 47,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "12c5c7e7-5d58-4ee9-80b4-c060512030e1",
+        "name": "Canada",
+        "created_at": "2026-02-14T13:27:45.991793+00:00"
+      },
+      {
+        "id": "1676fbe3-82bc-49d1-a49e-932cf35ed3a3",
+        "name": "Monolith",
+        "created_at": "2026-02-14T13:16:19.170273+00:00"
+      },
+      {
+        "id": "3adc88e1-1cc9-4b6d-adda-165d004d555d",
+        "name": "Linearity",
+        "created_at": "2026-02-14T14:38:57.7837+00:00"
+      },
+      {
+        "id": "656bbde8-87b7-4ffd-b610-52012acb3d1a",
+        "name": "Human Presence",
+        "created_at": "2026-02-14T13:42:55.745287+00:00"
+      },
+      {
+        "id": "b591cb50-f15f-4782-9d41-e710651f4f30",
+        "name": "Jeju",
+        "created_at": "2026-02-14T13:18:25.077596+00:00"
+      }
+    ]
+  },
+  {
+    "id": "1d74a63f-c73b-4b29-ab38-713003fda244",
+    "title": "Kroenleinia grusonii",
+    "year": 2025,
+    "width": 146,
+    "height": 113,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376256/portfolio/originals/df29813e-700d-4486-afda-013c9be1ad79.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376256/portfolio/originals/df29813e-700d-4486-afda-013c9be1ad79.jpg",
+    "is_featured": true,
+    "order": 6,
+    "created_at": "2026-01-26T18:28:45.793942+00:00",
+    "updated_at": "2026-03-05T16:23:26.776+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Kroenleinia grusonii",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 169,
+      "l": 40,
+      "s": 33,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "c06d7a56-71d8-4685-9136-883239e81980",
+        "name": "desert",
+        "created_at": "2026-02-14T14:22:33.19152+00:00"
+      },
+      {
+        "id": "e4d27cc4-ce75-4ff7-af39-f35f33dc42a6",
+        "name": "America",
+        "created_at": "2026-02-14T13:30:54.339015+00:00"
+      }
+    ]
+  },
+  {
+    "id": "a28649cc-afd7-4b26-8059-6ae26f7b0962",
+    "title": "Here to there",
+    "year": 2024,
+    "width": 189,
+    "height": 129,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376234/portfolio/originals/d42af11f-7542-40c5-a154-863ca8c2710e.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376234/portfolio/originals/d42af11f-7542-40c5-a154-863ca8c2710e.jpg",
+    "is_featured": true,
+    "order": 1,
+    "created_at": "2026-01-26T18:09:31.791846+00:00",
+    "updated_at": "2026-03-05T16:24:19.01+00:00",
+    "category_id": null,
+    "description": null,
+    "title_en": "Here to there",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 19,
+      "l": 38,
+      "s": 31,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "1676fbe3-82bc-49d1-a49e-932cf35ed3a3",
+        "name": "Monolith",
+        "created_at": "2026-02-14T13:16:19.170273+00:00"
+      },
+      {
+        "id": "6246d235-b6b9-4af9-a104-576cfbb2192e",
+        "name": "Cycle",
+        "created_at": "2026-02-14T12:41:55.817502+00:00"
+      },
+      {
+        "id": "b591cb50-f15f-4782-9d41-e710651f4f30",
+        "name": "Jeju",
+        "created_at": "2026-02-14T13:18:25.077596+00:00"
+      },
+      {
+        "id": "c06d7a56-71d8-4685-9136-883239e81980",
+        "name": "desert",
+        "created_at": "2026-02-14T14:22:33.19152+00:00"
+      },
+      {
+        "id": "e4d27cc4-ce75-4ff7-af39-f35f33dc42a6",
+        "name": "America",
+        "created_at": "2026-02-14T13:30:54.339015+00:00"
+      },
+      {
+        "id": "e7f19fb1-e85a-4a99-9ec3-1c0289078a2d",
+        "name": "Cycle: Round Vessel",
+        "created_at": "2026-02-06T14:50:04.749628+00:00"
+      }
+    ]
+  },
+  {
+    "id": "f69eb576-c07d-4379-b635-7e9d48a2930f",
+    "title": "들여다보고 멀어지기 3",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376264/portfolio/originals/e4081517-c3bb-463e-8756-f5d98196b388.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376264/portfolio/originals/e4081517-c3bb-463e-8756-f5d98196b388.jpg",
+    "is_featured": false,
+    "order": 53,
+    "created_at": "2026-02-06T11:32:55.752331+00:00",
+    "updated_at": "2026-03-05T16:28:07.235+00:00",
+    "category_id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 3",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 0,
+      "l": 23,
+      "s": 0,
+      "isAchromatic": true
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "ab6fed28-96f1-4b0a-94b4-6e3ac4a5ac8c",
+    "title": "들여다보고 멀어지기 4",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773375944/portfolio/originals/123d53bb-d741-41b4-9c3b-6d7984b959aa.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773375944/portfolio/originals/123d53bb-d741-41b4-9c3b-6d7984b959aa.jpg",
+    "is_featured": false,
+    "order": 54,
+    "created_at": "2026-02-06T11:33:18.70442+00:00",
+    "updated_at": "2026-03-05T16:28:18.325+00:00",
+    "category_id": "9de24e24-5ae3-4ad8-881a-69bd23ac081b",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 4",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 220,
+      "l": 32,
+      "s": 23,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  },
+  {
+    "id": "9120e4ce-5e50-4f2c-8b60-fd3421117ee1",
+    "title": "들여다보고 멀어지기 6",
+    "year": 2023,
+    "width": 75,
+    "height": 71,
+    "medium": "삼합지에 혼합재료",
+    "image_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/v1773376004/portfolio/originals/3b5ce6e7-4268-491f-be00-ca872c993d97.jpg",
+    "thumbnail_url": "https://res.cloudinary.com/dsx6cixpp/image/upload/c_fill,w_400,h_400/v1773376004/portfolio/originals/3b5ce6e7-4268-491f-be00-ca872c993d97.jpg",
+    "is_featured": false,
+    "order": 33,
+    "created_at": "2026-02-06T09:30:13.918778+00:00",
+    "updated_at": "2026-03-05T16:28:39.276+00:00",
+    "category_id": "a709367b-dc60-4612-9bfe-a0632be4805d",
+    "description": null,
+    "title_en": "Close-up and Distant Perspectives 6",
+    "description_en": null,
+    "show_watermark": true,
+    "medium_en": "Mixed media on Multi-layered Hanji",
+    "collection": null,
+    "collection_en": null,
+    "variable_size": false,
+    "dominant_color": {
+      "h": 48,
+      "l": 15,
+      "s": 43,
+      "isAchromatic": false
+    },
+    "tags": [
+      {
+        "id": "a7c6e0b7-0960-48b1-a705-e9c96044ab8e",
+        "name": "Close-up and Distant Perspectives",
+        "created_at": "2026-02-22T18:17:49.745061+00:00"
+      },
+      {
+        "id": "d3ec18df-98ee-49cd-ab3b-2d03f22e2e7a",
+        "name": "wildfire",
+        "created_at": "2026-02-14T12:04:06.634773+00:00"
+      }
+    ]
+  }
+]

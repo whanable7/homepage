@@ -1,132 +1,91 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { cookies } from 'next/headers';
+import { getPortfolioById, updateArtwork, getTags, addTag } from '@/lib/data';
 
-interface RouteParams {
-  params: Promise<{ id: string }>;
+const SESSION_COOKIE_NAME = 'admin_session';
+
+async function isAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  return !!session;
 }
 
-// GET /api/portfolio/:id/tags - Get tags for an artwork
-export async function GET(request: NextRequest, { params }: RouteParams) {
-  try {
-    const { id } = await params;
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const artwork = await getPortfolioById(id);
+  if (!artwork) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(artwork.tags || []);
+}
 
-    const { data, error } = await supabase
-      .from('artwork_tags')
-      .select('tag_id, tags(id, name, created_at)')
-      .eq('artwork_id', id);
-
-    if (error) throw error;
-
-    // Flatten the response
-    const tags = data?.map(item => item.tags).filter(Boolean) || [];
-
-    return NextResponse.json(tags);
-  } catch (error) {
-    console.error('Error fetching artwork tags:', error);
-    return NextResponse.json({ error: 'Failed to fetch tags' }, { status: 500 });
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const { id } = await params;
+  const { tagIds } = await request.json();
+  
+  const allTags = await getTags();
+  const tags = allTags.filter((t: { id: string }) => tagIds.includes(t.id));
+  
+  const updated = await updateArtwork(id, { tags });
+  if (!updated) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(tags);
 }
 
-// POST /api/portfolio/:id/tags - Add tags to an artwork
-// Body: { tag_ids: string[] } or { tag_names: string[] } (creates if not exist)
-export async function POST(request: NextRequest, { params }: RouteParams) {
-  try {
-    const { id: artwork_id } = await params;
-    const body = await request.json();
-    const { tag_ids, tag_names } = body;
-
-    let tagsToAdd: string[] = [];
-
-    // Handle tag_ids (existing tags)
-    if (tag_ids && Array.isArray(tag_ids)) {
-      tagsToAdd = [...tag_ids];
-    }
-
-    // Handle tag_names (create new tags if needed)
-    if (tag_names && Array.isArray(tag_names)) {
-      for (const name of tag_names) {
-        if (typeof name !== 'string' || name.trim().length === 0) continue;
-
-        // Try to find existing tag
-        const { data: existing } = await supabase
-          .from('tags')
-          .select('id')
-          .eq('name', name.trim())
-          .single();
-
-        if (existing) {
-          tagsToAdd.push(existing.id);
-        } else {
-          // Create new tag
-          const { data: newTag, error: createError } = await supabase
-            .from('tags')
-            .insert({ name: name.trim() })
-            .select('id')
-            .single();
-
-          if (createError) {
-            console.error('Error creating tag:', createError);
-            continue;
-          }
-
-          if (newTag) {
-            tagsToAdd.push(newTag.id);
-          }
-        }
+// POST: 작품에 태그 추가 (tag_ids 또는 tag_names)
+export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+  const { id } = await params;
+  const body = await request.json();
+  
+  const artwork = await getPortfolioById(id);
+  if (!artwork) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  
+  const currentTags = artwork.tags || [];
+  const allTags = await getTags();
+  let tagsToAdd: { id: string; name: string }[] = [];
+  
+  if (body.tag_ids) {
+    // tag_ids로 추가
+    tagsToAdd = allTags.filter((t: { id: string }) => 
+      body.tag_ids.includes(t.id) && !currentTags.some((ct: { id: string }) => ct.id === t.id)
+    );
+  } else if (body.tag_names) {
+    // tag_names로 추가 (없으면 생성)
+    for (const name of body.tag_names) {
+      let tag = allTags.find((t: { name: string }) => t.name.toLowerCase() === name.toLowerCase());
+      if (!tag) {
+        tag = await addTag({ name });
+      }
+      if (!currentTags.some((ct: { id: string }) => ct.id === tag.id)) {
+        tagsToAdd.push(tag);
       }
     }
-
-    if (tagsToAdd.length === 0) {
-      return NextResponse.json({ error: 'No valid tags provided' }, { status: 400 });
-    }
-
-    // Insert artwork_tags (ignore duplicates)
-    const insertData = tagsToAdd.map(tag_id => ({ artwork_id, tag_id }));
-
-    const { error } = await supabase
-      .from('artwork_tags')
-      .upsert(insertData, { onConflict: 'artwork_id,tag_id', ignoreDuplicates: true });
-
-    if (error) throw error;
-
-    // Return updated tags list
-    const { data: updatedTags } = await supabase
-      .from('artwork_tags')
-      .select('tags(id, name, created_at)')
-      .eq('artwork_id', artwork_id);
-
-    const tags = updatedTags?.map(item => item.tags).filter(Boolean) || [];
-
-    return NextResponse.json(tags);
-  } catch (error) {
-    console.error('Error adding tags:', error);
-    return NextResponse.json({ error: 'Failed to add tags' }, { status: 500 });
   }
+  
+  const newTags = [...currentTags, ...tagsToAdd];
+  const updated = await updateArtwork(id, { tags: newTags });
+  if (!updated) return NextResponse.json({ error: 'Update failed' }, { status: 500 });
+  return NextResponse.json(newTags);
 }
 
-// DELETE /api/portfolio/:id/tags - Remove tags from an artwork
-// Body: { tag_ids: string[] }
-export async function DELETE(request: NextRequest, { params }: RouteParams) {
-  try {
-    const { id: artwork_id } = await params;
-    const body = await request.json();
-    const { tag_ids } = body;
-
-    if (!tag_ids || !Array.isArray(tag_ids) || tag_ids.length === 0) {
-      return NextResponse.json({ error: 'tag_ids array is required' }, { status: 400 });
-    }
-
-    const { error } = await supabase
-      .from('artwork_tags')
-      .delete()
-      .eq('artwork_id', artwork_id)
-      .in('tag_id', tag_ids);
-
-    if (error) throw error;
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error removing tags:', error);
-    return NextResponse.json({ error: 'Failed to remove tags' }, { status: 500 });
+// DELETE: 작품에서 태그 제거
+export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
+  const { id } = await params;
+  const { tag_ids } = await request.json();
+  
+  const artwork = await getPortfolioById(id);
+  if (!artwork) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  
+  const currentTags = artwork.tags || [];
+  const newTags = currentTags.filter((t: { id: string }) => !tag_ids.includes(t.id));
+  
+  const updated = await updateArtwork(id, { tags: newTags });
+  if (!updated) return NextResponse.json({ error: 'Update failed' }, { status: 500 });
+  return NextResponse.json(newTags);
 }

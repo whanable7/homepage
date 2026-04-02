@@ -1,51 +1,50 @@
-import { NextResponse } from 'next/server';
-import { supabase } from '@/lib/supabase/client';
+import { NextRequest, NextResponse } from 'next/server';
+import { cookies } from 'next/headers';
+import { getExhibitionById, getExhibitions, updateExhibitions } from '@/lib/data';
 
-interface RouteParams {
-  params: Promise<{ id: string }>;
+const SESSION_COOKIE_NAME = 'admin_session';
+async function isAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return !!cookieStore.get(SESSION_COOKIE_NAME);
 }
 
-export async function PUT(request: Request, { params }: RouteParams) {
-  try {
-    const { id } = await params;
-    const body = await request.json();
-
-    const { data, error } = await supabase
-      .from('exhibitions')
-      .update(body)
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('Error updating exhibition:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json(data);
-  } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const exhibition = await getExhibitionById(id);
+  if (!exhibition) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(exhibition);
 }
 
-export async function DELETE(request: Request, { params }: RouteParams) {
-  try {
-    const { id } = await params;
+export async function PUT(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { id } = await params;
+  const body = await request.json();
+  const exhibitions = await getExhibitions();
+  const idx = exhibitions.findIndex((e: { id: string }) => e.id === id);
+  if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  exhibitions[idx] = { ...exhibitions[idx], ...body };
+  await updateExhibitions(exhibitions);
+  return NextResponse.json(exhibitions[idx]);
+}
 
-    const { error } = await supabase
-      .from('exhibitions')
-      .delete()
-      .eq('id', id);
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { id } = await params;
+  const body = await request.json();
+  const exhibitions = await getExhibitions();
+  const idx = exhibitions.findIndex((e: { id: string }) => e.id === id);
+  if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  exhibitions[idx] = { ...exhibitions[idx], ...body };
+  await updateExhibitions(exhibitions);
+  return NextResponse.json(exhibitions[idx]);
+}
 
-    if (error) {
-      console.error('Error deleting exhibition:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error('Error:', error);
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
-  }
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { id } = await params;
+  const exhibitions = await getExhibitions();
+  const filtered = exhibitions.filter((e: { id: string }) => e.id !== id);
+  if (filtered.length === exhibitions.length) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  await updateExhibitions(filtered);
+  return NextResponse.json({ success: true });
 }

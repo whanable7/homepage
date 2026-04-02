@@ -1,36 +1,31 @@
 import { NextRequest, NextResponse } from 'next/server';
-import sharp from 'sharp';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { cookies } from 'next/headers';
+
+const SESSION_COOKIE_NAME = 'admin_session';
+
+async function isAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  const session = cookieStore.get(SESSION_COOKIE_NAME);
+  return !!session;
+}
 
 // RGB → HSL 변환
 function rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: number } {
-  r /= 255;
-  g /= 255;
-  b /= 255;
-
-  const max = Math.max(r, g, b);
-  const min = Math.min(r, g, b);
-  let h = 0;
-  let s = 0;
+  r /= 255; g /= 255; b /= 255;
+  const max = Math.max(r, g, b), min = Math.min(r, g, b);
   const l = (max + min) / 2;
-
+  let h = 0, s = 0;
+  
   if (max !== min) {
     const d = max - min;
     s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
-
     switch (max) {
-      case r:
-        h = ((g - b) / d + (g < b ? 6 : 0)) / 6;
-        break;
-      case g:
-        h = ((b - r) / d + 2) / 6;
-        break;
-      case b:
-        h = ((r - g) / d + 4) / 6;
-        break;
+      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break;
+      case g: h = ((b - r) / d + 2) / 6; break;
+      case b: h = ((r - g) / d + 4) / 6; break;
     }
   }
-
+  
   return {
     h: Math.round(h * 360),
     s: Math.round(s * 100),
@@ -38,164 +33,94 @@ function rgbToHsl(r: number, g: number, b: number): { h: number; s: number; l: n
   };
 }
 
-// Hue를 12개 버킷으로 양자화 (30° 단위)
-function quantizeHue(h: number): number {
-  return Math.floor(h / 30) * 30;
-}
-
-// 대표색 추출 (30x30 샘플링, 가중치 적용)
-async function extractDominantColor(imageUrl: string): Promise<{ h: number; s: number; l: number; isAchromatic: boolean }> {
-  // 이미지 다운로드
-  const response = await fetch(imageUrl);
-  if (!response.ok) throw new Error('Failed to fetch image');
-  
-  const buffer = Buffer.from(await response.arrayBuffer());
-  
-  // 30x30으로 리사이즈 (900픽셀 샘플링)
-  const { data, info } = await sharp(buffer)
-    .resize(30, 30, { fit: 'fill' })
-    .raw()
-    .toBuffer({ resolveWithObject: true });
-
-  // 버킷별 HSL 값 수집 (가중치 적용)
-  const buckets: Map<number, { hSum: number; sSum: number; lSum: number; weight: number }> = new Map();
-  let achromaticWeight = 0;
-  let achromaticLSum = 0;
-  let totalWeight = 0;
-  
-  const ACHROMATIC_THRESHOLD = 8; // 채도 8% 미만 = 무채색 (더 타이트하게)
-
-  for (let i = 0; i < data.length; i += info.channels) {
-    const r = data[i];
-    const g = data[i + 1];
-    const b = data[i + 2];
-    
-    const hsl = rgbToHsl(r, g, b);
-    
-    // 명도 기반 가중치 (밝은 픽셀 강조, 어두운 픽셀 약화)
-    let weight = 1.0;
-    if (hsl.l < 20) {
-      weight = 0.3;  // 매우 어두운 픽셀은 가중치 낮춤
-    } else if (hsl.l < 35) {
-      weight = 0.7;  // 어두운 픽셀
-    } else if (hsl.l > 70) {
-      weight = 1.5;  // 밝은 픽셀 가중치 높임
-    } else if (hsl.l > 55) {
-      weight = 1.2;  // 중간~밝은 픽셀
-    }
-    
-    // 채도 기반 추가 가중치 (색이 진한 픽셀 강조)
-    if (hsl.s > 50) {
-      weight *= 1.3;  // 채도 높으면 색상 표현에 더 중요
-    } else if (hsl.s > 30) {
-      weight *= 1.1;
-    }
-    
-    totalWeight += weight;
-    
-    // 무채색 판별 (더 엄격하게)
-    if (hsl.s < ACHROMATIC_THRESHOLD) {
-      achromaticWeight += weight;
-      achromaticLSum += hsl.l * weight;
-      continue;
-    }
-    
-    // 유채색: Hue 양자화 후 버킷에 추가
-    const bucket = quantizeHue(hsl.h);
-    const existing = buckets.get(bucket) || { hSum: 0, sSum: 0, lSum: 0, weight: 0 };
-    
-    buckets.set(bucket, {
-      hSum: existing.hSum + hsl.h * weight,
-      sSum: existing.sSum + hsl.s * weight,
-      lSum: existing.lSum + hsl.l * weight,
-      weight: existing.weight + weight,
-    });
-  }
-
-  // 무채색이 가중치 기준 60% 이상이면 무채색으로 판정
-  if (achromaticWeight > totalWeight * 0.6) {
-    const avgL = Math.round(achromaticLSum / achromaticWeight);
-    return { h: 0, s: 0, l: avgL, isAchromatic: true };
-  }
-
-  // 최빈 버킷 찾기 (가중치 기준)
-  let maxBucket = 0;
-  let maxWeight = 0;
-  
-  buckets.forEach((data, bucket) => {
-    if (data.weight > maxWeight) {
-      maxWeight = data.weight;
-      maxBucket = bucket;
-    }
-  });
-
-  // 최빈 버킷의 가중 평균 HSL
-  const dominant = buckets.get(maxBucket);
-  if (!dominant || dominant.weight === 0) {
-    // 모든 픽셀이 무채색인 경우
-    const avgL = achromaticWeight > 0
-      ? Math.round(achromaticLSum / achromaticWeight)
-      : 50;
-    return { h: 0, s: 0, l: avgL, isAchromatic: true };
-  }
-
-  return {
-    h: Math.round(dominant.hSum / dominant.weight),
-    s: Math.round(dominant.sSum / dominant.weight),
-    l: Math.round(dominant.lSum / dominant.weight),
-    isAchromatic: false,
-  };
-}
-
-// POST /api/portfolio/analyze-color
-// Body: { image_url: string, artwork_id?: string }
-// artwork_id가 있으면 DB에 저장
 export async function POST(request: NextRequest) {
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  }
+
   try {
-    const body = await request.json();
-    const { image_url, artwork_id } = body;
-
-    if (!image_url) {
-      return NextResponse.json({ error: 'image_url is required' }, { status: 400 });
+    const { image_url } = await request.json();
+    if (!image_url || !image_url.includes('res.cloudinary.com')) {
+      return NextResponse.json({ error: 'Invalid Cloudinary URL' }, { status: 400 });
     }
 
-    const result = await extractDominantColor(image_url);
+    // Cloudinary URL transformation으로 1x1 리사이즈 → 평균색 추출
+    // c_scale,w_1,h_1 → 이미지를 1x1로 축소하면 평균색이 됨
+    const colorUrl = image_url.replace('/upload/', '/upload/c_scale,w_1,h_1,f_json/');
     
-    const dominantColor = {
-      h: result.h,
-      s: result.s,
-      l: result.l,
-      isAchromatic: result.isAchromatic,
-    };
-
-    // artwork_id가 있으면 DB에 저장
-    if (artwork_id) {
-      const { error } = await supabaseAdmin
-        .from('portfolio')
-        .update({ 
-          dominant_color: dominantColor,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', artwork_id);
-
-      if (error) {
-        console.error('Error saving dominant_color:', error);
-        return NextResponse.json({ 
-          dominant_color: dominantColor,
-          saved: false,
-          error: error.message,
-        });
+    // Cloudinary JSON 응답에서 색상 정보 추출
+    // 대안: 작은 이미지로 축소 후 색상 추출
+    const thumbUrl = image_url.replace('/upload/', '/upload/c_fill,w_50,h_50,f_png/');
+    
+    // 50x50 썸네일에서 평균색 계산 (Canvas 대신 Cloudinary colors API 사용)
+    // Cloudinary의 색상 정보를 가져오는 더 간단한 방법:
+    // fl_getinfo 플래그 사용
+    const infoUrl = image_url.replace('/upload/', '/upload/fl_getinfo/');
+    
+    let dominantColor: { h: number; s: number; l: number; isAchromatic: boolean } | null = null;
+    
+    try {
+      // Cloudinary의 predominant color 가져오기
+      const res = await fetch(infoUrl, { method: 'HEAD' });
+      const colorHeader = res.headers.get('x-cld-color');
+      
+      if (colorHeader) {
+        // Parse hex color
+        const hex = colorHeader.replace('#', '');
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+        const hsl = rgbToHsl(r, g, b);
+        dominantColor = { ...hsl, isAchromatic: hsl.s < 10 };
       }
-
-      return NextResponse.json({ 
-        dominant_color: dominantColor,
-        saved: true,
-      });
+    } catch {
+      // fl_getinfo 실패 시 대안: 1x1 이미지 다운로드
     }
-
-    return NextResponse.json({ dominant_color: dominantColor });
-  } catch (error) {
-    console.error('Error analyzing color:', error);
-    return NextResponse.json({ error: 'Failed to analyze color' }, { status: 500 });
+    
+    // 대안: fl_getinfo가 안 되면 Cloudinary Admin API로 색상 정보 가져오기
+    if (!dominantColor) {
+      try {
+        // public_id 추출
+        const match = image_url.match(/\/upload\/(?:v\d+\/)?(.+?)(?:\.\w+)?$/);
+        if (match) {
+          const publicId = match[1];
+          const cloudName = process.env.CLOUDINARY_CLOUD_NAME;
+          const apiKey = process.env.CLOUDINARY_API_KEY;
+          const apiSecret = process.env.CLOUDINARY_API_SECRET;
+          
+          // Admin API로 색상 정보 가져오기
+          const adminUrl = `https://api.cloudinary.com/v1_1/${cloudName}/resources/image/upload/${publicId}?colors=true`;
+          const authHeader = Buffer.from(`${apiKey}:${apiSecret}`).toString('base64');
+          
+          const res = await fetch(adminUrl, {
+            headers: { 'Authorization': `Basic ${authHeader}` },
+          });
+          
+          if (res.ok) {
+            const data = await res.json();
+            if (data.colors && data.colors.length > 0) {
+              // data.colors = [["#hex", percentage], ...]
+              const hex = data.colors[0][0].replace('#', '');
+              const r = parseInt(hex.substring(0, 2), 16);
+              const g = parseInt(hex.substring(2, 4), 16);
+              const b = parseInt(hex.substring(4, 6), 16);
+              const hsl = rgbToHsl(r, g, b);
+              dominantColor = { ...hsl, isAchromatic: hsl.s < 10 };
+            }
+          }
+        }
+      } catch (err) {
+        console.error('Cloudinary Admin API color fetch failed:', err);
+      }
+    }
+    
+    if (dominantColor) {
+      return NextResponse.json({ dominant_color: dominantColor });
+    } else {
+      return NextResponse.json({ error: 'Could not extract color' }, { status: 500 });
+    }
+  } catch (err) {
+    console.error('Color analysis error:', err);
+    return NextResponse.json({ error: 'Color analysis failed' }, { status: 500 });
   }
 }

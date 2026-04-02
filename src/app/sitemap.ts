@@ -1,52 +1,23 @@
 import { MetadataRoute } from 'next';
-import { supabase } from '@/lib/supabase/client';
+import { getCategories } from '@/lib/data';
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const baseUrl = 'https://jungwhan.art';
+  const baseUrl = 'https://jungwhanpark.com';
+  const categories = await getCategories();
 
-  // Fetch categories for dynamic routes
-  const { data: categories } = await supabase
-    .from('categories')
-    .select('slug, updated_at');
-
-  const categoryUrls = (categories || []).map((category) => ({
+  const categoryUrls = categories.map((category: { slug: string; updated_at?: string }) => ({
     url: `${baseUrl}/portfolio/${encodeURIComponent(category.slug)}`,
-    lastModified: new Date(category.updated_at),
+    lastModified: new Date(category.updated_at || new Date()),
     changeFrequency: 'weekly' as const,
     priority: 0.7,
   }));
 
   return [
-    {
-      url: baseUrl,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 1,
-    },
-    {
-      url: `${baseUrl}/portfolio`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.9,
-    },
-    {
-      url: `${baseUrl}/about`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
-    {
-      url: `${baseUrl}/news`,
-      lastModified: new Date(),
-      changeFrequency: 'weekly',
-      priority: 0.6,
-    },
-    {
-      url: `${baseUrl}/contact`,
-      lastModified: new Date(),
-      changeFrequency: 'monthly',
-      priority: 0.5,
-    },
+    { url: baseUrl, lastModified: new Date(), changeFrequency: 'monthly', priority: 1 },
+    { url: `${baseUrl}/portfolio`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${baseUrl}/cv`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${baseUrl}/news`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.6 },
+    { url: `${baseUrl}/contact`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.5 },
     ...categoryUrls,
   ];
 }

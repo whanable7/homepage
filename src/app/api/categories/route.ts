@@ -1,39 +1,26 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { cookies } from 'next/headers';
+import { getCategories, updateCategories } from '@/lib/data';
+
+const SESSION_COOKIE_NAME = 'admin_session';
+
+async function isAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return !!cookieStore.get(SESSION_COOKIE_NAME);
+}
 
 export async function GET() {
-  const { data, error } = await supabaseAdmin
-    .from('categories')
-    .select('*')
-    .order('order', { ascending: true });
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
-  }
-
-  return NextResponse.json(data);
+  return NextResponse.json(await getCategories());
 }
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-
-  const { data, error } = await supabaseAdmin
-    .from('categories')
-    .insert([{
-      name: body.name,
-      name_en: body.name_en || null,
-      slug: body.slug,
-      description: body.description || null,
-      description_en: body.description_en || null,
-      cover_image_url: body.cover_image_url || null,
-      order: body.order || 0,
-    }])
-    .select()
-    .single();
-
-  if (error) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+  if (!(await isAuthenticated())) {
+    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
-
-  return NextResponse.json(data);
+  const body = await request.json();
+  const categories = await getCategories();
+  const newCat = { ...body, id: crypto.randomUUID(), created_at: new Date().toISOString(), updated_at: new Date().toISOString() };
+  categories.push(newCat);
+  await updateCategories(categories);
+  return NextResponse.json(newCat, { status: 201 });
 }

@@ -1,106 +1,38 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { supabaseAdmin } from '@/lib/supabase/server';
+import { getNewsById, getNews, updateNews } from '@/lib/data';
 
 const SESSION_COOKIE_NAME = 'admin_session';
-
 async function isAuthenticated(): Promise<boolean> {
   const cookieStore = await cookies();
-  const session = cookieStore.get(SESSION_COOKIE_NAME);
-  return !!session;
+  return !!cookieStore.get(SESSION_COOKIE_NAME);
 }
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  try {
-    const { id } = await params;
-
-    const { data, error } = await supabaseAdmin
-      .from('news')
-      .select('*')
-      .eq('id', id)
-      .single();
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    if (!data) {
-      return NextResponse.json({ error: 'News not found' }, { status: 404 });
-    }
-
-    return NextResponse.json(data);
-  } catch {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
+export async function GET(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params;
+  const news = await getNewsById(id);
+  if (!news) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  return NextResponse.json(news);
 }
 
-export async function PUT(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  try {
-    const { id } = await params;
-    const body = await request.json();
-
-    const { data, error } = await supabaseAdmin
-      .from('news')
-      .update({
-        title: body.title,
-        title_en: body.title_en || null,
-        content: body.content,
-        content_en: body.content_en || null,
-        thumbnail_url: body.thumbnail_url || null,
-        link_url: body.link_url || null,
-        pdf_url: body.pdf_url || null,
-        type: body.type || 'article',
-        published_at: body.published_at,
-        updated_at: new Date().toISOString(),
-      })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) {
-      console.error('News update error:', error);
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json(data);
-  } catch (err) {
-    console.error('News PUT error:', err);
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
+export async function PATCH(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { id } = await params;
+  const body = await request.json();
+  const allNews = await getNews();
+  const idx = allNews.findIndex((n: { id: string }) => n.id === id);
+  if (idx === -1) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  allNews[idx] = { ...allNews[idx], ...body, updated_at: new Date().toISOString() };
+  await updateNews(allNews);
+  return NextResponse.json(allNews[idx]);
 }
 
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
-) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-  }
-
-  try {
-    const { id } = await params;
-
-    const { error } = await supabaseAdmin
-      .from('news')
-      .delete()
-      .eq('id', id);
-
-    if (error) {
-      return NextResponse.json({ error: error.message }, { status: 500 });
-    }
-
-    return NextResponse.json({ success: true });
-  } catch {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
-  }
+export async function DELETE(_request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
+  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { id } = await params;
+  const allNews = await getNews();
+  const filtered = allNews.filter((n: { id: string }) => n.id !== id);
+  if (filtered.length === allNews.length) return NextResponse.json({ error: 'Not found' }, { status: 404 });
+  await updateNews(filtered);
+  return NextResponse.json({ success: true });
 }
