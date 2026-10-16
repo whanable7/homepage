@@ -42,6 +42,7 @@ export interface ArchiveLayout {
     Record<"ecosystem" | "cosmos" | "strata" | "years", string[]>
   >;
   seed: number;
+  yearOrder?: Record<string, string[]>;
 }
 export interface Placement {
   id: string;

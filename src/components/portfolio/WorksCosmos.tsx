@@ -6,7 +6,14 @@ import type { ArchiveWork, WorkGroup } from "@/types/archive";
 import { representativeColor, groupEdges } from "@/lib/layouts";
 import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
-import { WorkImage } from "./WorksBrowser";
+import SpaceSettings from "./SpaceSettings";
+import SpacePreview from "./SpacePreview";
+import {
+  cosmosDefaults,
+  cosmosNodes,
+  stepCosmos,
+  cosmosHash,
+} from "@/lib/cosmos-physics";
 export default function WorksCosmos({
   works,
   groups,
@@ -21,24 +28,21 @@ export default function WorksCosmos({
   const { locale } = useLocale(),
     host = useRef<HTMLDivElement>(null),
     playing = useRef(true),
-    [running, setRunning] = useState(true),
+    [physics, setPhysics] = useState(cosmosDefaults),
+    physicsRef = useRef(physics),
+    needsSettle = useRef(true),
+    [corner, setCorner] = useState<"left" | "right">("right"),
     [hover, setHover] = useState<ArchiveWork | null>(null),
     [failed, setFailed] = useState(false),
-    [explore, setExplore] = useState(false),
     controlsRef = useRef<OrbitControls | null>(null);
   const callbacks = useRef({ onOpen, setHover });
   useEffect(() => {
     callbacks.current = { onOpen, setHover };
   }, [onOpen]);
   useEffect(() => {
-    if (controlsRef.current) {
-      controlsRef.current.enabled = explore;
-      if (controlsRef.current.domElement instanceof HTMLElement)
-        controlsRef.current.domElement.style.touchAction = explore
-          ? "none"
-          : "pan-y";
-    }
-  }, [explore]);
+    physicsRef.current = physics;
+    needsSettle.current = true;
+  }, [physics]);
   useEffect(() => {
     const el = host.current;
     if (!el) return;
@@ -56,48 +60,43 @@ export default function WorksCosmos({
     renderer.setPixelRatio(Math.min(devicePixelRatio, 1.7));
     el.appendChild(renderer.domElement);
     const scene = new THREE.Scene(),
-      camera = new THREE.PerspectiveCamera(45, 1, 0.1, 1500);
+      camera = new THREE.PerspectiveCamera(20, 1, 0.1, 10000);
     camera.position.set(0, 0, 340);
     const controls = new OrbitControls(camera, renderer.domElement);
-    controls.enabled = false;
+    controls.enabled = matchMedia("(pointer:fine)").matches;
+    controls.enableZoom = false;
     renderer.domElement.style.touchAction = "pan-y";
     controls.enableDamping = true;
     controls.enablePan = false;
-    controls.minDistance = 170;
-    controls.maxDistance = 600;
+    controls.minDistance = 10;
+    controls.maxDistance = 3000;
     controlsRef.current = controls;
     const tilt = new THREE.Group();
-    tilt.rotation.set(1.04, 0, 0.42);
+    tilt.rotation.set(1.18, 0, 0.18, "ZXY");
     scene.add(tilt);
     const disk = new THREE.Group();
     tilt.add(disk);
-    const positions = new Map<string, THREE.Vector3>();
-    function hash(value: string) {
-      let h = 2166136261;
-      for (const c of value) h = Math.imul(h ^ c.charCodeAt(0), 16777619);
-      return (h >>> 0) / 4294967296;
-    }
-    works.forEach((work, i) => {
-      const memberships = groups
-          .map((g, j) => (g.artworkIds.includes(work.id) ? j : -1))
-          .filter((j) => j >= 0),
-        group = memberships[0];
-      const a =
-        group === undefined
-          ? i * 2.399963
-          : (group / Math.max(groups.length, 1)) * Math.PI * 2 +
-            (hash(work.id + "angle") - 0.5) * 0.8;
-      const r =
-          25 +
-          Math.sqrt(hash(work.id + "r")) *
-            96 *
-            (0.86 + hash(work.id + "edge") * 0.14),
-        z = (hash(work.id + "z") - 0.5) * 13;
-      positions.set(
-        work.id,
-        new THREE.Vector3(Math.cos(a) * r, Math.sin(a) * r, z),
-      );
-    });
+    const nodes = cosmosNodes(
+      works.map((w) => w.id),
+      groups,
+    );
+    const positions = new Map(
+      nodes.map((n) => [n.id, new THREE.Vector3(n.x, n.y, n.z)]),
+    );
+    const nodeMap = new Map(nodes.map((n) => [n.id, n]));
+    const edgePairs = groupEdges(groups).filter(
+      ([a, b]) => nodeMap.has(a) && nodeMap.has(b),
+    );
+    const physicsEdges = edgePairs.map(
+      ([a, b]) =>
+        [nodeMap.get(a)!, nodeMap.get(b)!] as [
+          (typeof nodes)[number],
+          (typeof nodes)[number],
+        ],
+    );
+    for (let i = 0; i < 140; i++)
+      stepCosmos(nodes, physicsEdges, physicsRef.current);
+    nodes.forEach((n) => positions.get(n.id)!.set(n.x, n.y, n.z));
     const spriteCanvas = document.createElement("canvas");
     spriteCanvas.width = 32;
     spriteCanvas.height = 32;
@@ -146,8 +145,7 @@ export default function WorksCosmos({
       disk.add(cloud);
       points.push(cloud);
     }
-    const edgePairs = groupEdges(groups),
-      lineCoords: number[] = [];
+    const lineCoords: number[] = [];
     edgePairs.forEach(([a, b]) => {
       const p = positions.get(a),
         q = positions.get(b);
@@ -179,11 +177,11 @@ export default function WorksCosmos({
     const dustCoords: number[] = [];
     for (let i = 0; i < 130; i++) {
       const a = i * 2.399963,
-        r = 40 + hash("dust" + i) * 240;
+        r = 40 + cosmosHash("dust" + i) * 240;
       dustCoords.push(
         Math.cos(a) * r,
         Math.sin(a) * r,
-        (hash("depth" + i) - 0.5) * 160,
+        (cosmosHash("depth" + i) - 0.5) * 160,
       );
     }
     const dust = new THREE.Points(
@@ -201,12 +199,11 @@ export default function WorksCosmos({
     );
     scene.add(dust);
     let pointerInside = false,
-      manualStop = false,
       lastId = "",
       down: { x: number; y: number } | null = null;
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     playing.current = !reduced.matches;
-    queueMicrotask(() => setRunning(playing.current));
+
     const ray = new THREE.Raycaster();
     ray.params.Points = { threshold: 3 };
     const mouse = new THREE.Vector2();
@@ -228,6 +225,8 @@ export default function WorksCosmos({
       if ((work?.id || "") === lastId) return;
       lastId = work?.id || "";
       callbacks.current.setHover(work);
+      const rect = el.getBoundingClientRect();
+      setCorner(e.clientX > rect.left + rect.width / 2 ? "left" : "right");
       const coords: number[] = [];
       if (work)
         edgePairs.forEach(([a, b]) => {
@@ -254,15 +253,13 @@ export default function WorksCosmos({
       };
     const press = (e: PointerEvent) => {
       down = { x: e.clientX, y: e.clientY };
-      manualStop = true;
-      playing.current = false;
-      setRunning(false);
+      // A click previews a work; only dragging ends automatic rotation.
     };
     const release = (e: PointerEvent) => {
       if (down && Math.hypot(e.clientX - down.x, e.clientY - down.y) < 6) {
         const work = pick(e);
         if (work) callbacks.current.onOpen(work);
-      }
+      } else if (down) playing.current = false;
       down = null;
     };
     const resize = new ResizeObserver(([entry]) => {
@@ -279,20 +276,97 @@ export default function WorksCosmos({
     canvas.addEventListener("pointerdown", press);
     canvas.addEventListener("pointerup", release);
     const clock = new THREE.Clock();
+    const world = new THREE.Vector3(),
+      inverse = new THREE.Quaternion();
+    const rotationChanged = () => {
+      playing.current = false;
+    };
+    controls.addEventListener("start", rotationChanged);
+    let accumulator = 0;
+
     renderer.setAnimationLoop(() => {
       const delta = Math.min(0.05, clock.getDelta());
       if (document.hidden) return;
-      if (playing.current && !pointerInside && !reduced.matches) {
-        manualStop = false;
-        disk.rotation.z -= (delta * Math.PI * 2) / 240;
+      const p = physicsRef.current;
+      if (reduced.matches && needsSettle.current) {
+        for (let i = 0; i < 180; i++) stepCosmos(nodes, physicsEdges, p);
+        needsSettle.current = false;
       }
-      void manualStop;
+      if (!reduced.matches) {
+        accumulator += delta;
+        let steps = 0;
+        while (accumulator >= 1 / 60 && steps++ < 3) {
+          stepCosmos(nodes, physicsEdges, p);
+          accumulator -= 1 / 60;
+        }
+      }
+      nodes.forEach((n) => positions.get(n.id)!.set(n.x, n.y, n.z));
+      for (const cloud of points) {
+        const attr = cloud.geometry.getAttribute("position");
+        (cloud.userData.works as ArchiveWork[]).forEach((w, i) => {
+          const v = positions.get(w.id)!;
+          attr.setXYZ(i, v.x, v.y, v.z);
+        });
+        attr.needsUpdate = true;
+        cloud.geometry.computeBoundingSphere();
+      }
+      const linePositions = lines.geometry.getAttribute("position");
+      edgePairs.forEach(([a, b], i) => {
+        const v = positions.get(a)!,
+          w = positions.get(b)!;
+        linePositions.setXYZ(i * 2, v.x, v.y, v.z);
+        linePositions.setXYZ(i * 2 + 1, w.x, w.y, w.z);
+      });
+      linePositions.needsUpdate = true;
+      lines.geometry.computeBoundingSphere();
+      const activePairs = lastId
+        ? edgePairs.filter(([a, b]) => a === lastId || b === lastId)
+        : [];
+      const activeAttr = active.geometry.getAttribute("position");
+      if (activeAttr && activeAttr.count === activePairs.length * 2) {
+        activePairs.forEach(([a, b], i) => {
+          const v = positions.get(a)!,
+            w = positions.get(b)!;
+          activeAttr.setXYZ(i * 2, v.x, v.y, v.z);
+          activeAttr.setXYZ(i * 2 + 1, w.x, w.y, w.z);
+        });
+        activeAttr.needsUpdate = true;
+        active.geometry.computeBoundingSphere();
+      }
+      if (playing.current && !pointerInside && !reduced.matches)
+        disk.rotation.z -= ((delta * Math.PI * 2) / 240) * p.rotation;
       controls.update();
+      scene.updateMatrixWorld(true);
+      inverse.copy(camera.quaternion).invert();
+      let distance = 80;
+      const tangent = Math.tan(THREE.MathUtils.degToRad(camera.fov / 2));
+      for (const n of nodes) {
+        world
+          .set(n.x, n.y, n.z)
+          .applyMatrix4(disk.matrixWorld)
+          .sub(controls.target)
+          .applyQuaternion(inverse);
+        distance = Math.max(
+          distance,
+          world.z +
+            Math.max(
+              (Math.abs(world.x) + 6) / (tangent * camera.aspect * 0.94),
+              (Math.abs(world.y) + 6) / (tangent * 0.9),
+            ),
+        );
+      }
+      camera.position
+        .sub(controls.target)
+        .normalize()
+        .multiplyScalar(distance)
+        .add(controls.target);
+      camera.updateMatrixWorld();
       renderer.render(scene, camera);
     });
     return () => {
       resize.disconnect();
       renderer.setAnimationLoop(null);
+      controls.removeEventListener("start", rotationChanged);
       controls.dispose();
       controlsRef.current = null;
       scene.traverse((obj) => {
@@ -333,43 +407,78 @@ export default function WorksCosmos({
             : "3D is unavailable on this device. Please use Years."}
         </p>
       )}
-      <div className="space-bottom">
-        <button
-          onClick={() => {
-            playing.current = !playing.current;
-            queueMicrotask(() => setRunning(playing.current));
-          }}
-          aria-pressed={running}
-        >
-          {locale === "ko"
-            ? running
-              ? "회전 멈추기"
-              : "회전 재생"
-            : running
-              ? "Pause rotation"
-              : "Play rotation"}
-        </button>
-        <button onClick={() => setExplore(!explore)} aria-pressed={explore}>
-          {locale === "ko"
-            ? explore
-              ? "탐색 끝내기"
-              : "공간 탐색"
-            : "Explore"}
-        </button>
-      </div>
-      {hover && (
-        <div className="space-preview" aria-hidden="true">
-          <div>
-            <WorkImage work={hover} />
-          </div>
-          <p>{getLocalizedValue(locale, hover.title, hover.title_en)}</p>
-        </div>
-      )}
+      <SpaceSettings
+        controls={[
+          {
+            key: "repulsion",
+            ko: "반발력",
+            en: "repulsion",
+            min: 5,
+            max: 150,
+            step: 1,
+          },
+          {
+            key: "center",
+            ko: "중심으로 당기는 힘",
+            en: "center attraction",
+            min: 0.005,
+            max: 0.06,
+            step: 0.001,
+          },
+          {
+            key: "distance",
+            ko: "연결 길이",
+            en: "link distance",
+            min: 15,
+            max: 100,
+            step: 1,
+          },
+          {
+            key: "tension",
+            ko: "연결 강도",
+            en: "link tension",
+            min: 0,
+            max: 0.06,
+            step: 0.002,
+          },
+          {
+            key: "damping",
+            ko: "움직임 유지",
+            en: "motion persistence",
+            min: 0.5,
+            max: 0.94,
+            step: 0.01,
+          },
+          {
+            key: "rotation",
+            ko: "회전 속도",
+            en: "rotation speed",
+            min: 0,
+            max: 2,
+            step: 0.1,
+          },
+        ]}
+        values={physics}
+        onChange={(key, value) => {
+          setPhysics((p) => ({ ...p, [key]: value }));
+          if (key === "rotation") playing.current = true;
+        }}
+        onReset={() => {
+          setPhysics({ ...cosmosDefaults });
+          playing.current = true;
+        }}
+      />
+      {hover && <SpacePreview work={hover} corner={corner} />}
       <details className="cosmos-access">
         <summary>{locale === "ko" ? "작품 목록" : "Artwork list"}</summary>
         <div>
           {works.map((w) => (
-            <button key={w.id} onClick={() => onOpen(w)}>
+            <button
+              key={w.id}
+              onFocus={() => setHover(w)}
+              onBlur={() => setHover(null)}
+              onClick={() => onOpen(w)}
+            >
               {getLocalizedValue(locale, w.title, w.title_en)}
             </button>
           ))}

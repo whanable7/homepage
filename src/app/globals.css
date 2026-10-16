@@ -195,8 +195,8 @@ html {
 .works-tabs {
   display: flex;
   justify-content: center;
-  gap: 30px;
-  margin: 8px 0 34px;
+  gap: 8px;
+  margin: 8px 0 28px;
   flex-wrap: wrap;
 }
 .works-tabs button {
@@ -206,13 +206,12 @@ html {
   color: var(--text-secondary);
   background: none;
   border: 0;
-  padding: 5px 0;
+  padding: 8px 22px;
+  border-radius: 999px;
 }
 .works-tabs button[aria-current] {
-  color: var(--foreground);
-  text-decoration: underline;
-  text-underline-offset: 7px;
-  text-decoration-thickness: 1px;
+  color: var(--background);
+  background: var(--foreground);
 }
 .strata-field {
   position: relative;
@@ -288,7 +287,7 @@ html {
   position: relative;
   width: 100%;
   overflow: hidden;
-  height: max(320px, calc(100svh - 218px));
+  height: max(360px, calc(100svh - 176px));
 }
 .ecosystem-map {
   position: absolute;
@@ -297,6 +296,7 @@ html {
   transform-origin: top left;
 }
 .ecosystem-map > svg {
+  overflow: visible;
   position: absolute;
   inset: 0;
 }
@@ -308,8 +308,8 @@ html {
 }
 .cosmos-field {
   position: relative;
-  height: min(76vh, 850px);
-  min-height: 520px;
+  height: max(450px, calc(100svh - 176px));
+  min-height: 450px;
   background: radial-gradient(
     ellipse at center,
     #19212c55 0%,
@@ -366,8 +366,8 @@ html {
 .space-preview {
   position: absolute;
   right: 12px;
-  bottom: 60px;
-  width: 180px;
+  bottom: 52px;
+  width: min(320px, 30vw);
   pointer-events: none;
   background: var(--background);
   padding: 10px;
@@ -375,7 +375,7 @@ html {
 }
 .space-preview > div {
   position: relative;
-  height: 130px;
+  height: min(300px, 38vh);
 }
 .space-preview p {
   font-size: 11px;
@@ -524,7 +524,7 @@ html {
     padding: 0 10px;
   }
   .cosmos-field {
-    min-height: 500px;
+    min-height: 450px;
   }
 }
 @media (prefers-reduced-motion: reduce) {
@@ -1100,4 +1100,114 @@ html {
   .works-tabs button {
     font-size: 14px;
   }
+}
+
+/* Preview 7: panels overlay the entire field; copyright stays in document flow. */
+.works-browser {
+  max-width: none;
+  padding-left: 24px;
+  padding-right: 24px;
+}
+.works-cosmos {
+  padding-left: 10px;
+  padding-right: 10px;
+}
+.space-settings {
+  border: 1px solid var(--border);
+  box-shadow: 0 8px 30px #0000000a;
+  max-height: calc(100svh - 240px);
+  overflow-y: auto;
+}
+.space-settings-actions {
+  display: flex;
+  justify-content: space-between;
+}
+.space-controls > button {
+  background: var(--background);
+}
+.space-preview-left {
+  left: 12px;
+  right: auto;
+}
+.space-preview p {
+  color: var(--text-secondary);
+}
+.copyright-footer {
+  padding: 28px 24px 32px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--text-secondary);
+  line-height: 1.8;
+}
+.copyright-footer p + p {
+  margin-top: 10px;
+  white-space: pre-line;
+}
+.year-order-editor > p {
+  margin: 18px 0;
+  color: #666;
+}
+.year-order-editor > label select {
+  margin-left: 12px;
+}
+.year-order-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 22px;
+}
+.year-order-grid article {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border: 1px solid #dedede;
+  padding: 12px;
+  cursor: grab;
+}
+.year-order-grid article:active {
+  cursor: grabbing;
+}
+.year-order-grid img {
+  width: 100%;
+  height: 145px;
+  object-fit: contain;
+}
+.year-order-grid strong {
+  font-weight: 400;
+}
+.year-order-grid small {
+  color: #666;
+}
+.year-order-number {
+  color: #666;
+  font-size: 12px;
+}
+.year-order-actions {
+  display: flex;
+  justify-content: space-between;
+}
+.year-order-grid input[type="number"] {
+  width: 84px;
+}
+@media (max-width: 640px) {
+  .works-browser {
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+  .works-tabs {
+    gap: 2px;
+  }
+  .works-tabs button {
+    padding: 8px 12px;
+  }
+  .space-settings {
+    max-height: calc(100svh - 220px);
+  }
+  .year-order-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+}
+
+.space-settings input[type="range"] {
+  accent-color: var(--foreground);
 }

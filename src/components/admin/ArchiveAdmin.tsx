@@ -21,6 +21,8 @@ import ArtworkForm from "./ArtworkForm";
 import TextEditor from "./TextEditor";
 import { confirmAdminNavigation } from "./useUnsavedGuard";
 import CVEditor from "./CVEditor";
+import YearOrderEditor from "./YearOrderEditor";
+import { moveWorkToYear } from "@/lib/year-order";
 import WorksEcosystem from "@/components/portfolio/WorksEcosystem";
 type Tab =
   | "artworks"
@@ -34,14 +36,14 @@ type Tab =
   | "cv";
 const tabs: Record<Tab, string> = {
   artworks: "작품",
-  ecosystem: "Ecosystem",
-  cosmos: "천체 · Cosmos",
-  strata: "지층 · Strata",
-  sequences: "Sequences",
-  years: "Years",
+  ecosystem: "ecosystem",
+  cosmos: "천체 · cosmos",
+  strata: "지층 · strata",
+  sequences: "sequences",
+  years: "years",
   slideshow: "첫 화면",
-  texts: "TEXTS",
-  cv: "CV",
+  texts: "texts",
+  cv: "cv",
 };
 type Queue = {
   id: string;
@@ -182,6 +184,17 @@ export default function ArchiveAdmin() {
       body = await res.json();
     if (!res.ok) throw new Error(body.error || "저장 실패");
     setWorks((current) => current.map((w) => (w.id === work.id ? body : w)));
+    if (values.year !== undefined && values.year !== work.year) {
+      setLayout((current) =>
+        current
+          ? {
+              ...current,
+              yearOrder: moveWorkToYear(current, works, work.id, values.year!),
+            }
+          : current,
+      );
+      unsaved.current = true;
+    }
     return body;
   }
   async function uploadQueue() {
@@ -918,207 +931,227 @@ export default function ArchiveAdmin() {
               ))}
             </div>
           )}
-          <div className="admin-actions">
-            <label className="admin-sort">
-              <span>정렬</span>
-              <select
-                aria-label="작품 정렬"
-                value={sort}
-                onChange={(e) => setSort(e.target.value as WorkSort)}
-              >
-                <option value="recent">최근 등록순 · 미설정 우선</option>
-                <option value="title-asc">제목 오름차순</option>
-                <option value="title-desc">제목 내림차순</option>
-                <option value="year-asc">연도 오름차순</option>
-                <option value="year-desc">연도 내림차순</option>
-              </select>
-            </label>
-            <input
-              placeholder="작품명 · 연도 검색"
-              value={filter}
-              onChange={(e) => setFilter(e.target.value)}
+          {tab === "years" && (
+            <YearOrderEditor
+              works={works}
+              layout={layout}
+              onChange={change}
+              busy={busy}
+              onYearChange={async (w, y) => {
+                if (
+                  !Number.isInteger(y) ||
+                  y < 1900 ||
+                  y > new Date().getFullYear() + 1
+                ) {
+                  setMessage("제작연도를 확인해 주세요.");
+                  return;
+                }
+                setBusy(true);
+                try {
+                  await patch(w, { year: y });
+                  setMessage(
+                    "제작연도를 변경했습니다. 순서를 임시 저장한 뒤 공개해 주세요.",
+                  );
+                } catch (e) {
+                  setMessage(e instanceof Error ? e.message : "연도 변경 실패");
+                } finally {
+                  setBusy(false);
+                }
+              }}
             />
-            {["ecosystem", "cosmos", "strata", "sequences"].includes(tab) && (
-              <label className="admin-check">
-                <input
-                  type="checkbox"
-                  checked={missing}
-                  onChange={(e) => setMissing(e.target.checked)}
-                />
-                미설정 작품만
-              </label>
-            )}
-            <span>{selected.length}점 선택</span>
-            <button onClick={() => setSelected(sorted.map((w) => w.id))}>
-              전체 선택
-            </button>
-            <button onClick={() => setSelected([])}>선택 해제</button>
-          </div>
-          <div className="admin-art-grid">
-            {sorted.map((w) => (
-              <article key={w.id} className={unset(w) ? "admin-unset" : ""}>
-                <label>
-                  <input
-                    type="checkbox"
-                    checked={selected.includes(w.id)}
-                    onChange={(e) =>
-                      setSelected((current) =>
-                        e.target.checked
-                          ? [...current, w.id]
-                          : current.filter((id) => id !== w.id),
-                      )
-                    }
-                  />
-                  <img
-                    src={w.thumbnail_url || w.image_url}
-                    alt={w.title}
-                    loading="lazy"
-                  />
-                  <span>{w.title}</span>
-                  <small>
-                    {w.year} · {w.medium || "재료 미입력"}
-                  </small>
-                  <small>{workDimensions(w)}</small>
-                  <small>
-                    {w.status === "draft" ? "임시보관" : "공개 대상"}
-                    {unset(w) ? " · 미설정" : ""}
-                  </small>
+          )}
+          {tab !== "years" && (
+            <>
+              <div className="admin-actions">
+                <label className="admin-sort">
+                  <span>정렬</span>
+                  <select
+                    aria-label="작품 정렬"
+                    value={sort}
+                    onChange={(e) => setSort(e.target.value as WorkSort)}
+                  >
+                    <option value="recent">최근 등록순 · 미설정 우선</option>
+                    <option value="title-asc">제목 오름차순</option>
+                    <option value="title-desc">제목 내림차순</option>
+                    <option value="year-asc">연도 오름차순</option>
+                    <option value="year-desc">연도 내림차순</option>
+                  </select>
                 </label>
-                {tab === "artworks" && (
-                  <>
-                    <button onClick={() => setEditing(w)}>
-                      이미지·캡션 수정
-                    </button>
-                    <button
-                      onClick={() =>
-                        patch(w, {
-                          status: w.status === "draft" ? "published" : "draft",
-                        }).catch((e) => setMessage(e.message))
-                      }
-                    >
-                      {w.status === "draft"
-                        ? "공개 대상에 포함"
-                        : "공개 대상에서 제외"}
-                    </button>
-                  </>
-                )}
-                {tab === "cosmos" && (
-                  <label>
-                    별 크기
-                    <select
-                      value={layout.stars[w.id] || 1}
-                      onChange={(e) =>
-                        change({
-                          ...layout,
-                          stars: {
-                            ...layout.stars,
-                            [w.id]: +e.target.value as 1 | 2 | 3,
-                          },
-                        })
-                      }
-                    >
-                      <option value="1">작게</option>
-                      <option value="2">중간</option>
-                      <option value="3">크게</option>
-                    </select>
-                  </label>
-                )}
-                {tab === "strata" && (
-                  <>
-                    <input
-                      aria-label={`${w.title} 대표색`}
-                      type="color"
-                      value={representativeColor(w)}
-                      onChange={(e) => {
-                        const color = e.target.value;
-                        setWorks((current) =>
-                          current.map((a) =>
-                            a.id === w.id
-                              ? { ...a, representative_color: color }
-                              : a,
-                          ),
-                        );
-                      }}
-                      onBlur={(e) =>
-                        patch(w, {
-                          representative_color: e.target.value,
-                        }).catch((err) => setMessage(err.message))
-                      }
-                    />
-                    <div className="palette-swatches">
-                      {w.palette?.map((c) => (
-                        <button
-                          key={c.hex}
-                          style={{ background: c.hex }}
-                          aria-label={`${c.hex} ${c.percentage}% 대표색으로 선택`}
-                          onClick={() =>
-                            patch(w, { representative_color: c.hex }).catch(
-                              (e) => setMessage(e.message),
-                            )
-                          }
-                        />
-                      ))}
-                    </div>
-                  </>
-                )}
-                {tab === "years" && (
-                  <input
-                    aria-label={`${w.title} 제작연도`}
-                    type="number"
-                    defaultValue={w.year}
-                    onBlur={(e) => {
-                      const y = +e.target.value;
-                      if (
-                        Number.isInteger(y) &&
-                        y >= 1900 &&
-                        y <= new Date().getFullYear() + 1
-                      )
-                        void patch(w, { year: y }).catch((err) =>
-                          setMessage(err.message),
-                        );
-                      else setMessage("제작연도를 확인해 주세요.");
-                    }}
-                  />
-                )}
-                {["ecosystem", "cosmos", "strata", "years"].includes(tab) && (
+                <input
+                  placeholder="작품명 · 연도 검색"
+                  value={filter}
+                  onChange={(e) => setFilter(e.target.value)}
+                />
+                {["ecosystem", "cosmos", "strata", "sequences"].includes(
+                  tab,
+                ) && (
                   <label className="admin-check">
                     <input
                       type="checkbox"
-                      checked={
-                        layout.excluded[tab as "ecosystem"]?.includes(w.id) ||
-                        false
-                      }
-                      onChange={(e) => {
-                        const key = tab as "ecosystem",
-                          current = layout.excluded[key] || [];
-                        change({
-                          ...layout,
-                          excluded: {
-                            ...layout.excluded,
-                            [key]: e.target.checked
-                              ? [...current, w.id]
-                              : current.filter((id) => id !== w.id),
-                          },
-                        });
-                      }}
+                      checked={missing}
+                      onChange={(e) => setMissing(e.target.checked)}
                     />
-                    이 보기에서 제외
+                    미설정 작품만
                   </label>
                 )}
-                {tab === "slideshow" && (
-                  <button
-                    onClick={() =>
-                      patch(w, { is_featured: !w.is_featured }).catch((e) =>
-                        setMessage(e.message),
-                      )
-                    }
-                  >
-                    {w.is_featured ? "대표 해제" : "대표 이미지로 선택"}
-                  </button>
-                )}
-              </article>
-            ))}
-          </div>
+                <span>{selected.length}점 선택</span>
+                <button onClick={() => setSelected(sorted.map((w) => w.id))}>
+                  전체 선택
+                </button>
+                <button onClick={() => setSelected([])}>선택 해제</button>
+              </div>
+              <div className="admin-art-grid">
+                {sorted.map((w) => (
+                  <article key={w.id} className={unset(w) ? "admin-unset" : ""}>
+                    <label>
+                      <input
+                        type="checkbox"
+                        checked={selected.includes(w.id)}
+                        onChange={(e) =>
+                          setSelected((current) =>
+                            e.target.checked
+                              ? [...current, w.id]
+                              : current.filter((id) => id !== w.id),
+                          )
+                        }
+                      />
+                      <img
+                        src={w.thumbnail_url || w.image_url}
+                        alt={w.title}
+                        loading="lazy"
+                      />
+                      <span>{w.title}</span>
+                      <small>
+                        {w.year} · {w.medium || "재료 미입력"}
+                      </small>
+                      <small>{workDimensions(w)}</small>
+                      <small>
+                        {w.status === "draft" ? "임시보관" : "공개 대상"}
+                        {unset(w) ? " · 미설정" : ""}
+                      </small>
+                    </label>
+                    {tab === "artworks" && (
+                      <>
+                        <button onClick={() => setEditing(w)}>
+                          이미지·캡션 수정
+                        </button>
+                        <button
+                          onClick={() =>
+                            patch(w, {
+                              status:
+                                w.status === "draft" ? "published" : "draft",
+                            }).catch((e) => setMessage(e.message))
+                          }
+                        >
+                          {w.status === "draft"
+                            ? "공개 대상에 포함"
+                            : "공개 대상에서 제외"}
+                        </button>
+                      </>
+                    )}
+                    {tab === "cosmos" && (
+                      <label>
+                        별 크기
+                        <select
+                          value={layout.stars[w.id] || 1}
+                          onChange={(e) =>
+                            change({
+                              ...layout,
+                              stars: {
+                                ...layout.stars,
+                                [w.id]: +e.target.value as 1 | 2 | 3,
+                              },
+                            })
+                          }
+                        >
+                          <option value="1">작게</option>
+                          <option value="2">중간</option>
+                          <option value="3">크게</option>
+                        </select>
+                      </label>
+                    )}
+                    {tab === "strata" && (
+                      <>
+                        <input
+                          aria-label={`${w.title} 대표색`}
+                          type="color"
+                          value={representativeColor(w)}
+                          onChange={(e) => {
+                            const color = e.target.value;
+                            setWorks((current) =>
+                              current.map((a) =>
+                                a.id === w.id
+                                  ? { ...a, representative_color: color }
+                                  : a,
+                              ),
+                            );
+                          }}
+                          onBlur={(e) =>
+                            patch(w, {
+                              representative_color: e.target.value,
+                            }).catch((err) => setMessage(err.message))
+                          }
+                        />
+                        <div className="palette-swatches">
+                          {w.palette?.map((c) => (
+                            <button
+                              key={c.hex}
+                              style={{ background: c.hex }}
+                              aria-label={`${c.hex} ${c.percentage}% 대표색으로 선택`}
+                              onClick={() =>
+                                patch(w, { representative_color: c.hex }).catch(
+                                  (e) => setMessage(e.message),
+                                )
+                              }
+                            />
+                          ))}
+                        </div>
+                      </>
+                    )}
+                    {["ecosystem", "cosmos", "strata", "years"].includes(
+                      tab,
+                    ) && (
+                      <label className="admin-check">
+                        <input
+                          type="checkbox"
+                          checked={
+                            layout.excluded[tab as "ecosystem"]?.includes(
+                              w.id,
+                            ) || false
+                          }
+                          onChange={(e) => {
+                            const key = tab as "ecosystem",
+                              current = layout.excluded[key] || [];
+                            change({
+                              ...layout,
+                              excluded: {
+                                ...layout.excluded,
+                                [key]: e.target.checked
+                                  ? [...current, w.id]
+                                  : current.filter((id) => id !== w.id),
+                              },
+                            });
+                          }}
+                        />
+                        이 보기에서 제외
+                      </label>
+                    )}
+                    {tab === "slideshow" && (
+                      <button
+                        onClick={() =>
+                          patch(w, { is_featured: !w.is_featured }).catch((e) =>
+                            setMessage(e.message),
+                          )
+                        }
+                      >
+                        {w.is_featured ? "대표 해제" : "대표 이미지로 선택"}
+                      </button>
+                    )}
+                  </article>
+                ))}
+              </div>
+            </>
+          )}
         </>
       )}
       <Modal

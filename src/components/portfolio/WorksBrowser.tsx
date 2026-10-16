@@ -6,8 +6,9 @@ import Image from "next/image";
 import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
 import { cloudinaryLoader } from "@/lib/cloudinary-loader";
-import { imageRatio } from "@/lib/layouts";
+import { imageRatio, strataLayout } from "@/lib/layouts";
 import type { ArchiveWork, PublishedArchive } from "@/types/archive";
+import { orderedYearWorks } from "@/lib/year-order";
 import ArtworkModal from "@/components/artwork/ArtworkModal";
 const Ecosystem = dynamic(() => import("./WorksEcosystem"), { ssr: false });
 const Cosmos = dynamic(() => import("./WorksCosmos"), { ssr: false });
@@ -66,15 +67,16 @@ export default function WorksBrowser({
   const [snapshot, setSnapshot] = useState(initial),
     [selected, setSelected] = useState<ArchiveWork | null>(null),
     [updated, setUpdated] = useState(false),
-    [phone, setPhone] = useState(false),
+    [fieldWidth, setFieldWidth] = useState(1440),
     [error, setError] = useState("");
   const root = useRef<HTMLDivElement>(null);
   useEffect(() => {
-    const q = matchMedia("(max-width: 640px)");
-    setPhone(q.matches);
-    const change = () => setPhone(q.matches);
-    q.addEventListener("change", change);
-    return () => q.removeEventListener("change", change);
+    if (!root.current) return;
+    const observer = new ResizeObserver(([entry]) =>
+      setFieldWidth(entry.contentRect.width),
+    );
+    observer.observe(root.current);
+    return () => observer.disconnect();
   }, []);
   useEffect(() => {
     if (preview) return;
@@ -88,13 +90,15 @@ export default function WorksBrowser({
     }, 30000);
     return () => clearInterval(timer);
   }, [snapshot.revision, preview]);
-  const works = useMemo(
-    () =>
-      snapshot.works.filter(
-        (w) => !snapshot.layout.excluded[view as "ecosystem"]?.includes(w.id),
-      ),
-    [snapshot, view],
-  );
+  const works = useMemo(() => {
+    const included = snapshot.works.filter(
+      (w) => !snapshot.layout.excluded[view as "ecosystem"]?.includes(w.id),
+    );
+    if (view !== "years") return included;
+    return [...new Set(included.map((w) => w.year))]
+      .sort((a, b) => b - a)
+      .flatMap((year) => orderedYearWorks(included, year, snapshot.layout));
+  }, [snapshot, view]);
   const labels: Record<View, string> =
     locale === "ko"
       ? {
@@ -105,14 +109,18 @@ export default function WorksBrowser({
           years: "연도",
         }
       : {
-          cosmos: "Cosmos",
-          ecosystem: "Ecosystem",
-          strata: "Strata",
-          sequences: "Sequences",
-          years: "Years",
+          cosmos: "cosmos",
+          ecosystem: "ecosystem",
+          strata: "strata",
+          sequences: "sequences",
+          years: "years",
         };
-  const placements = phone ? snapshot.strata.phone : snapshot.strata.desktop,
-    base = phone ? 360 : 1440;
+  const base = fieldWidth < 600 ? 360 : fieldWidth < 1100 ? 900 : 1440;
+  const placements = useMemo(
+    () =>
+      view === "strata" ? strataLayout(works, base, snapshot.layout.seed) : [],
+    [works, base, snapshot.layout.seed, view],
+  );
   const maxY = Math.max(1, ...placements.map((b) => b.y + b.height));
   const workMap = new Map(works.map((w) => [w.id, w]));
   const button = (work: ArchiveWork) => (
@@ -208,7 +216,10 @@ export default function WorksBrowser({
                 onClick={() => setSelected(w)}
                 aria-label={getLocalizedValue(locale, w.title, w.title_en)}
               >
-                <WorkImage work={w} sizes="(max-width:640px) 55vw, 30vw" />
+                <WorkImage
+                  work={w}
+                  sizes="(max-width:600px) 100vw, (max-width:1100px) 40vw, 23vw"
+                />
               </button>
             ) : null;
           })}

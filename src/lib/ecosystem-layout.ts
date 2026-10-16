@@ -38,6 +38,7 @@ export function separateEcosystemNodes(
   width: number,
   height: number,
   passes = 4,
+  constrain = true,
 ) {
   for (let pass = 0; pass < passes; pass++) {
     for (let i = 0; i < nodes.length; i++) {
@@ -63,12 +64,16 @@ export function separateEcosystemNodes(
         }
       }
     }
-    nodes.forEach((n) => {
-      n.x = Math.max(20 + n.width / 2, Math.min(width - 20 - n.width / 2, n.x));
-      n.y = Math.max(
-        20 + n.height / 2,
-        Math.min(height - 20 - n.height / 2, n.y),
-      );
-    });
+    if (constrain)
+      nodes.forEach((n) => {
+        n.x = Math.max(
+          20 + n.width / 2,
+          Math.min(width - 20 - n.width / 2, n.x),
+        );
+        n.y = Math.max(
+          20 + n.height / 2,
+          Math.min(height - 20 - n.height / 2, n.y),
+        );
+      });
   }
 }

@@ -16,6 +16,8 @@ import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
 import type { ArchiveWork, WorkGroup } from "@/types/archive";
 import { WorkImage } from "./WorksBrowser";
+import SpaceSettings from "./SpaceSettings";
+import SpacePreview from "./SpacePreview";
 type Edge = SimulationLinkDatum<EcosystemNode>;
 const defaults = { repulsion: 120, center: 0.05, distance: 130, tension: 0.8 };
 export default function WorksEcosystem({
@@ -48,29 +50,39 @@ export default function WorksEcosystem({
     py: number;
   } | null>(null);
   const [hover, setHover] = useState<ArchiveWork | null>(null);
-  const [settings, setSettings] = useState(false);
+  const [corner, setCorner] = useState<"left" | "right">("right");
   const [physics, setPhysics] = useState(defaults);
   const [zoom, setZoom] = useState(1);
   const [pan, setPan] = useState({ x: 0, y: 0 });
   const [explore, setExplore] = useState(false);
   const [size, setSize] = useState({ width: 1000, height: 600 });
+  const mapRef = useRef<HTMLDivElement>(null);
+  const cameraRef = useRef({ scale: 1, x: 0, y: 0 });
+  const displayRef = useRef({ size, zoom, pan });
+  useEffect(() => {
+    displayRef.current = { size, zoom, pan };
+  }, [size, zoom, pan]);
   const physicsRef = useRef(physics);
   useEffect(() => {
     physicsRef.current = physics;
   }, [physics]);
   const model = useMemo(() => {
     const width = Math.max(900, Math.sqrt(works.length) * 115);
-    const height = Math.max(650, width * 0.72);
+    const height = Math.max(
+      650,
+      (width * size.height) / Math.max(1, size.width),
+    );
     const nodes = ecosystemNodes(works, width, height);
     const map = new Map(nodes.map((n) => [n.id, n]));
     return {
       width,
       height,
+      aspect: Math.max(0.4, Math.min(3, size.width / size.height)),
       nodes,
       map,
       edges: groupEdges(groups).filter(([a, b]) => map.has(a) && map.has(b)),
     };
-  }, [works, groups]);
+  }, [works, groups, size.width, size.height]);
   useEffect(() => {
     if (!container.current) return;
     const observer = new ResizeObserver(([entry]) =>
@@ -95,8 +107,8 @@ export default function WorksEcosystem({
           .strength(p.tension),
       )
       .force("charge", forceManyBody().strength(-p.repulsion))
-      .force("x", forceX(model.width / 2).strength(p.center))
-      .force("y", forceY(model.height / 2).strength(p.center))
+      .force("x", forceX(model.width / 2).strength(p.center / model.aspect))
+      .force("y", forceY(model.height / 2).strength(p.center * model.aspect))
       .force(
         "collision",
         forceCollide<EcosystemNode>()
@@ -110,6 +122,34 @@ export default function WorksEcosystem({
     simulation.current = sim;
     let frame = 0;
     const draw = () => {
+      const { size: screen, zoom: z, pan: shift } = displayRef.current;
+      const left = Math.min(
+        ...model.nodes.map((n) => n.x - n.width / 2),
+        model.width / 2 - 80,
+      );
+      const right = Math.max(
+        ...model.nodes.map((n) => n.x + n.width / 2),
+        model.width / 2 + 80,
+      );
+      const top = Math.min(
+        ...model.nodes.map((n) => n.y - n.height / 2),
+        model.height / 2 - 60,
+      );
+      const bottom = Math.max(
+        ...model.nodes.map((n) => n.y + n.height / 2),
+        model.height / 2 + 60,
+      );
+      const fit = Math.min(
+        (screen.width - 24) / (right - left + 30),
+        (screen.height - 68) / (bottom - top + 30),
+      );
+      const scale = Math.min(1.6, fit) * z;
+      const x = screen.width / 2 - ((left + right) / 2) * scale + shift.x;
+      const y =
+        (screen.height - 40) / 2 - ((top + bottom) / 2) * scale + shift.y;
+      cameraRef.current = { scale, x, y };
+      if (mapRef.current)
+        mapRef.current.style.transform = `translate(${x}px,${y}px) scale(${scale})`;
       model.nodes.forEach((n) => {
         const button = nodesRef.current.get(n.id);
         if (button)
@@ -131,15 +171,21 @@ export default function WorksEcosystem({
     const reduced = matchMedia("(prefers-reduced-motion: reduce)");
     const settle = () => {
       sim.stop().tick(240);
-      separateEcosystemNodes(model.nodes, model.width, model.height, 80);
+      separateEcosystemNodes(model.nodes, model.width, model.height, 80, false);
       draw();
     };
     sim.tick(80);
-    separateEcosystemNodes(model.nodes, model.width, model.height, 80);
+    separateEcosystemNodes(model.nodes, model.width, model.height, 80, false);
     draw();
     sim
       .on("tick", () => {
-        separateEcosystemNodes(model.nodes, model.width, model.height, 5);
+        separateEcosystemNodes(
+          model.nodes,
+          model.width,
+          model.height,
+          5,
+          false,
+        );
         if (!frame)
           frame = requestAnimationFrame(() => {
             frame = 0;
@@ -147,11 +193,17 @@ export default function WorksEcosystem({
           });
       })
       .on("end", () => {
-        separateEcosystemNodes(model.nodes, model.width, model.height, 80);
+        separateEcosystemNodes(
+          model.nodes,
+          model.width,
+          model.height,
+          80,
+          false,
+        );
         draw();
       });
     if (reduced.matches) settle();
-    else sim.restart();
+    else sim.alphaTarget(0.012).restart();
     const visibility = () => {
       if (document.hidden) sim.stop();
       else if (!reduced.matches && sim.alpha() > sim.alphaMin()) sim.restart();
@@ -170,33 +222,31 @@ export default function WorksEcosystem({
     (sim.force("charge") as ReturnType<typeof forceManyBody>).strength(
       -physics.repulsion,
     );
-    (sim.force("x") as ReturnType<typeof forceX>).strength(physics.center);
-    (sim.force("y") as ReturnType<typeof forceY>).strength(physics.center);
+    (sim.force("x") as ReturnType<typeof forceX>).strength(
+      physics.center / model.aspect,
+    );
+    (sim.force("y") as ReturnType<typeof forceY>).strength(
+      physics.center * model.aspect,
+    );
     (sim.force("links") as ReturnType<typeof forceLink<EcosystemNode, Edge>>)
       .distance(physics.distance)
       .strength(physics.tension);
     if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
       sim.alpha(0.7).stop().tick(240);
-      separateEcosystemNodes(model.nodes, model.width, model.height, 80);
+      separateEcosystemNodes(model.nodes, model.width, model.height, 80, false);
       paint.current();
     } else sim.alpha(0.7).restart();
   }, [physics, model]);
-  // Leave the right edge free for a preview instead of covering other works.
-  const scale =
-    Math.min(
-      size.width / (model.width + 210),
-      size.height / (model.height + 40),
-      1,
-    ) * zoom;
-  const offsetX = (size.width - (model.width + 210) * scale) / 2;
-  const offsetY = (size.height - model.height * scale) / 2;
+  useEffect(() => {
+    paint.current();
+  }, [size, zoom, pan]);
   function releaseNode() {
     const drag = nodeDrag.current;
     if (!drag) return;
     drag.node.fx = null;
     drag.node.fy = null;
     nodeDrag.current = null;
-    simulation.current?.alphaTarget(0).restart();
+    simulation.current?.alphaTarget(0.012).restart();
   }
   const controls = [
     {
@@ -264,14 +314,14 @@ export default function WorksEcosystem({
       }}
     >
       <div
+        ref={mapRef}
         className="ecosystem-map"
         style={{
-          width: model.width + 210,
+          width: model.width,
           height: model.height,
-          transform: `translate(${offsetX + pan.x}px,${offsetY + pan.y}px) scale(${scale})`,
         }}
       >
-        <svg width={model.width + 210} height={model.height} aria-hidden="true">
+        <svg width={model.width} height={model.height} aria-hidden="true">
           {model.edges.map(([a, b]) => {
             const key = [a, b].sort().join("|"),
               active = hover?.id === a || hover?.id === b;
@@ -313,7 +363,15 @@ export default function WorksEcosystem({
                 transform: `translate(${n.x - n.width / 2}px,${n.y - n.height / 2}px)`,
               }}
               onPointerEnter={(e) => {
-                if (e.pointerType === "mouse") setHover(w);
+                if (e.pointerType === "mouse") {
+                  const rect = container.current?.getBoundingClientRect();
+                  setCorner(
+                    rect && e.clientX > rect.left + rect.width / 2
+                      ? "left"
+                      : "right",
+                  );
+                  setHover(w);
+                }
               }}
               onPointerLeave={() => setHover(null)}
               onFocus={() => setHover(w)}
@@ -339,14 +397,8 @@ export default function WorksEcosystem({
                 if (!suppressedClick.current && Math.hypot(dx, dy) < 6) return;
                 suppressedClick.current = true;
                 setHover(null);
-                n.fx = Math.max(
-                  20 + n.width / 2,
-                  Math.min(model.width - 20 - n.width / 2, d.x + dx / scale),
-                );
-                n.fy = Math.max(
-                  20 + n.height / 2,
-                  Math.min(model.height - 20 - n.height / 2, d.y + dy / scale),
-                );
+                n.fx = d.x + dx / cameraRef.current.scale;
+                n.fy = d.y + dy / cameraRef.current.scale;
                 n.x = n.fx;
                 n.y = n.fy;
                 simulation.current?.alphaTarget(0.15).restart();
@@ -364,37 +416,12 @@ export default function WorksEcosystem({
           );
         })}
       </div>
-      <div className="space-controls">
-        <button onClick={() => setSettings(!settings)} aria-expanded={settings}>
-          {locale === "ko" ? "배치 설정" : "Physics settings"}
-        </button>
-        {settings && (
-          <div className="space-settings">
-            {controls.map((c) => (
-              <label key={c.key}>
-                <span>{locale === "ko" ? c.ko : c.en}</span>
-                <input
-                  aria-label={locale === "ko" ? c.ko : c.en}
-                  type="range"
-                  min={c.min}
-                  max={c.max}
-                  step={c.step}
-                  value={physics[c.key]}
-                  onChange={(e) =>
-                    setPhysics((p) => ({
-                      ...p,
-                      [c.key]: Number(e.target.value),
-                    }))
-                  }
-                />
-              </label>
-            ))}
-            <button onClick={() => setPhysics({ ...defaults })}>
-              {locale === "ko" ? "기본값으로" : "Reset"}
-            </button>
-          </div>
-        )}
-      </div>
+      <SpaceSettings
+        controls={controls}
+        values={physics}
+        onChange={(key, value) => setPhysics((p) => ({ ...p, [key]: value }))}
+        onReset={() => setPhysics({ ...defaults })}
+      />
       <div className="space-bottom">
         <button onClick={() => setExplore(!explore)} aria-pressed={explore}>
           {locale === "ko"
@@ -426,14 +453,7 @@ export default function WorksEcosystem({
           </button>
         </div>
       </div>
-      {hover && (
-        <div className="space-preview" aria-hidden="true">
-          <div>
-            <WorkImage work={hover} />
-          </div>
-          <p>{getLocalizedValue(locale, hover.title, hover.title_en)}</p>
-        </div>
-      )}
+      {hover && <SpacePreview work={hover} corner={corner} />}
     </div>
   );
 }

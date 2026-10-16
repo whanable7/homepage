@@ -7,6 +7,7 @@ import {
 } from "./archive-store";
 import { getPortfolio } from "./data";
 import { strataLayout } from "./layouts";
+import { currentYearOrder } from "./year-order";
 import { removesAllRelations } from "./archive-publication";
 export const emptyLayout = (): ArchiveLayout => ({
   ecosystem: [],
@@ -15,6 +16,7 @@ export const emptyLayout = (): ArchiveLayout => ({
   stars: {},
   excluded: {},
   seed: 0,
+  yearOrder: {},
 });
 export function publicWork(work: ArchiveWork): ArchiveWork {
   const { tags, connections, ...rest } = work;
@@ -98,9 +100,10 @@ export async function publishArchive(
   revision: string,
   confirmEmptyRelations = false,
 ) {
-  const works = ((await getPortfolio()) as ArchiveWork[]).filter(
-    (w) => w.status !== "draft" && !w.deleted_at,
+  const allWorks = ((await getPortfolio()) as ArchiveWork[]).filter(
+    (w) => !w.deleted_at,
   );
+  const works = allWorks.filter((w) => w.status !== "draft");
   return mutateDocument(
     "archive",
     await archiveSeed(),
@@ -112,11 +115,16 @@ export async function publishArchive(
         throw new Error(
           "연결을 모두 비운 상태로 공개하려면 별도 확인이 필요합니다.",
         );
+      const nextLayout = {
+        ...state.draft,
+        yearOrder: currentYearOrder(state.draft, allWorks),
+      };
       const included = works.filter(
         (w) => !state.draft.excluded.strata?.includes(w.id),
       );
       return {
         ...state,
+        draft: nextLayout,
         backups: removesAllRelations(state.published.layout, state.draft)
           ? [
               ...state.backups,
@@ -128,7 +136,10 @@ export async function publishArchive(
           : state.backups,
         published: {
           works: works.map(publicWork),
-          layout: structuredClone(state.draft),
+          layout: {
+            ...structuredClone(nextLayout),
+            yearOrder: currentYearOrder(nextLayout, works),
+          },
           strata: {
             phone: strataLayout(included, 360, state.draft.seed),
             desktop: strataLayout(included, 1440, state.draft.seed),

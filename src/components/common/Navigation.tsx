@@ -33,7 +33,7 @@ export default function Navigation() {
                   : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
               }`}
             >
-              {link.label}
+              {link.label.toLowerCase()}
             </Link>
           ))}
         </div>

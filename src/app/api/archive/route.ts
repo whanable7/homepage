@@ -9,6 +9,7 @@ import {
 } from "@/lib/archive";
 import { ConflictError, mutateDocument } from "@/lib/archive-store";
 import { getPortfolio } from "@/lib/data";
+import { validateYearOrder, currentYearOrder } from "@/lib/year-order";
 import type { ArchiveLayout } from "@/types/archive";
 export async function GET() {
   if (!(await isAuthenticated()))
@@ -58,7 +59,8 @@ export async function PUT(request: NextRequest) {
           revision,
         ),
       );
-    const ids = new Set((await getPortfolio()).map((w) => w.id));
+    const portfolio = await getPortfolio();
+    const ids = new Set(portfolio.map((w) => w.id));
     const value = layout as ArchiveLayout;
     if (
       !value ||
@@ -142,6 +144,8 @@ export async function PUT(request: NextRequest) {
     for (const groups of [value.ecosystem, value.cosmos])
       if (new Set(groups.map((g) => g.id)).size !== groups.length)
         throw new Error("중복된 그룹을 확인해 주세요.");
+    validateYearOrder(value.yearOrder, portfolio);
+    value.yearOrder = currentYearOrder(value, portfolio);
     return NextResponse.json(await saveArchiveDraft(value, revision));
   } catch (error) {
     return NextResponse.json(

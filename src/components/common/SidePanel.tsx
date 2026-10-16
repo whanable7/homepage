@@ -162,7 +162,7 @@ export default function SidePanel() {
                             : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
                         }`}
                       >
-                        {item.label}
+                        {item.label.toLowerCase()}
                       </Link>
                     </li>
                   ))}

@@ -11,7 +11,8 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
     { locale } = useLocale();
   const [position, setPosition] = useState(multiple ? 1 : 0),
     [animate, setAnimate] = useState(true),
-    [paused, setPaused] = useState(false);
+    [paused, setPaused] = useState(false),
+    [captionIndex, setCaptionIndex] = useState(0);
   const busy = useRef(false),
     pointer = useRef<{ x: number; y: number } | null>(null),
     frames = useRef<number[]>([]);
@@ -27,6 +28,7 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
   );
   const settle = useCallback(() => {
     if (!busy.current) return;
+    setCaptionIndex(multiple ? (position - 1 + count) % count : 0);
     if (multiple && (position === 0 || position === count + 1)) {
       setAnimate(false);
       setPosition(position === 0 ? count : 1);
@@ -44,7 +46,7 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
   }, [position, count, multiple]);
   useEffect(() => {
     if (!busy.current) return;
-    const timer = setTimeout(settle, 500);
+    const timer = setTimeout(settle, 1150);
     return () => clearTimeout(timer);
   }, [position, settle]);
   useEffect(() => {
@@ -71,7 +73,7 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
   const slides = multiple
       ? [artworks[count - 1], ...artworks, artworks[0]]
       : artworks,
-    current = artworks[index];
+    current = artworks[captionIndex] || artworks[index];
   return (
     <section
       className="landing-slideshow"
@@ -102,7 +104,9 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
           className="slideshow-track"
           style={{
             transform: `translateX(${-position * 100}%)`,
-            transition: animate ? "transform 380ms ease" : "none",
+            transition: animate
+              ? "transform 1000ms cubic-bezier(.4,0,.2,1)"
+              : "none",
           }}
           onTransitionEnd={(e) => {
             if (e.target === e.currentTarget) settle();
@@ -180,6 +184,7 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
                   if (busy.current) return;
                   setAnimate(false);
                   setPosition(i + 1);
+                  setCaptionIndex(i);
                 }}
               >
                 <span />

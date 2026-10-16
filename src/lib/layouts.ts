@@ -28,7 +28,24 @@ export function colorPosition(work: ArchiveWork): number {
   const max = Math.max(r, g, b),
     min = Math.min(r, g, b),
     d = max - min;
-  if (d < 0.08) return 360 + (1 - (max + min) / 2) * 45;
+  const linear = (v: number) =>
+    v <= 0.04045 ? v / 12.92 : ((v + 0.055) / 1.055) ** 2.4;
+  const [lr, lg, lb] = [r, g, b].map(linear);
+  const l = Math.cbrt(
+    0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb,
+  );
+  const m = Math.cbrt(
+    0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb,
+  );
+  const s = Math.cbrt(
+    0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb,
+  );
+  const light = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const chroma = Math.hypot(
+    1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s,
+    0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s,
+  );
+  if (chroma < 0.025 || d < 0.035) return 360 + (1 - light) * 45;
   let hue =
     max === r
       ? ((g - b) / d) % 6
@@ -53,127 +70,42 @@ export function imageRatio(work: ArchiveWork) {
     ),
   );
 }
+// A skyline never fills older holes: later colours cannot jump back up a layer.
 export function strataLayout(
   works: ArchiveWork[],
   width: number,
   seed = 0,
 ): Placement[] {
-  const gap = width < 600 ? 4 : 6,
-    desktop = width >= 600,
-    result: Placement[] = [];
-  const pending = [...works].sort(
-    (a, b) => colorPosition(a) - colorPosition(b) || a.id.localeCompare(b.id),
-  );
-  type Box = { x: number; y: number; width: number; height: number };
-  let free: Box[] = [
-    {
-      x: 0,
-      y: 0,
-      width: width + gap,
-      height: Math.max(2000, works.length * width * 5),
-    },
-  ];
-  while (pending.length) {
-    let best: (Placement & { score: number; index: number }) | null = null;
-    pending.slice(0, 3).forEach((work, index) => {
-      const ratio = imageRatio(work),
-        physical = Math.sqrt(
-          Math.max(1, (work.width || 60) * (work.height || 60)),
-        ),
-        size = Math.max(0.85, Math.min(1.2, Math.pow(physical / 60, 0.22)));
-      const base = width * (desktop ? 0.147 : 0.35) * size * Math.sqrt(ratio),
-        max = width * (desktop ? 0.238 : 0.54);
-      free.forEach((rect) => {
-        const sizes = [
-          base,
-          base * 0.91,
-          base * 1.09,
-          rect.width - gap,
-          (rect.height - gap) * ratio,
-        ];
-        sizes.forEach((value) => {
-          if (value < base * 0.78 || value > base * 1.22) return;
-          const w = Math.min(max, Math.max(desktop ? 80 : 44, value)),
-            h = w / ratio;
-          if (w + gap > rect.width + 0.01 || h + gap > rect.height + 0.01)
-            return;
-          const score =
-            rect.y +
-            h * 0.18 +
-            index * 14 +
-            Math.abs(Math.log(w / base)) * width * 0.03 -
-            ((w * h) / width) * 0.7 +
-            ((work.id.charCodeAt(0) + seed) % 7) * rect.x * 0.0001;
-          if (!best || score < best.score)
-            best = {
-              id: work.id,
-              x: rect.x,
-              y: rect.y,
-              width: w,
-              height: h,
-              score,
-              index,
-            };
-        });
-      });
-    });
-    if (!best) throw new Error("작품 배치를 계산할 수 없습니다.");
-    const chosen = best as Placement & { score: number; index: number },
-      used = {
-        ...chosen,
-        width: chosen.width + gap,
-        height: chosen.height + gap,
-      };
-    const split: Box[] = [];
-    free.forEach((r) => {
-      if (
-        used.x >= r.x + r.width ||
-        used.x + used.width <= r.x ||
-        used.y >= r.y + r.height ||
-        used.y + used.height <= r.y
-      ) {
-        split.push(r);
-        return;
+  const gap = width < 600 ? 4 : 6;
+  const columns = width < 600 ? 2 : width < 1100 ? 5 : 9;
+  const unit = (width - gap * (columns - 1)) / columns;
+  const heights = Array<number>(columns).fill(0);
+  let frontier = 0;
+  return [...works]
+    .sort(
+      (a, b) => colorPosition(a) - colorPosition(b) || a.id.localeCompare(b.id),
+    )
+    .map((work) => {
+      const ratio = imageRatio(work);
+      const span = ratio >= 1.45 ? 2 : 1;
+      let column = 0,
+        y = Infinity;
+      for (let i = 0; i <= columns - span; i++) {
+        const candidate = Math.max(frontier, ...heights.slice(i, i + span));
+        if (
+          candidate < y - 0.01 ||
+          (Math.abs(candidate - y) < 0.01 && seed % 2 === 1)
+        ) {
+          column = i;
+          y = candidate;
+        }
       }
-      if (used.x > r.x) split.push({ ...r, width: used.x - r.x });
-      if (used.x + used.width < r.x + r.width)
-        split.push({
-          ...r,
-          x: used.x + used.width,
-          width: r.x + r.width - used.x - used.width,
-        });
-      if (used.y > r.y) split.push({ ...r, height: used.y - r.y });
-      if (used.y + used.height < r.y + r.height)
-        split.push({
-          ...r,
-          y: used.y + used.height,
-          height: r.y + r.height - used.y - used.height,
-        });
+      const w = unit * span + gap * (span - 1),
+        h = w / ratio;
+      for (let i = column; i < column + span; i++) heights[i] = y + h + gap;
+      frontier = y;
+      return { id: work.id, x: column * (unit + gap), y, width: w, height: h };
     });
-    free = split.filter(
-      (a, i) =>
-        a.width > gap &&
-        a.height > gap &&
-        !split.some(
-          (b, j) =>
-            i !== j &&
-            a.x >= b.x &&
-            a.y >= b.y &&
-            a.x + a.width <= b.x + b.width + 0.001 &&
-            a.y + a.height <= b.y + b.height + 0.001 &&
-            (a.width * b.height !== b.width * a.height || j < i),
-        ),
-    );
-    result.push({
-      id: chosen.id,
-      x: chosen.x,
-      y: chosen.y,
-      width: chosen.width,
-      height: chosen.height,
-    });
-    pending.splice(chosen.index, 1);
-  }
-  return result;
 }
 export function groupEdges(groups: WorkGroup[]): [string, string][] {
   const unique = new Map<string, [string, string]>();
