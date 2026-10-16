@@ -19,7 +19,7 @@ import { WorkImage } from "./WorksBrowser";
 import SpaceSettings from "./SpaceSettings";
 import SpacePreview from "./SpacePreview";
 type Edge = SimulationLinkDatum<EcosystemNode>;
-const defaults = { repulsion: 120, center: 0.05, distance: 130, tension: 0.8 };
+const defaults = { repulsion: 224, center: 0.005, distance: 143, tension: 0.45 };
 export default function WorksEcosystem({
   works,
   groups,

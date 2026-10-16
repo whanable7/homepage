@@ -37,7 +37,10 @@ export default function SpaceSettings({
         <div className="space-settings">
           {controls.map((c) => (
             <label key={c.key}>
-              <span>{locale === "ko" ? c.ko : c.en}</span>
+              <span>
+                <span>{locale === "ko" ? c.ko : c.en}</span>
+                <output aria-hidden="true">{values[c.key]}</output>
+              </span>
               <input
                 type="range"
                 aria-label={locale === "ko" ? c.ko : c.en}

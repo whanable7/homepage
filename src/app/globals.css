@@ -1211,3 +1211,14 @@ html {
 .space-settings input[type="range"] {
   accent-color: var(--foreground);
 }
+
+.space-settings label > span {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+.space-settings output {
+  color: var(--text-secondary);
+  font-variant-numeric: tabular-nums;
+  font-size: 12px;
+}
