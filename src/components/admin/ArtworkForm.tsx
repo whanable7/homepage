@@ -1,304 +1,200 @@
-'use client';
-
-import { useState, useEffect } from 'react';
-import { Artwork, ArtworkFormData, Category } from '@/types/artwork';
-import Button from '@/components/common/Button';
-import ImageUploader from './ImageUploader';
-
-interface ArtworkFormProps {
-  artwork?: Artwork;
+"use client";
+import { useState } from "react";
+import type { Artwork, ArtworkFormData, Category } from "@/types/artwork";
+import type { ArchiveWork } from "@/types/archive";
+import { uploadImage } from "@/lib/upload-image";
+type Form = ArtworkFormData & {
+  id?: string;
+  image_url: string;
+  thumbnail_url: string;
+  image_width?: number;
+  image_height?: number;
+  status?: "draft" | "published";
+};
+export default function ArtworkForm({
+  artwork,
+  onSubmit,
+  onCancel,
+}: {
+  artwork?: Artwork | ArchiveWork;
   categories: Category[];
-  onSubmit: (data: ArtworkFormData & { image_url: string; thumbnail_url: string }) => Promise<void>;
+  onSubmit: (data: Form) => Promise<void>;
   onCancel: () => void;
-}
-
-export default function ArtworkForm({ artwork, categories, onSubmit, onCancel }: ArtworkFormProps) {
-  const [title, setTitle] = useState(artwork?.title || '');
-  const [titleEn, setTitleEn] = useState(artwork?.title_en || '');
-  const [year, setYear] = useState(artwork?.year?.toString() || new Date().getFullYear().toString());
-  const [width, setWidth] = useState(artwork?.width?.toString() || '');
-  const [height, setHeight] = useState(artwork?.height?.toString() || '');
-  const [medium, setMedium] = useState(artwork?.medium || '');
-  const [mediumEn, setMediumEn] = useState(artwork?.medium_en || '');
-  const [collection, setCollection] = useState(artwork?.collection || '');
-  const [collectionEn, setCollectionEn] = useState(artwork?.collection_en || '');
-  const [variableSize, setVariableSize] = useState(artwork?.variable_size || false);
-  const [categoryId, setCategoryId] = useState(artwork?.category_id || '');
-  const [showWatermark, setShowWatermark] = useState(artwork?.show_watermark ?? true);
-  const [imageUrl, setImageUrl] = useState(artwork?.image_url || '');
-  const [thumbnailUrl, setThumbnailUrl] = useState(artwork?.thumbnail_url || '');
-  const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<Record<string, string>>({});
-  const [submitError, setSubmitError] = useState<string | null>(null);
-
-  useEffect(() => {
-    setTitle(artwork?.title || '');
-    setTitleEn(artwork?.title_en || '');
-    setYear(artwork?.year?.toString() || new Date().getFullYear().toString());
-    setWidth(artwork?.width?.toString() || '');
-    setHeight(artwork?.height?.toString() || '');
-    setMedium(artwork?.medium || '');
-    setMediumEn(artwork?.medium_en || '');
-    setCollection(artwork?.collection || '');
-    setCollectionEn(artwork?.collection_en || '');
-    setVariableSize(artwork?.variable_size || false);
-    setCategoryId(artwork?.category_id || '');
-    setShowWatermark(artwork?.show_watermark ?? true);
-    setImageUrl(artwork?.image_url || '');
-    setThumbnailUrl(artwork?.thumbnail_url || '');
-    setErrors({});
-    setSubmitError(null);
-    setDominantColor(artwork?.dominant_color || null);
-  }, [artwork]);
-
-  const validate = () => {
-    const newErrors: Record<string, string> = {};
-
-    if (!title.trim()) {
-      newErrors.title = '제목을 입력해주세요';
-    }
-
-    if (!year || isNaN(parseInt(year)) || parseInt(year) < 1900 || parseInt(year) > new Date().getFullYear() + 1) {
-      newErrors.year = '올바른 연도를 입력해주세요';
-    }
-
-    if (!imageUrl) {
-      newErrors.image = '이미지를 업로드해주세요';
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validate()) return;
-
-    setLoading(true);
-    setSubmitError(null);
-
-    try {
-      await onSubmit({
-        title: title.trim(),
-        title_en: titleEn.trim() || undefined,
-        year: parseInt(year),
-        width: width ? parseInt(width) : undefined,
-        height: height ? parseInt(height) : undefined,
-        medium: medium.trim() || undefined,
-        medium_en: mediumEn.trim() || undefined,
-        collection: collection.trim() || undefined,
-        collection_en: collectionEn.trim() || undefined,
-        variable_size: variableSize,
-        category_id: categoryId || undefined,
-        show_watermark: showWatermark,
-        image_url: imageUrl,
-        thumbnail_url: thumbnailUrl,
-        dominant_color: dominantColor,
-      });
-    } catch (err) {
-      setSubmitError(err instanceof Error ? err.message : '저장에 실패했습니다');
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const [dominantColor, setDominantColor] = useState<string | null>(artwork?.dominant_color || null);
-
-  const handleImageUpload = async (newImageUrl: string, newThumbnailUrl: string) => {
-    setImageUrl(newImageUrl);
-    setThumbnailUrl(newThumbnailUrl);
-    setErrors((prev) => ({ ...prev, image: '' }));
-    
-    // 색상 자동 분석
-    try {
-      const res = await fetch('/api/portfolio/analyze-color', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ image_url: newImageUrl }),
-      });
-      if (res.ok) {
-        const data = await res.json();
-        if (data.dominant_color) {
-          setDominantColor(data.dominant_color);
+}) {
+  const w = artwork as ArchiveWork | undefined;
+  const [data, setData] = useState<Form>({
+    id: w?.id || crypto.randomUUID(),
+    title: w?.title || "",
+    title_en: w?.title_en || "",
+    year: w?.year || new Date().getFullYear(),
+    width: w?.width || undefined,
+    height: w?.height || undefined,
+    medium: w?.medium || "",
+    medium_en: w?.medium_en || "",
+    description: w?.description || "",
+    description_en: w?.description_en || "",
+    collection: w?.collection || "",
+    collection_en: w?.collection_en || "",
+    variable_size: w?.variable_size || false,
+    image_url: w?.image_url || "",
+    thumbnail_url: w?.thumbnail_url || "",
+    image_width: w?.image_width,
+    image_height: w?.image_height,
+    status: w?.status || (w ? "published" : "draft"),
+  });
+  const [busy, setBusy] = useState(false),
+    [error, setError] = useState("");
+  const field = (name: keyof Form, label: string, type = "text") => (
+    <label className="admin-field">
+      {label}
+      <input
+        type={type}
+        step={type === "number" ? "any" : undefined}
+        value={String(data[name] ?? "")}
+        onChange={(e) =>
+          setData({
+            ...data,
+            [name]:
+              type === "number"
+                ? e.target.value === ""
+                  ? undefined
+                  : Number(e.target.value)
+                : e.target.value,
+          })
         }
-      }
-    } catch (err) {
-      console.error('Color analysis failed:', err);
-    }
-  };
-
+      />
+    </label>
+  );
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {submitError && (
-        <div className="p-3 bg-red-900/30 text-red-400 text-sm rounded">
-          {submitError}
-        </div>
-      )}
-
-      <div>
-        <ImageUploader
-          onUpload={handleImageUpload}
-          currentImage={imageUrl}
+    <form
+      className="archive-form"
+      onSubmit={async (e) => {
+        e.preventDefault();
+        if (busy) return;
+        if (
+          !data.title.trim() ||
+          !data.image_url ||
+          !Number.isInteger(data.year) ||
+          data.year < 1900 ||
+          data.year > new Date().getFullYear() + 1
+        ) {
+          setError("이미지, 제목, 제작연도를 확인해 주세요.");
+          return;
+        }
+        if (
+          [data.width, data.height].some(
+            (n) => n != null && (!Number.isFinite(n) || n <= 0),
+          )
+        ) {
+          setError("치수는 0보다 큰 숫자로 입력해 주세요.");
+          return;
+        }
+        setBusy(true);
+        setError("");
+        try {
+          await onSubmit({
+            ...data,
+            width: data.width ?? null,
+            height: data.height ?? null,
+            title: data.title.trim(),
+          });
+        } catch (err) {
+          setError(err instanceof Error ? err.message : "저장 실패");
+        } finally {
+          setBusy(false);
+        }
+      }}
+    >
+      {error && <p role="alert">{error}</p>}
+      {data.image_url && (
+        <img
+          className="admin-form-preview"
+          src={data.thumbnail_url || data.image_url}
+          alt="작품 미리보기"
         />
-        {errors.image && (
-          <p className="text-red-400 text-sm mt-1">{errors.image}</p>
-        )}
+      )}
+      <label className="admin-field">
+        작품 이미지
+        <input
+          type="file"
+          accept="image/jpeg,image/png,image/webp"
+          disabled={busy}
+          onChange={async (e) => {
+            const file = e.target.files?.[0];
+            if (!file) return;
+            setBusy(true);
+            setError("");
+            try {
+              const uploaded = await uploadImage(file);
+              setData((current) => ({ ...current, ...uploaded }));
+            } catch (err) {
+              setError(err instanceof Error ? err.message : "업로드 실패");
+            } finally {
+              setBusy(false);
+              e.target.value = "";
+            }
+          }}
+        />
+      </label>
+      <div className="admin-form-grid">
+        {field("title", "제목")}
+        {field("title_en", "제목 · English")}
+        {field("year", "제작연도", "number")}
+        {field("height", "세로 · cm", "number")}
+        {field("width", "가로 · cm", "number")}
+        {field("medium", "재료")}
+        {field("medium_en", "재료 · English")}
+        {field("collection", "소장처")}
+        {field("collection_en", "소장처 · English")}
       </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
-            제목 <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="text"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="작품 제목"
+      <label className="admin-check">
+        <input
+          type="checkbox"
+          checked={data.variable_size || false}
+          onChange={(e) =>
+            setData({ ...data, variable_size: e.target.checked })
+          }
+        />
+        가변크기
+      </label>
+      <div className="admin-form-grid">
+        <label className="admin-field">
+          설명
+          <textarea
+            value={data.description || ""}
+            onChange={(e) => setData({ ...data, description: e.target.value })}
           />
-          {errors.title && (
-            <p className="text-red-400 text-sm mt-1">{errors.title}</p>
-          )}
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
-            제목 (영문)
-          </label>
-          <input
-            type="text"
-            value={titleEn}
-            onChange={(e) => setTitleEn(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="Artwork Title"
+        </label>
+        <label className="admin-field">
+          설명 · English
+          <textarea
+            value={data.description_en || ""}
+            onChange={(e) =>
+              setData({ ...data, description_en: e.target.value })
+            }
           />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-4 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">
-            연도 <span className="text-red-400">*</span>
-          </label>
-          <input
-            type="number"
-            value={year}
-            onChange={(e) => setYear(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="2024"
-            min="1900"
-            max={new Date().getFullYear() + 1}
-          />
-          {errors.year && (
-            <p className="text-red-400 text-sm mt-1">{errors.year}</p>
-          )}
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">세로 (cm)</label>
-          <input
-            type="number"
-            value={height}
-            onChange={(e) => setHeight(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="80"
-            min="1"
-            disabled={variableSize}
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">가로 (cm)</label>
-          <input
-            type="number"
-            value={width}
-            onChange={(e) => setWidth(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="100"
-            min="1"
-            disabled={variableSize}
-          />
-        </div>
-
-        <div className="flex items-end pb-2">
-          <label className="flex items-center gap-2 cursor-pointer">
-            <input
-              type="checkbox"
-              checked={variableSize}
-              onChange={(e) => setVariableSize(e.target.checked)}
-              className="w-4 h-4"
-            />
-            <span className="text-sm text-gray-700">가변크기</span>
-          </label>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">재료/기법</label>
-          <input
-            type="text"
-            value={medium}
-            onChange={(e) => setMedium(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="캔버스에 유채"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">재료/기법 (영문)</label>
-          <input
-            type="text"
-            value={mediumEn}
-            onChange={(e) => setMediumEn(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="Oil on canvas"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">소장처</label>
-          <input
-            type="text"
-            value={collection}
-            onChange={(e) => setCollection(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="국립현대미술관"
-          />
-        </div>
-        <div>
-          <label className="block text-sm font-medium mb-1 text-gray-700">소장처 (영문)</label>
-          <input
-            type="text"
-            value={collectionEn}
-            onChange={(e) => setCollectionEn(e.target.value)}
-            className="w-full h-10 px-3 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 bg-white text-gray-900 placeholder-gray-400"
-            placeholder="National Museum of Modern and Contemporary Art"
-          />
-        </div>
-      </div>
-
-      <div className="space-y-3">
-        <label className="flex items-center gap-2 cursor-pointer">
-          <input
-            type="checkbox"
-            checked={showWatermark}
-            onChange={(e) => setShowWatermark(e.target.checked)}
-            className="w-4 h-4"
-          />
-          <span className="text-sm text-gray-700">저작권 워터마크 표시 (© 마크 오버레이)</span>
         </label>
       </div>
-
-      <div className="flex justify-end gap-3 pt-4 border-t border-gray-200">
-        <Button type="button" variant="secondary" onClick={onCancel}>
+      <label className="admin-check">
+        <input
+          type="checkbox"
+          checked={data.status === "published"}
+          onChange={(e) =>
+            setData({
+              ...data,
+              status: e.target.checked ? "published" : "draft",
+            })
+          }
+        />
+        다음 공개에 포함
+      </label>
+      <div className="admin-actions">
+        <button type="button" onClick={onCancel} disabled={busy}>
           취소
-        </Button>
-        <Button type="submit" loading={loading}>
-          저장
-        </Button>
+        </button>
+        <button type="submit" disabled={busy}>
+          {busy ? "처리 중…" : "임시 저장"}
+        </button>
       </div>
     </form>
   );

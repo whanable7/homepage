@@ -1,8 +1,8 @@
-import Header from '@/components/common/Header';
-import ContactContent from '@/components/contact/ContactContent';
-import { getAbout } from '@/lib/data';
+import Header from "@/components/common/Header";
+import ContactContent from "@/components/contact/ContactContent";
+import { getPublicAbout as getAbout } from "@/lib/data";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function ContactPage() {
   const contactInfo = await getAbout();

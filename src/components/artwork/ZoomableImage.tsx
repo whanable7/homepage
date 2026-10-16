@@ -1,9 +1,20 @@
-'use client';
+"use client";
 
-import { useState, useRef, useCallback, useEffect, forwardRef, useImperativeHandle } from 'react';
-import { TransformWrapper, TransformComponent, ReactZoomPanPinchRef } from 'react-zoom-pan-pinch';
-import Image from 'next/image';
-import { cloudinaryLoader } from '@/lib/cloudinary-loader';
+import {
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+  forwardRef,
+  useImperativeHandle,
+} from "react";
+import {
+  TransformWrapper,
+  TransformComponent,
+  ReactZoomPanPinchRef,
+} from "react-zoom-pan-pinch";
+import Image from "next/image";
+import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 
 export interface ZoomableImageRef {
   zoomIn: () => void;
@@ -27,15 +38,28 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
   ({ src, alt, onScaleChange, onLongPress }, ref) => {
     const [showMagnifier, setShowMagnifier] = useState(false);
     const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
-    const [imageDimensions, setImageDimensions] = useState({ width: 0, height: 0, naturalWidth: 0, naturalHeight: 0 });
+    const [imageDimensions, setImageDimensions] = useState({
+      width: 0,
+      height: 0,
+      naturalWidth: 0,
+      naturalHeight: 0,
+      containerWidth: 0,
+      containerHeight: 0,
+    });
     const [currentScale, setCurrentScale] = useState(1);
     const isZoomed = currentScale > 1.05;
     const imageContainerRef = useRef<HTMLDivElement>(null);
     const imageRef = useRef<HTMLImageElement | null>(null);
     const transformRef = useRef<ReactZoomPanPinchRef>(null);
-    const magnifierTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-    const touchPosRef = useRef<{ clientX: number; clientY: number } | null>(null);
+    const magnifierTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
+    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
+      null,
+    );
+    const touchPosRef = useRef<{ clientX: number; clientY: number } | null>(
+      null,
+    );
 
     // 외부에서 줌 컨트롤 사용 가능하도록 노출
     useImperativeHandle(ref, () => ({
@@ -70,12 +94,14 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
           height: displayHeight,
           naturalWidth,
           naturalHeight,
+          containerWidth: containerRect.width,
+          containerHeight: containerRect.height,
         });
       }
     }, []);
 
     const handleImageLoad = useCallback(() => {
-      const imgElement = imageContainerRef.current?.querySelector('img');
+      const imgElement = imageContainerRef.current?.querySelector("img");
       if (imgElement) {
         imageRef.current = imgElement;
         updateImageDimensions();
@@ -83,33 +109,42 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
     }, [updateImageDimensions]);
 
     useEffect(() => {
-      window.addEventListener('resize', updateImageDimensions);
-      return () => window.removeEventListener('resize', updateImageDimensions);
+      window.addEventListener("resize", updateImageDimensions);
+      return () => window.removeEventListener("resize", updateImageDimensions);
     }, [updateImageDimensions]);
 
-    const updateMagnifierPosition = useCallback((clientX: number, clientY: number) => {
-      if (!imageContainerRef.current) return;
-      const container = imageContainerRef.current;
-      const rect = container.getBoundingClientRect();
-      const x = clientX - rect.left;
-      const y = clientY - rect.top;
-      setMagnifierPos({ x, y });
-    }, []);
+    const updateMagnifierPosition = useCallback(
+      (clientX: number, clientY: number) => {
+        if (!imageContainerRef.current) return;
+        const container = imageContainerRef.current;
+        const rect = container.getBoundingClientRect();
+        const x = clientX - rect.left;
+        const y = clientY - rect.top;
+        setMagnifierPos({ x, y });
+      },
+      [],
+    );
 
-    const handleMouseDown = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-      if (isZoomed) return;
-      updateMagnifierPosition(e.clientX, e.clientY);
-      setShowMagnifier(true);
-    }, [updateMagnifierPosition, isZoomed]);
+    const handleMouseDown = useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        if (isZoomed) return;
+        updateMagnifierPosition(e.clientX, e.clientY);
+        setShowMagnifier(true);
+      },
+      [updateMagnifierPosition, isZoomed],
+    );
 
     const handleMouseUp = useCallback(() => {
       setShowMagnifier(false);
     }, []);
 
-    const handleMouseMove = useCallback((e: React.MouseEvent<HTMLDivElement>) => {
-      if (!showMagnifier) return;
-      updateMagnifierPosition(e.clientX, e.clientY);
-    }, [showMagnifier, updateMagnifierPosition]);
+    const handleMouseMove = useCallback(
+      (e: React.MouseEvent<HTMLDivElement>) => {
+        if (!showMagnifier) return;
+        updateMagnifierPosition(e.clientX, e.clientY);
+      },
+      [showMagnifier, updateMagnifierPosition],
+    );
 
     const handleMouseLeave = useCallback(() => {
       setShowMagnifier(false);
@@ -126,36 +161,51 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
       }
     }, []);
 
-    const handleTouchStart = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-      if (e.touches.length !== 1 || isZoomed) return;
-      const touch = e.touches[0];
-      touchPosRef.current = { clientX: touch.clientX, clientY: touch.clientY };
+    const handleTouchStart = useCallback(
+      (e: React.TouchEvent<HTMLDivElement>) => {
+        if (e.touches.length !== 1 || isZoomed) return;
+        const touch = e.touches[0];
+        touchPosRef.current = {
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+        };
 
-      magnifierTimerRef.current = setTimeout(() => {
-        if (touchPosRef.current) {
-          updateMagnifierPosition(touchPosRef.current.clientX, touchPosRef.current.clientY);
-          setShowMagnifier(true);
+        magnifierTimerRef.current = setTimeout(() => {
+          if (touchPosRef.current) {
+            updateMagnifierPosition(
+              touchPosRef.current.clientX,
+              touchPosRef.current.clientY,
+            );
+            setShowMagnifier(true);
+          }
+        }, MAGNIFIER_DELAY);
+
+        longPressTimerRef.current = setTimeout(() => {
+          setShowMagnifier(false);
+          clearTouchTimers();
+          onLongPress?.();
+        }, LONG_PRESS_DELAY);
+      },
+      [isZoomed, updateMagnifierPosition, clearTouchTimers, onLongPress],
+    );
+
+    const handleTouchMove = useCallback(
+      (e: React.TouchEvent<HTMLDivElement>) => {
+        if (e.touches.length !== 1) return;
+        const touch = e.touches[0];
+        touchPosRef.current = {
+          clientX: touch.clientX,
+          clientY: touch.clientY,
+        };
+
+        if (showMagnifier && !isZoomed) {
+          updateMagnifierPosition(touch.clientX, touch.clientY);
+        } else {
+          clearTouchTimers();
         }
-      }, MAGNIFIER_DELAY);
-
-      longPressTimerRef.current = setTimeout(() => {
-        setShowMagnifier(false);
-        clearTouchTimers();
-        onLongPress?.();
-      }, LONG_PRESS_DELAY);
-    }, [isZoomed, updateMagnifierPosition, clearTouchTimers, onLongPress]);
-
-    const handleTouchMove = useCallback((e: React.TouchEvent<HTMLDivElement>) => {
-      if (e.touches.length !== 1) return;
-      const touch = e.touches[0];
-      touchPosRef.current = { clientX: touch.clientX, clientY: touch.clientY };
-
-      if (showMagnifier && !isZoomed) {
-        updateMagnifierPosition(touch.clientX, touch.clientY);
-      } else {
-        clearTouchTimers();
-      }
-    }, [showMagnifier, isZoomed, updateMagnifierPosition, clearTouchTimers]);
+      },
+      [showMagnifier, isZoomed, updateMagnifierPosition, clearTouchTimers],
+    );
 
     const handleTouchEnd = useCallback(() => {
       clearTouchTimers();
@@ -164,10 +214,11 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
     }, [clearTouchTimers]);
 
     const getMagnifierStyle = useCallback(() => {
-      if (!imageContainerRef.current || !imageDimensions.width) return {};
-
-      const container = imageContainerRef.current;
-      const containerRect = container.getBoundingClientRect();
+      if (!imageDimensions.width) return {};
+      const containerRect = {
+        width: imageDimensions.containerWidth,
+        height: imageDimensions.containerHeight,
+      };
 
       const imageOffsetX = (containerRect.width - imageDimensions.width) / 2;
       const imageOffsetY = (containerRect.height - imageDimensions.height) / 2;
@@ -192,12 +243,15 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
         backgroundImage: `url(${src})`,
         backgroundSize: `${bgWidth}px ${bgHeight}px`,
         backgroundPosition: `-${bgPosX}px -${bgPosY}px`,
-        backgroundRepeat: 'no-repeat',
+        backgroundRepeat: "no-repeat",
       };
     }, [magnifierPos, imageDimensions, src]);
 
     return (
-      <div className="w-full h-full overflow-hidden" style={{ clipPath: 'inset(0)', contain: 'paint' }}>
+      <div
+        className="w-full h-full overflow-hidden"
+        style={{ clipPath: "inset(0)", contain: "paint" }}
+      >
         <TransformWrapper
           ref={transformRef}
           initialScale={1}
@@ -207,7 +261,7 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
           limitToBounds={true}
           alignmentAnimation={{ sizeX: 0, sizeY: 0 }}
           wheel={{ smoothStep: 0.001, activationKeys: [] }}
-          doubleClick={{ mode: 'toggle' }}
+          doubleClick={{ mode: "toggle" }}
           panning={{ disabled: !isZoomed || showMagnifier }}
           onTransformed={(_ref, state) => {
             setCurrentScale(state.scale);
@@ -215,47 +269,57 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
           }}
         >
           <TransformComponent
-            wrapperStyle={{ width: '100%', height: '100%' }}
-            contentStyle={{ width: '100%', height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}
+            wrapperStyle={{ width: "100%", height: "100%" }}
+            contentStyle={{
+              width: "100%",
+              height: "100%",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
           >
-          <div
-            ref={imageContainerRef}
-            className={`relative w-full h-full flex items-center justify-center ${
-              isZoomed ? 'cursor-grab active:cursor-grabbing' : 'cursor-crosshair'
-            }`}
-            onMouseDown={handleMouseDown}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-            onMouseLeave={handleMouseLeave}
-            onTouchStart={handleTouchStart}
-            onTouchMove={handleTouchMove}
-            onTouchEnd={handleTouchEnd}
-          >
-            <Image
-              src={src}
-              alt={alt}
-              fill
-              sizes="100vw"
-              className="object-contain"
-              priority
-              onLoad={handleImageLoad}
-              {...(src?.includes('res.cloudinary.com') ? { loader: cloudinaryLoader } : {})}
-            />
-
-            {showMagnifier && (
-              <div
-                className="absolute rounded-lg border-2 border-white/50 shadow-lg pointer-events-none z-20"
-                style={getMagnifierStyle()}
+            <div
+              ref={imageContainerRef}
+              className={`relative w-full h-full flex items-center justify-center ${
+                isZoomed
+                  ? "cursor-grab active:cursor-grabbing"
+                  : "cursor-crosshair"
+              }`}
+              onMouseDown={handleMouseDown}
+              onMouseUp={handleMouseUp}
+              onMouseMove={handleMouseMove}
+              onMouseLeave={handleMouseLeave}
+              onTouchStart={handleTouchStart}
+              onTouchMove={handleTouchMove}
+              onTouchEnd={handleTouchEnd}
+            >
+              <Image
+                src={src}
+                alt={alt}
+                fill
+                sizes="100vw"
+                className="object-contain"
+                priority
+                onLoad={handleImageLoad}
+                {...(src?.includes("res.cloudinary.com")
+                  ? { loader: cloudinaryLoader }
+                  : {})}
               />
-            )}
-          </div>
-        </TransformComponent>
-      </TransformWrapper>
+
+              {showMagnifier && (
+                <div
+                  className="absolute rounded-lg border-2 border-white/50 shadow-lg pointer-events-none z-20"
+                  style={getMagnifierStyle()}
+                />
+              )}
+            </div>
+          </TransformComponent>
+        </TransformWrapper>
       </div>
     );
-  }
+  },
 );
 
-ZoomableImage.displayName = 'ZoomableImage';
+ZoomableImage.displayName = "ZoomableImage";
 
 export default ZoomableImage;

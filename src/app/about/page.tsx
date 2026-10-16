@@ -1,8 +1,8 @@
-import Header from '@/components/common/Header';
-import AboutContent from '@/components/about/AboutContent';
-import { getAbout, getExhibitions } from '@/lib/data';
+import Header from "@/components/common/Header";
+import AboutContent from "@/components/about/AboutContent";
+import { getPublicAbout as getAbout, getExhibitions } from "@/lib/data";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const [aboutInfo, exhibitions] = await Promise.all([

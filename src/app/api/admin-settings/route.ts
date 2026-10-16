@@ -1,20 +1,30 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getAdminSettings, updateAdminSettings } from '@/lib/data';
-
-const SESSION_COOKIE_NAME = 'admin_session';
-async function isAuthenticated(): Promise<boolean> {
-  const cookieStore = await cookies();
-  return !!cookieStore.get(SESSION_COOKIE_NAME);
-}
-
+import { NextRequest, NextResponse } from "next/server";
+import { getAdminSettings, updateAdminSettings } from "@/lib/data";
+import { isAuthenticated, checkPassword } from "@/lib/auth";
 export async function GET() {
-  return NextResponse.json(await getAdminSettings());
+  if (!(await isAuthenticated()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  const settings = await getAdminSettings();
+  return NextResponse.json(
+    { password_hint: settings.password_hint || "" },
+    { headers: { "Cache-Control": "no-store" } },
+  );
 }
-
 export async function PUT(request: NextRequest) {
-  if (!(await isAuthenticated())) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  if (!(await isAuthenticated()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const body = await request.json();
-  await updateAdminSettings(body);
-  return NextResponse.json(body);
+  if (!(await checkPassword(body.current_password)))
+    return NextResponse.json(
+      { error: "현재 비밀번호를 확인해 주세요." },
+      { status: 403 },
+    );
+  if (body.new_password)
+    return NextResponse.json(
+      { error: "이번 개편에서는 기존 비밀번호를 유지합니다." },
+      { status: 400 },
+    );
+  const password_hint = String(body.password_hint || "").slice(0, 200);
+  await updateAdminSettings({ password_hint });
+  return NextResponse.json({ password_hint });
 }

@@ -1,4 +1,4 @@
-'use client';
+"use client";
 
 import {
   createContext,
@@ -6,11 +6,11 @@ import {
   useState,
   useEffect,
   ReactNode,
-} from 'react';
-import { ko, type Translations } from './translations/ko';
-import { en } from './translations/en';
+} from "react";
+import { ko, type Translations } from "./translations/ko";
+import { en } from "./translations/en";
 
-export type Locale = 'ko' | 'en';
+export type Locale = "ko" | "en";
 
 interface LocaleContextType {
   locale: Locale;
@@ -23,30 +23,44 @@ const LocaleContext = createContext<LocaleContextType | undefined>(undefined);
 const translations: Record<Locale, Translations> = { ko, en };
 
 export function LocaleProvider({ children }: { children: ReactNode }) {
-  const [locale, setLocaleState] = useState<Locale>('ko');
+  const [locale, setLocaleState] = useState<Locale>("ko");
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    const saved = localStorage.getItem('locale') as Locale;
-    if (saved && (saved === 'ko' || saved === 'en')) {
-      setLocaleState(saved);
-    }
-    setMounted(true);
+    let cancelled = false;
+    queueMicrotask(() => {
+      if (cancelled) return;
+      try {
+        const saved = localStorage.getItem("locale");
+        if (saved === "ko" || saved === "en") {
+          setLocaleState(saved);
+          document.documentElement.lang = saved;
+        }
+      } catch {}
+      setMounted(true);
+    });
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   const setLocale = (newLocale: Locale) => {
     setLocaleState(newLocale);
-    localStorage.setItem('locale', newLocale);
+    localStorage.setItem("locale", newLocale);
     document.documentElement.lang = newLocale;
   };
 
   // 항상 Context Provider를 제공하되, 마운트 전에는 기본값(ko) 사용
   // SSR 하이드레이션 시에도 컨텍스트 접근 가능
-  const effectiveLocale = mounted ? locale : 'ko';
+  const effectiveLocale = mounted ? locale : "ko";
 
   return (
     <LocaleContext.Provider
-      value={{ locale: effectiveLocale, setLocale, t: translations[effectiveLocale] }}
+      value={{
+        locale: effectiveLocale,
+        setLocale,
+        t: translations[effectiveLocale],
+      }}
     >
       {children}
     </LocaleContext.Provider>
@@ -56,7 +70,7 @@ export function LocaleProvider({ children }: { children: ReactNode }) {
 export function useLocale() {
   const context = useContext(LocaleContext);
   if (context === undefined) {
-    throw new Error('useLocale must be used within a LocaleProvider');
+    throw new Error("useLocale must be used within a LocaleProvider");
   }
   return context;
 }
