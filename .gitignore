@@ -40,3 +40,19 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 .env*.local
+
+# Isolated development data and test artifacts
+.archive-local/
+.archive-test/
+.env.example.local
+playwright-report/
+test-results/
+
+.archive-migration/
+
+# Local numbered source backup copies
+**/* [0-9].ts
+**/* [0-9].tsx
+
+# Private archive snapshots and isolated test datasets
+/.archive-*/

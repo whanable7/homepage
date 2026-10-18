@@ -1,57 +1,46 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { getAdminSettings } from '@/lib/data';
-
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
-const SESSION_COOKIE_NAME = 'admin_session';
-
+import { NextRequest, NextResponse } from "next/server";
+import { cookies } from "next/headers";
+import { checkPassword, isAuthenticated } from "@/lib/auth";
+import { createSession, SESSION_COOKIE, SESSION_SECONDS } from "@/lib/session";
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
-    const settings = await getAdminSettings();
-
-    let isValid = false;
-
-    if (settings?.password_hash) {
-      const bcrypt = await import('bcryptjs');
-      isValid = await bcrypt.compare(password, settings.password_hash);
-    } else if (ADMIN_PASSWORD) {
-      isValid = password === ADMIN_PASSWORD;
-    } else {
-      return NextResponse.json({ error: 'Server configuration error' }, { status: 500 });
+    if (!(await checkPassword(password))) {
+      await new Promise((r) => setTimeout(r, 400));
+      return NextResponse.json(
+        { error: "비밀번호를 확인해 주세요." },
+        { status: 401 },
+      );
     }
-
-    if (!isValid) {
-      return NextResponse.json({ error: 'Invalid password' }, { status: 401 });
-    }
-
-    const sessionToken = crypto.randomUUID();
-    const cookieStore = await cookies();
-
-    cookieStore.set(SESSION_COOKIE_NAME, sessionToken, {
+    (await cookies()).set(SESSION_COOKIE, await createSession(), {
       httpOnly: true,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      path: '/',
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: SESSION_SECONDS,
     });
-
-    return NextResponse.json({ success: true });
+    return NextResponse.json(
+      { success: true },
+      { headers: { "Cache-Control": "no-store" } },
+    );
   } catch {
-    return NextResponse.json({ error: 'Invalid request' }, { status: 400 });
+    return NextResponse.json(
+      { error: "로그인 설정 또는 저장 공간을 확인해 주세요." },
+      { status: 503 },
+    );
   }
 }
-
 export async function DELETE() {
-  const cookieStore = await cookies();
-  cookieStore.delete(SESSION_COOKIE_NAME);
+  (await cookies()).delete(SESSION_COOKIE);
   return NextResponse.json({ success: true });
 }
-
 export async function GET() {
-  const cookieStore = await cookies();
-  const session = cookieStore.get(SESSION_COOKIE_NAME);
-  if (!session) {
-    return NextResponse.json({ authenticated: false }, { status: 401 });
-  }
-  return NextResponse.json({ authenticated: true });
+  const authenticated = await isAuthenticated();
+  return NextResponse.json(
+    { authenticated },
+    {
+      status: authenticated ? 200 : 401,
+      headers: { "Cache-Control": "no-store" },
+    },
+  );
 }

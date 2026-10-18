@@ -1,15 +1,15 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 export default function Navigation() {
   const pathname = usePathname();
 
   const links = [
-    { href: '/', label: 'Home' },
-    { href: '/portfolio', label: 'Portfolio' },
-    { href: '/cv', label: 'CV' },
+    { href: "/", label: "Home" },
+    { href: "/works", label: "Works" },
+    { href: "/cv", label: "CV" },
   ];
 
   return (
@@ -29,11 +29,11 @@ export default function Navigation() {
               href={link.href}
               className={`text-sm transition-colors ${
                 pathname === link.href
-                  ? 'text-[var(--foreground)]'
-                  : 'text-[var(--text-secondary)] hover:text-[var(--foreground)]'
+                  ? "text-[var(--foreground)]"
+                  : "text-[var(--text-secondary)] hover:text-[var(--foreground)]"
               }`}
             >
-              {link.label}
+              {link.label.toLowerCase()}
             </Link>
           ))}
         </div>

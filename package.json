@@ -1,34 +1,29 @@
 {
   "name": "jungwhan_paintings",
-  "version": "0.1.0",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "typecheck": "tsc --noEmit",
+    "test": "tsx --test tests/*.test.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.9",
     "@types/d3-force": "^3.0.10",
+    "@vercel/blob": "^2.3.1",
     "bcryptjs": "^3.0.3",
     "cloudinary": "^2.9.0",
     "d3-force": "^3.0.0",
-    "graphology": "^0.26.0",
-    "graphology-layout-forceatlas2": "^0.10.1",
-    "next": "^15.5.12",
-    "next-cloudinary": "^6.17.5",
-    "node-vibrant": "^4.0.4",
+    "next": "^15.5.28",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "react-force-graph-2d": "^1.29.1",
-    "react-force-graph-3d": "^1.29.0",
     "react-zoom-pan-pinch": "^3.7.0",
     "resend": "^6.8.0",
-    "sharp": "^0.34.5",
-    "sigma": "^3.0.2",
-    "three": "^0.160.0",
-    "@vercel/blob": "^2.3.1"
+    "sharp": "^0.35.5",
+    "three": "^0.160.0"
   },
   "devDependencies": {
     "@tailwindcss/postcss": "^4",
@@ -36,10 +31,16 @@
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/three": "^0.160.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.4",
     "pg": "^8.18.0",
     "tailwindcss": "^4",
-    "typescript": "^5"
+    "tsx": "^4.23.15",
+    "typescript": "^5",
+    "prettier": "^3.6.2"
+  },
+  "overrides": {
+    "postcss": "^8.5.30"
   }
 }

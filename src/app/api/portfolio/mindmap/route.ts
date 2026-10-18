@@ -1,10 +1,11 @@
-import { NextResponse } from 'next/server';
-import { getPortfolio, getTags } from '@/lib/data';
+import { NextResponse } from "next/server";
+import { isAuthenticated } from "@/lib/auth";
+import { getPortfolio, getTags } from "@/lib/data";
 
 // 이분 그래프 구조: artwork ↔ tag 연결
 interface MindmapNode {
   id: string;
-  type: 'artwork' | 'tag';
+  type: "artwork" | "tag";
   title?: string;
   title_en?: string | null;
   year?: number;
@@ -23,6 +24,8 @@ interface MindmapEdge {
 
 // GET /api/portfolio/mindmap - 이분 그래프 데이터 (artwork ↔ tag)
 export async function GET() {
+  if (!(await isAuthenticated()))
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   try {
     const artworks = await getPortfolio();
     const tags = await getTags();
@@ -39,7 +42,7 @@ export async function GET() {
 
     // 태그별 작품 수
     const tagArtworkCount = new Map<string, number>();
-    artworkTags.forEach(at => {
+    artworkTags.forEach((at) => {
       tagArtworkCount.set(at.tag_id, (tagArtworkCount.get(at.tag_id) || 0) + 1);
     });
 
@@ -53,30 +56,40 @@ export async function GET() {
 
     // 작품별 연결 수
     const artworkConnectionCount = new Map<string, number>();
-    artworkTags.forEach(at => {
+    artworkTags.forEach((at) => {
       if (universalTags.has(at.tag_id)) return;
       artworkConnectionCount.set(
         at.artwork_id,
-        (artworkConnectionCount.get(at.artwork_id) || 0) + 1
+        (artworkConnectionCount.get(at.artwork_id) || 0) + 1,
       );
     });
 
     const nodes: MindmapNode[] = [];
 
     // artwork 노드
-    artworks.forEach((artwork: { id: string; title: string; title_en?: string | null; year?: number; thumbnail_url?: string; width?: number | null; height?: number | null }) => {
-      nodes.push({
-        id: `artwork:${artwork.id}`,
-        type: 'artwork',
-        title: artwork.title,
-        title_en: artwork.title_en,
-        year: artwork.year,
-        thumbnail_url: artwork.thumbnail_url,
-        width: artwork.width,
-        height: artwork.height,
-        connection_count: artworkConnectionCount.get(artwork.id) || 0,
-      });
-    });
+    artworks.forEach(
+      (artwork: {
+        id: string;
+        title: string;
+        title_en?: string | null;
+        year?: number;
+        thumbnail_url?: string;
+        width?: number | null;
+        height?: number | null;
+      }) => {
+        nodes.push({
+          id: `artwork:${artwork.id}`,
+          type: "artwork",
+          title: artwork.title,
+          title_en: artwork.title_en,
+          year: artwork.year,
+          thumbnail_url: artwork.thumbnail_url,
+          width: artwork.width,
+          height: artwork.height,
+          connection_count: artworkConnectionCount.get(artwork.id) || 0,
+        });
+      },
+    );
 
     // tag 노드
     tags.forEach((tag: { id: string; name: string }) => {
@@ -86,7 +99,7 @@ export async function GET() {
 
       nodes.push({
         id: `tag:${tag.id}`,
-        type: 'tag',
+        type: "tag",
         name: tag.name,
         artwork_count: count,
       });
@@ -94,7 +107,7 @@ export async function GET() {
 
     // 엣지
     const edges: MindmapEdge[] = [];
-    artworkTags.forEach(at => {
+    artworkTags.forEach((at) => {
       if (universalTags.has(at.tag_id)) return;
       edges.push({
         source: `artwork:${at.artwork_id}`,
@@ -107,13 +120,16 @@ export async function GET() {
       edges,
       stats: {
         artworks: artworks.length,
-        tags: nodes.filter(n => n.type === 'tag').length,
+        tags: nodes.filter((n) => n.type === "tag").length,
         edges: edges.length,
         universal_tags_excluded: universalTags.size,
       },
     });
   } catch (error) {
-    console.error('Error fetching mindmap data:', error);
-    return NextResponse.json({ error: 'Failed to fetch mindmap data' }, { status: 500 });
+    console.error("Error fetching mindmap data:", error);
+    return NextResponse.json(
+      { error: "Failed to fetch mindmap data" },
+      { status: 500 },
+    );
   }
 }

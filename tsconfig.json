@@ -37,6 +37,12 @@
     "**/*.mts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".vercel/**",
+    ".archive-*/**",
+    "**/* ?.ts",
+    "**/* ?.tsx",
+    ".next/**/* ?.ts",
+    ".next/**/* ?.tsx"
   ]
 }

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import { useState } from 'react';
-import Link from 'next/link';
-import { Artwork } from '@/types/artwork';
-import ArtworkCard from '@/components/artwork/ArtworkCard';
-import ArtworkModal from '@/components/artwork/ArtworkModal';
+import { useState } from "react";
+import Link from "next/link";
+import { Artwork } from "@/types/artwork";
+import ArtworkCard from "@/components/artwork/ArtworkCard";
+import ArtworkModal from "@/components/artwork/ArtworkModal";
 
 interface FeaturedWorksProps {
   artworks: Artwork[];
@@ -13,7 +13,8 @@ interface FeaturedWorksProps {
 export default function FeaturedWorks({ artworks }: FeaturedWorksProps) {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
 
-  const selectedArtwork = selectedIndex !== null ? artworks[selectedIndex] : null;
+  const selectedArtwork =
+    selectedIndex !== null ? artworks[selectedIndex] : null;
 
   const handlePrev = () => {
     if (selectedIndex !== null && selectedIndex > 0) {
@@ -52,7 +53,7 @@ export default function FeaturedWorks({ artworks }: FeaturedWorksProps) {
 
           <div className="mt-12 text-center">
             <Link
-              href="/portfolio"
+              href="/works"
               className="inline-flex items-center gap-2 text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors"
             >
               <span>View All Works</span>
@@ -80,7 +81,9 @@ export default function FeaturedWorks({ artworks }: FeaturedWorksProps) {
           onPrev={handlePrev}
           onNext={handleNext}
           hasPrev={selectedIndex !== null && selectedIndex > 0}
-          hasNext={selectedIndex !== null && selectedIndex < artworks.length - 1}
+          hasNext={
+            selectedIndex !== null && selectedIndex < artworks.length - 1
+          }
         />
       )}
     </>

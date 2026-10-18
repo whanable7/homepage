@@ -1,8 +1,8 @@
-import Header from '@/components/common/Header';
-import NewsContent from '@/components/news/NewsContent';
-import { getNews } from '@/lib/data';
+import Header from "@/components/common/Header";
+import NewsContent from "@/components/news/NewsContent";
+import { getNews } from "@/lib/data";
 
-export const revalidate = 3600;
+export const dynamic = "force-dynamic";
 
 export default async function NewsPage() {
   const news = await getNews();

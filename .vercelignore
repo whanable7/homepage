@@ -1,0 +1,14 @@
+# Keep credentials, private snapshots, and local outputs off deployment uploads.
+.git
+.vercel
+.env*
+.archive-*
+node_modules
+.next
+outputs
+coverage
+*.tsbuildinfo
+
+# Local numbered source backups are not deployment inputs.
+**/* [0-9].ts
+**/* [0-9].tsx

@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-
-export default function YearsPage() {
-  redirect('/portfolio?view=years');
+import { redirect } from "next/navigation";
+export default function LegacyView() {
+  redirect("/works?view=years");
 }

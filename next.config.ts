@@ -1,37 +1,64 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
-  eslint: {
-    ignoreDuringBuilds: true,
-  },
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: '*.supabase.co',
-        pathname: '/storage/v1/object/public/**',
+        protocol: "https",
+        hostname: "*.supabase.co",
+        pathname: "/storage/v1/object/public/**",
       },
       {
-        protocol: 'https',
-        hostname: '**',
+        protocol: "https",
+        hostname: "res.cloudinary.com",
+      },
+      {
+        protocol: "https",
+        hostname: "*.public.blob.vercel-storage.com",
       },
     ],
   },
   async redirects() {
     return [
+      { source: "/portfolio", destination: "/works", permanent: true },
       {
-        source: '/artworks',
-        destination: '/portfolio',
+        source: "/portfolio/graph",
+        destination: "/works?view=ecosystem",
         permanent: true,
       },
       {
-        source: '/artworks/:slug',
-        destination: '/portfolio/:slug',
+        source: "/portfolio/mindmap",
+        destination: "/works?view=ecosystem",
         permanent: true,
       },
       {
-        source: '/about',
-        destination: '/cv',
+        source: "/portfolio/colors",
+        destination: "/works?view=strata",
+        permanent: true,
+      },
+      {
+        source: "/portfolio/years",
+        destination: "/works?view=years",
+        permanent: true,
+      },
+      {
+        source: "/portfolio/:slug",
+        destination: "/works/:slug",
+        permanent: true,
+      },
+      {
+        source: "/artworks",
+        destination: "/works",
+        permanent: true,
+      },
+      {
+        source: "/artworks/:slug",
+        destination: "/works/:slug",
+        permanent: true,
+      },
+      {
+        source: "/about",
+        destination: "/cv",
         permanent: true,
       },
     ];

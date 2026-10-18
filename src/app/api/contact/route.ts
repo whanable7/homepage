@@ -1,80 +1,53 @@
-import { NextRequest, NextResponse } from 'next/server';
-import { Resend } from 'resend';
+import { NextRequest, NextResponse } from "next/server";
+import { Resend } from "resend";
+import { parseContactMessage, contactMessageText } from "@/lib/contact-message";
 
 export async function POST(request: NextRequest) {
+  let message;
   try {
-    const body = await request.json();
-
-    // 폼 데이터 검증
-    const { name, email, subject, message } = body;
-
-    if (!name || !email || !subject || !message) {
-      return NextResponse.json(
-        { error: 'All fields are required' },
-        { status: 400 }
-      );
-    }
-
-    // 이메일 형식 검증
-    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    if (!emailRegex.test(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
-
-    const apiKey = process.env.RESEND_API_KEY;
-    if (!apiKey) {
-      console.error('RESEND_API_KEY is not configured');
-      return NextResponse.json(
-        { error: 'Email service not configured' },
-        { status: 500 }
-      );
-    }
-
-    const toEmail = process.env.CONTACT_TO_EMAIL;
-    if (!toEmail) {
-      console.error('CONTACT_TO_EMAIL is not configured');
-      return NextResponse.json(
-        { error: 'Email service not configured' },
-        { status: 500 }
-      );
-    }
-
-    const resend = new Resend(apiKey);
-
-    // Resend로 이메일 발송
-    const { error } = await resend.emails.send({
-      from: 'Contact Form <onboarding@resend.dev>',
-      to: toEmail,
-      replyTo: email,
-      subject: `[Website Contact] ${subject}`,
-      html: `
-        <h2>New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${name}</p>
-        <p><strong>Email:</strong> ${email}</p>
-        <p><strong>Subject:</strong> ${subject}</p>
-        <hr />
-        <h3>Message:</h3>
-        <p>${message.replace(/\n/g, '<br />')}</p>
-      `,
-    });
-
-    if (error) {
-      console.error('Resend error:', error);
-      return NextResponse.json(
-        { error: 'Failed to send email' },
-        { status: 500 }
-      );
-    }
-
-    return NextResponse.json({ success: true });
-  } catch (err) {
-    console.error('Contact API error:', err);
+    message = parseContactMessage(await request.json());
+  } catch {
     return NextResponse.json(
-      { error: 'Invalid request' },
-      { status: 400 }
+      { error: "문의 내용을 확인해 주세요." },
+      { status: 400 },
+    );
+  }
+  const apiKey = process.env.RESEND_API_KEY?.trim(),
+    to = process.env.CONTACT_TO_EMAIL?.trim();
+  if (!apiKey || !to)
+    return NextResponse.json(
+      { error: "문의 메일을 보낼 수 없습니다. 이메일 주소로 직접 보내주세요." },
+      { status: 503 },
+    );
+  try {
+    const { error } = await new Resend(apiKey).emails.send({
+      from:
+        process.env.CONTACT_FROM_EMAIL?.trim() ||
+        "Jungwhan Park <onboarding@resend.dev>",
+      to,
+      replyTo: message.email,
+      subject: `[Website Contact] ${message.subject}`,
+      text: contactMessageText(message),
+    });
+    if (error) {
+      console.error("Contact delivery failed", {
+        name: error.name,
+        message: error.message
+          .replaceAll(apiKey, "[redacted]")
+          .replace(/re_[A-Za-z0-9_-]+/g, "[redacted]")
+          .slice(0, 400),
+      });
+      return NextResponse.json(
+        { error: "메일을 보내지 못했습니다. 잠시 후 다시 시도해 주세요." },
+        { status: 502 },
+      );
+    }
+    return NextResponse.json({ success: true });
+  } catch {
+    console.error("Contact delivery unavailable");
+    return NextResponse.json(
+      { error: "메일을 보내지 못했습니다. 잠시 후 다시 시도해 주세요." },
+      { status: 502 },
     );
   }
 }

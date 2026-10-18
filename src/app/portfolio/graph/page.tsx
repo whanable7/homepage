@@ -1,5 +1,4 @@
-import { redirect } from 'next/navigation';
-
-export default function GraphPage() {
-  redirect('/portfolio?view=graph');
+import { redirect } from "next/navigation";
+export default function LegacyView() {
+  redirect("/works?view=ecosystem");
 }

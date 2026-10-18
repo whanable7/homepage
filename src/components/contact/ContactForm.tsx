@@ -125,7 +125,7 @@ export default function ContactForm() {
         <button
           type="submit"
           disabled={status === 'sending'}
-          className="px-8 py-3 border border-white text-[var(--foreground)] text-sm tracking-wider hover:bg-white hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-8 py-3 border border-[#666666] text-[var(--foreground)] text-sm tracking-wider hover:bg-[#e8e8e8] hover:border-[#1a1a1a] hover:text-black transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {status === 'sending' ? t.contactForm.sending : t.contactForm.submit}
         </button>

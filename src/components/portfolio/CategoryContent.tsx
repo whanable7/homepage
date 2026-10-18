@@ -1,30 +1,37 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import { Category, Artwork } from '@/types/artwork';
-import ArtworkList from './ArtworkList';
-import { useLocale } from '@/i18n';
-import { getLocalizedValue } from '@/lib/i18n-utils';
+import Link from "next/link";
+import { Category, Artwork } from "@/types/artwork";
+import ArtworkList from "./ArtworkList";
+import { useLocale } from "@/i18n";
+import { getLocalizedValue } from "@/lib/i18n-utils";
 
 interface CategoryContentProps {
   category: Category;
   artworks: Artwork[];
 }
 
-export default function CategoryContent({ category, artworks }: CategoryContentProps) {
+export default function CategoryContent({
+  category,
+  artworks,
+}: CategoryContentProps) {
   const { locale, t } = useLocale();
 
-  const categoryName = getLocalizedValue(locale, category.name, category.name_en);
+  const categoryName = getLocalizedValue(
+    locale,
+    category.name,
+    category.name_en,
+  );
   const categoryDescription = getLocalizedValue(
     locale,
     category.description,
-    category.description_en
+    category.description_en,
   );
 
   return (
     <div className="max-w-6xl mx-auto">
       <Link
-        href="/portfolio"
+        href="/works"
         className="inline-flex items-center text-sm text-[var(--text-secondary)] hover:text-[var(--foreground)] transition-colors mb-8"
       >
         <svg
@@ -48,7 +55,9 @@ export default function CategoryContent({ category, artworks }: CategoryContentP
         {categoryName}
       </h1>
       {categoryDescription && (
-        <p className="text-[var(--text-secondary)] mb-12">{categoryDescription}</p>
+        <p className="text-[var(--text-secondary)] mb-12">
+          {categoryDescription}
+        </p>
       )}
 
       <ArtworkList artworks={artworks} />

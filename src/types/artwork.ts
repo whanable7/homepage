@@ -14,7 +14,7 @@ export interface Category {
 // Tag system for mindmap connections
 export interface Tag {
   id: string;
-  name: string;  // 관리자만 보는 언어적 태그
+  name: string; // 관리자만 보는 언어적 태그
   created_at: string;
 }
 
@@ -62,7 +62,7 @@ export interface PublicationItem {
   title_en?: string;
   publisher?: string;
   publisher_en?: string;
-  type?: 'book' | 'catalog' | 'article' | 'other';
+  type?: "book" | "catalog" | "article" | "other";
 }
 
 export interface Artwork {
@@ -87,9 +87,9 @@ export interface Artwork {
   category_id: string | null;
   category?: Category;
   // New fields for views
-  dominant_color: string | null;  // HSL format for color wheel
-  tags?: Tag[];  // Populated via join
-  connections?: ArtworkConnection[];  // Populated for mindmap view
+  dominant_color: string | null; // HSL format for color wheel
+  tags?: Tag[]; // Populated via join
+  connections?: ArtworkConnection[]; // Populated for mindmap view
   created_at: string;
   updated_at: string;
 }
@@ -98,8 +98,8 @@ export interface ArtworkFormData {
   title: string;
   title_en?: string;
   year: number;
-  width?: number;
-  height?: number;
+  width?: number | null;
+  height?: number | null;
   medium?: string;
   medium_en?: string;
   description?: string;
@@ -128,7 +128,8 @@ export interface EducationItem {
 }
 
 export interface SocialLink {
-  platform: 'instagram' | 'facebook' | 'twitter' | 'youtube' | 'website' | 'other';
+  platform:
+    "instagram" | "facebook" | "twitter" | "youtube" | "website" | "other";
   url: string;
   label?: string;
 }
@@ -215,7 +216,7 @@ export interface Exhibition {
   location: string | null;
   location_en: string | null;
   year: number;
-  type: 'solo' | 'group' | 'popup';
+  type: "solo" | "group" | "popup";
   external_url: string | null;
   display_order: number;
   created_at: string;
@@ -229,7 +230,7 @@ export interface ExhibitionFormData {
   location?: string;
   location_en?: string;
   year: number;
-  type: 'solo' | 'group' | 'popup';
+  type: "solo" | "group" | "popup";
   external_url?: string;
   display_order?: number;
 }
@@ -244,7 +245,7 @@ export interface News {
   thumbnail_url: string | null;
   link_url: string | null;
   pdf_url: string | null;
-  type: 'article' | 'interview' | 'artist_note' | 'review';
+  type: "article" | "interview" | "artist_note" | "review";
   published_at: string;
   created_at: string;
   updated_at: string;
@@ -258,7 +259,7 @@ export interface NewsFormData {
   thumbnail_url?: string;
   link_url?: string;
   pdf_url?: string;
-  type: 'article' | 'interview' | 'artist_note' | 'review';
+  type: "article" | "interview" | "artist_note" | "review";
   published_at?: string;
 }
 
