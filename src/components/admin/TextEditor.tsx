@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState } from "react";
+import { useAppearance } from "@/contexts/AppearanceContext";
 import { upload } from "@vercel/blob/client";
 import type { ArchiveText, TextBlock, TextLanguage } from "@/types/archive";
 import { useUnsavedGuard, confirmAdminNavigation } from "./useUnsavedGuard";
@@ -9,17 +10,18 @@ const emptyLanguage = (): TextLanguage => ({
   blocks: [],
   published: false,
 });
-const newBlock = (locale: "ko" | "en"): TextBlock => ({
+const newBlock = (size: number): TextBlock => ({
   id: crypto.randomUUID(),
   text: "",
   align: "left",
-  size: locale === "ko" ? 18 : 20,
+  size,
   lineHeight: 1.6,
   paragraphSpacing: 1,
   color: "#1A1A1A",
   style: "paragraph",
 });
 export default function TextEditor() {
+  const appearance = useAppearance();
   const [items, setItems] = useState<ArchiveText[]>([]),
     [revision, setRevision] = useState(""),
     [text, setText] = useState<ArchiveText | null>(null),
@@ -424,7 +426,10 @@ export default function TextEditor() {
                   <button
                     onClick={() =>
                       update(locale, {
-                        blocks: [...text[locale].blocks, newBlock(locale)],
+                        blocks: [
+                          ...text[locale].blocks,
+                          newBlock(appearance.textSize),
+                        ],
                       })
                     }
                   >

@@ -28,6 +28,7 @@ export interface Sequence {
   title_en: string;
   positions?: Record<string, { x: number; y: number }>;
   steps: {
+    anchorX?: number;
     id: string;
     title: string;
     title_en: string;

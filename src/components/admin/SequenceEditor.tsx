@@ -3,7 +3,12 @@ import { useState } from "react";
 import type { ArchiveLayout, ArchiveWork, Sequence } from "@/types/archive";
 import SequenceCanvas from "@/components/portfolio/SequenceCanvas";
 import { WorkImage } from "@/components/portfolio/WorksBrowser";
-import { sequenceKey, sequenceLayout } from "@/lib/sequence-layout";
+import {
+  sequenceKey,
+  sequenceLayout,
+  addSequenceStep,
+  addSequenceMembers,
+} from "@/lib/sequence-layout";
 
 export default function SequenceEditor({
   layout,
@@ -72,9 +77,9 @@ export default function SequenceEditor({
         </button>
       </div>
       <p>
-        처음에는 제작연도순으로 놓습니다. 이미지를 끌어 위치를 바꾸거나, 선택 후
-        방향키로 조정하세요. 배치를 바꾼 뒤 분류 임시 저장 · 공개 버튼을
-        눌러주세요.
+        새 단계는 가장 오른쪽 그룹 다음에 생깁니다. 이미지를 끌어 위치를
+        바꾸거나, 선택 후 방향키로 조정하세요. 배치를 바꾼 뒤 분류 임시 저장 ·
+        공개 버튼을 눌러주세요.
       </p>
       {layout.sequences.map((sequence) => (
         <section className="sequence-editor" key={sequence.id}>
@@ -93,18 +98,7 @@ export default function SequenceEditor({
             </button>
             <button
               onClick={() =>
-                update({
-                  ...sequence,
-                  steps: [
-                    ...sequence.steps,
-                    {
-                      id: crypto.randomUUID(),
-                      title: "새 단계",
-                      title_en: "",
-                      artworkIds: [...selected],
-                    },
-                  ],
-                })
+                update(addSequenceStep(sequence, selected, works, layout))
               }
             >
               새 단계 만들기
@@ -242,20 +236,15 @@ export default function SequenceEditor({
                   <button
                     disabled={!selected.length}
                     onClick={() =>
-                      update({
-                        ...sequence,
-                        positions: freeze(sequence),
-                        steps: sequence.steps.map((s) =>
-                          s.id === step.id
-                            ? {
-                                ...s,
-                                artworkIds: [
-                                  ...new Set([...s.artworkIds, ...selected]),
-                                ],
-                              }
-                            : s,
+                      update(
+                        addSequenceMembers(
+                          sequence,
+                          step.id,
+                          selected,
+                          works,
+                          layout,
                         ),
-                      })
+                      )
                     }
                   >
                     선택 작품을 단계에 추가

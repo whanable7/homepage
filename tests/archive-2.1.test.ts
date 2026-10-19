@@ -79,7 +79,7 @@ test("focus includes all directly matching groups but does not recursively flood
   assert.deepEqual([...groupFocus(groups, "d", "one").ids], ["a", "b", "c"]);
 });
 
-test("sequences seed chronologically, retain year order, preserve manual positions, and reject invalid coordinates", async () => {
+test("legacy sequence layouts retain their prior year order and manual positions, and reject invalid coordinates", async () => {
   const base: ArchiveWork = JSON.parse(
     await readFile("src/data/preview_archive.json", "utf8"),
   ).works[0];

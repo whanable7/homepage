@@ -148,7 +148,7 @@ export default function SidePanel() {
               </div>
 
               {/* Navigation links - clicking closes the panel */}
-              <nav className="px-4 sm:px-6">
+              <nav className="side-panel-nav px-4 sm:px-6">
                 <ul className="space-y-1">
                   {navItems.map((item) => (
                     <li key={item.href}>
