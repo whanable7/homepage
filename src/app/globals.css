@@ -16,19 +16,19 @@
   --color-text-secondary: var(--text-secondary);
   --color-border: var(--border);
   --color-accent: var(--accent);
-  --font-sans: var(--font-noto-sans);
-  --font-serif: var(--font-cormorant);
+  --font-sans: var(--font-site);
+  --font-serif: var(--font-site);
 }
 
 body {
+  --font-cormorant: "Cormorant Garamond";
+  --font-noto-sans: "Noto Sans KR";
+  --font-nanum-myeongjo: "Nanum Myeongjo";
+  --font-site: var(--font-cormorant), var(--font-noto-sans), serif;
+  --font-text: var(--font-cormorant), var(--font-nanum-myeongjo), serif;
   background: var(--background);
   color: var(--foreground);
-  font-family:
-    var(--font-noto-sans),
-    -apple-system,
-    BlinkMacSystemFont,
-    system-ui,
-    sans-serif;
+  font-family: var(--font-site);
 }
 
 /* Smooth scrolling */
@@ -227,7 +227,7 @@ html {
 }
 .works-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 28px;
   align-items: center;
 }
@@ -236,7 +236,7 @@ html {
   display: block;
   width: 100%;
   min-height: 44px;
-  max-height: 300px;
+  max-height: 430px;
   border: 0;
   background: none;
 }
@@ -837,8 +837,15 @@ html {
 }
 .admin-language-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: minmax(0, 1fr);
   gap: 38px;
+  width: 100%;
+  max-width: 1100px;
+  margin-inline: auto;
+}
+.admin-language-grid.is-comparing {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: none;
 }
 .admin-language {
   min-width: 0;
@@ -863,8 +870,8 @@ html {
 }
 .editor-block textarea {
   width: 100%;
-  min-height: 140px;
-  line-height: 1.8;
+  min-height: 300px;
+  line-height: 1.6;
   padding: 16px !important;
   margin-top: 8px;
 }
@@ -976,7 +983,8 @@ html {
   margin: 22px 0;
 }
 .text-body {
-  line-height: 1.95;
+  font-family: var(--font-text);
+  line-height: 1.6;
   overflow-wrap: anywhere;
 }
 .text-body p,
@@ -1221,4 +1229,211 @@ html {
   color: var(--text-secondary);
   font-variant-numeric: tabular-nums;
   font-size: 12px;
+}
+
+/* Archive 2.1: saved editorial arrangements and group context. */
+.sequence-scroll {
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior-x: contain;
+  padding: 10px 0 18px;
+}
+.sequence-canvas {
+  position: relative;
+}
+.sequence-lines {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  color: var(--text-secondary);
+}
+.sequence-node {
+  position: absolute;
+  display: block;
+  padding: 0;
+  border: 0;
+  background: none;
+}
+.sequence-node-editable {
+  cursor: grab;
+  touch-action: none;
+}
+.sequence-node-editable:active {
+  cursor: grabbing;
+  z-index: 2;
+}
+.sequence-stage-label {
+  position: absolute;
+  transform: translateX(-50%);
+  color: var(--text-secondary);
+  font-size: 13px;
+  white-space: nowrap;
+  pointer-events: none;
+}
+.works-sequence {
+  max-width: none;
+}
+.sequence-admin > p {
+  color: var(--text-secondary);
+  margin: 12px 0 24px;
+}
+.sequence-editor {
+  margin: 32px 0 60px;
+  padding-top: 24px;
+  border-top: 1px solid var(--border);
+}
+.sequence-step-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 22px;
+}
+.sequence-step-editor {
+  padding: 16px 0;
+  border-top: 1px solid var(--border);
+  min-width: 0;
+}
+.sequence-step-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 14px;
+}
+.sequence-step-thumbnail {
+  position: relative;
+  display: block;
+  width: 65px;
+  height: 60px;
+  object-fit: contain;
+}
+.group-manager {
+  display: grid;
+  grid-template-columns: 210px minmax(0, 1fr) 250px;
+  gap: 24px;
+  align-items: start;
+}
+.group-manager h2 {
+  font-size: 18px;
+  margin-bottom: 16px;
+}
+.group-manager h3 {
+  font-size: 14px;
+  margin: 24px 0 10px;
+}
+.group-list-items {
+  display: grid;
+  margin-top: 20px;
+  gap: 6px;
+  max-height: 640px;
+  overflow-y: auto;
+}
+.group-list-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  text-align: left;
+  border: 1px solid transparent !important;
+}
+.group-list-item[aria-pressed="true"] {
+  border-color: var(--foreground) !important;
+  background: var(--surface);
+}
+.group-thumbnail {
+  position: relative;
+  display: block;
+  flex: 0 0 48px;
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+}
+.group-list-item span {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.group-list-item small {
+  display: block;
+  color: var(--text-secondary);
+}
+.group-detail > button,
+.group-delete > button {
+  display: block;
+  margin: 8px 0;
+}
+.group-detail p {
+  color: var(--text-secondary);
+  font-size: 13px;
+}
+.group-delete {
+  border-top: 1px solid var(--border);
+  margin-top: 30px;
+  padding-top: 16px;
+}
+.group-relation-preview {
+  min-width: 0;
+}
+.group-relation-preview .ecosystem-field {
+  height: 560px;
+  min-height: 400px;
+}
+.group-relation-preview .space-preview {
+  max-width: 230px;
+}
+.ecosystem-work {
+  transition: opacity 140ms ease;
+}
+.text-language-tabs button[aria-pressed="true"] {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: var(--background);
+}
+.editor-toolbar label {
+  display: grid;
+  gap: 4px;
+  font-size: 12px;
+}
+.editor-toolbar {
+  position: sticky;
+  top: 72px;
+  z-index: 2;
+  padding-block: 10px;
+  background: var(--background);
+}
+@media (max-width: 1100px) {
+  .group-manager {
+    grid-template-columns: 190px minmax(0, 1fr);
+  }
+  .group-detail {
+    grid-column: 1 / -1;
+  }
+  .works-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (max-width: 720px) {
+  .group-manager {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .group-list-items {
+    max-height: 240px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .admin-language-grid.is-comparing {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .sequence-step-list {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .editor-toolbar {
+    position: static;
+  }
+}
+@media (max-width: 640px) {
+  .works-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .ecosystem-work {
+    transition: none;
+  }
 }

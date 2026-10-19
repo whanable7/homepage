@@ -26,6 +26,7 @@ export interface Sequence {
   id: string;
   title: string;
   title_en: string;
+  positions?: Record<string, { x: number; y: number }>;
   steps: {
     id: string;
     title: string;
@@ -68,6 +69,8 @@ export interface TextBlock {
   text: string;
   align: "left" | "center" | "right" | "justify";
   size: number;
+  lineHeight?: number;
+  paragraphSpacing?: number;
   color: string;
   style: "paragraph" | "heading" | "quote";
 }

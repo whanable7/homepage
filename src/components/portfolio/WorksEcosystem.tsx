@@ -10,6 +10,7 @@ import {
 } from "d3-force";
 import type { Simulation, SimulationLinkDatum } from "d3-force";
 import { groupEdges } from "@/lib/layouts";
+import { edgeKey, groupFocus } from "@/lib/group-relations";
 import { ecosystemNodes, separateEcosystemNodes } from "@/lib/ecosystem-layout";
 import type { EcosystemNode } from "@/lib/ecosystem-layout";
 import { useLocale } from "@/i18n";
@@ -19,15 +20,24 @@ import { WorkImage } from "./WorksBrowser";
 import SpaceSettings from "./SpaceSettings";
 import SpacePreview from "./SpacePreview";
 type Edge = SimulationLinkDatum<EcosystemNode>;
-const defaults = { repulsion: 224, center: 0.005, distance: 143, tension: 0.45 };
+const defaults = {
+  repulsion: 224,
+  center: 0.005,
+  distance: 143,
+  tension: 0.45,
+};
 export default function WorksEcosystem({
   works,
   groups,
   onOpen,
+  focusedGroupId,
+  onlyFocused = false,
 }: {
   works: ArchiveWork[];
   groups: WorkGroup[];
   onOpen: (work: ArchiveWork) => void;
+  focusedGroupId?: string;
+  onlyFocused?: boolean;
 }) {
   const { locale } = useLocale();
   const container = useRef<HTMLDivElement>(null);
@@ -50,6 +60,7 @@ export default function WorksEcosystem({
     py: number;
   } | null>(null);
   const [hover, setHover] = useState<ArchiveWork | null>(null);
+  const focus = groupFocus(groups, hover?.id, focusedGroupId);
   const [corner, setCorner] = useState<"left" | "right">("right");
   const [physics, setPhysics] = useState(defaults);
   const [zoom, setZoom] = useState(1);
@@ -324,7 +335,7 @@ export default function WorksEcosystem({
         <svg width={model.width} height={model.height} aria-hidden="true">
           {model.edges.map(([a, b]) => {
             const key = [a, b].sort().join("|"),
-              active = hover?.id === a || hover?.id === b;
+              active = focus.edges.has(edgeKey(a, b));
             return (
               <line
                 key={key}
@@ -337,8 +348,10 @@ export default function WorksEcosystem({
                 x2={model.map.get(b)!.x}
                 y2={model.map.get(b)!.y}
                 stroke={active ? "#505050" : "#646464"}
-                strokeOpacity={active ? 0.92 : 0.6}
-                strokeWidth={active ? 1.5 : 1.05}
+                strokeOpacity={
+                  active ? 0.95 : focus.enabled ? (onlyFocused ? 0 : 0.14) : 0.6
+                }
+                strokeWidth={active ? 1.65 : 1.05}
                 vectorEffect="non-scaling-stroke"
               />
             );
@@ -356,6 +369,23 @@ export default function WorksEcosystem({
                 else nodesRef.current.delete(n.id);
               }}
               style={{
+                opacity:
+                  focus.enabled && !focus.ids.has(n.id)
+                    ? onlyFocused
+                      ? 0
+                      : focusedGroupId
+                        ? 0.22
+                        : 0.55
+                    : 1,
+                visibility:
+                  onlyFocused && focus.enabled && !focus.ids.has(n.id)
+                    ? "hidden"
+                    : "visible",
+                outline:
+                  focus.enabled && focus.ids.has(n.id)
+                    ? `${hover?.id === n.id ? 2 : 1}px solid var(--text-secondary)`
+                    : undefined,
+                outlineOffset: 3,
                 left: 0,
                 top: 0,
                 width: n.width,
