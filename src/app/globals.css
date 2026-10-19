@@ -1437,3 +1437,117 @@ html {
     transition: none;
   }
 }
+
+/* Preview 2.2: membership selection stays beside its actions. */
+.group-selection-help {
+  font-size: 13px;
+  color: var(--text-secondary);
+  margin: 8px 0 12px;
+}
+.group-selected-thumbs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 12px 0;
+  max-height: 160px;
+  overflow: auto;
+}
+.group-selected-thumbs button {
+  position: relative;
+  width: 48px;
+  height: 48px;
+  padding: 0 !important;
+  border: 1px solid var(--border) !important;
+}
+.group-picker {
+  width: min(960px, 95vw);
+  height: min(850px, 90svh);
+  display: flex;
+  flex-direction: column;
+  padding: 24px;
+  color: var(--foreground);
+  background: var(--background);
+}
+.group-picker-heading,
+.group-picker-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+.group-picker-heading {
+  margin-bottom: 18px;
+}
+.group-picker button {
+  min-height: 40px;
+  padding: 6px 12px;
+  border: 1px solid var(--border);
+}
+.group-picker > p {
+  font-size: 13px;
+  margin: 12px 0;
+}
+.group-picker-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(125px, 1fr));
+  gap: 20px;
+  overflow-y: auto;
+  min-height: 0;
+  flex: 1;
+  padding: 8px;
+}
+.group-picker-work {
+  cursor: pointer;
+  font-size: 13px;
+}
+.group-picker-work:has(input:checked) {
+  outline: 1px solid var(--foreground);
+  outline-offset: 5px;
+}
+.group-picker-work small {
+  display: block;
+  color: var(--text-secondary);
+}
+.group-picker-work input {
+  margin-right: 6px;
+}
+.group-picker-image {
+  display: block;
+  position: relative;
+  height: 110px;
+  margin-bottom: 8px;
+}
+.group-picker-footer {
+  border-top: 1px solid var(--border);
+  padding-top: 16px;
+  margin-top: 16px;
+}
+.sequence-scroll {
+  height: clamp(300px, calc(100svh - 280px), 780px);
+  padding: 0;
+  overflow: auto;
+}
+.sequence-scaled-area {
+  position: relative;
+}
+.sequence-canvas {
+  position: absolute;
+  transform-origin: top left;
+}
+.sequence-view-controls {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 12px 0;
+  font-size: 13px;
+}
+.sequence-view-controls button {
+  min-width: 36px;
+  min-height: 36px;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+}
+.sequence-view-controls small {
+  color: var(--text-secondary);
+}

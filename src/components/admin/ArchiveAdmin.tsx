@@ -502,7 +502,7 @@ export default function ArchiveAdmin() {
                 setMissing(false);
               }}
               onChange={updateGroups}
-              onOpen={setEditing}
+              onSelectedChange={setSelected}
             />
           )}
           {tab === "sequences" && (
