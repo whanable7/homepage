@@ -36,7 +36,7 @@ export default function FeaturedWorks({ artworks }: FeaturedWorksProps) {
     <>
       <section id="featured-works" className="py-20 px-6 md:px-12 lg:px-20">
         <div className="max-w-7xl mx-auto">
-          <h2 className="font-[family-name:var(--font-cormorant)] text-2xl md:text-3xl text-center mb-12">
+          <h2 className="font-[family-name:var(--font-site)] text-2xl md:text-3xl text-center mb-12">
             Selected Works
           </h2>
 

@@ -9,11 +9,13 @@ const emptyLanguage = (): TextLanguage => ({
   blocks: [],
   published: false,
 });
-const newBlock = (): TextBlock => ({
+const newBlock = (locale: "ko" | "en"): TextBlock => ({
   id: crypto.randomUUID(),
   text: "",
   align: "left",
-  size: 16,
+  size: locale === "ko" ? 18 : 20,
+  lineHeight: 1.6,
+  paragraphSpacing: 1,
   color: "#1A1A1A",
   style: "paragraph",
 });
@@ -22,6 +24,8 @@ export default function TextEditor() {
     [revision, setRevision] = useState(""),
     [text, setText] = useState<ArchiveText | null>(null),
     [preview, setPreview] = useState(false),
+    [language, setLanguage] = useState<"ko" | "en">("ko"),
+    [compare, setCompare] = useState(false),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false);
   useUnsavedGuard(
@@ -176,8 +180,36 @@ export default function TextEditor() {
               {busy ? "처리 중…" : "저장"}
             </button>
           </div>
-          <div className="admin-language-grid">
-            {(["ko", "en"] as const).map((locale) => (
+          <div
+            className="admin-actions text-language-tabs"
+            role="group"
+            aria-label="작성 언어 선택"
+          >
+            {(["ko", "en"] as const).map((l) => (
+              <button
+                key={l}
+                aria-pressed={language === l}
+                onClick={() => {
+                  setLanguage(l);
+                  setCompare(false);
+                }}
+              >
+                {l === "ko" ? "한국어" : "English"} ·{" "}
+                {text[l].published
+                  ? "공개"
+                  : text[l].title || text[l].blocks.length
+                    ? "작성 중"
+                    : "미작성"}
+              </button>
+            ))}
+            <button aria-pressed={compare} onClick={() => setCompare(!compare)}>
+              나란히 비교
+            </button>
+          </div>
+          <div
+            className={`admin-language-grid ${compare ? "is-comparing" : "single-language"}`}
+          >
+            {(compare ? (["ko", "en"] as const) : [language]).map((locale) => (
               <section key={locale} className="admin-language">
                 <h3>{locale === "ko" ? "한국어" : "English"}</h3>
                 <label className="admin-field">
@@ -198,7 +230,7 @@ export default function TextEditor() {
                   이 언어 공개
                 </label>
                 {preview ? (
-                  <TextBody blocks={text[locale].blocks} />
+                  <TextBody blocks={text[locale].blocks} language={locale} />
                 ) : (
                   text[locale].blocks.map((b, index) => (
                     <div className="editor-block" key={b.id}>
@@ -246,22 +278,84 @@ export default function TextEditor() {
                           <option value="right">오른쪽</option>
                           <option value="justify">양쪽</option>
                         </select>
-                        <input
-                          aria-label="글자 크기"
-                          type="number"
-                          min="12"
-                          max="64"
-                          value={b.size}
-                          onChange={(e) =>
-                            update(locale, {
-                              blocks: text[locale].blocks.map((x) =>
-                                x.id === b.id
-                                  ? { ...x, size: +e.target.value }
-                                  : x,
-                              ),
-                            })
-                          }
-                        />
+                        <label>
+                          크기 (pt)
+                          <input
+                            aria-label="글자 크기"
+                            type="number"
+                            min="9"
+                            max="48"
+                            step="0.5"
+                            value={Math.round(b.size * 0.75 * 100) / 100}
+                            onChange={(e) =>
+                              update(locale, {
+                                blocks: text[locale].blocks.map((x) =>
+                                  x.id === b.id
+                                    ? {
+                                        ...x,
+                                        size: Math.max(
+                                          12,
+                                          Math.min(64, +e.target.value / 0.75),
+                                        ),
+                                      }
+                                    : x,
+                                ),
+                              })
+                            }
+                          />
+                        </label>
+                        <label>
+                          줄간격 (%)
+                          <input
+                            aria-label="줄간격"
+                            type="number"
+                            min="100"
+                            max="300"
+                            step="10"
+                            value={Math.round((b.lineHeight ?? 1.6) * 100)}
+                            onChange={(e) =>
+                              update(locale, {
+                                blocks: text[locale].blocks.map((x) =>
+                                  x.id === b.id
+                                    ? {
+                                        ...x,
+                                        lineHeight: Math.max(
+                                          1,
+                                          Math.min(3, +e.target.value / 100),
+                                        ),
+                                      }
+                                    : x,
+                                ),
+                              })
+                            }
+                          />
+                        </label>
+                        <label>
+                          문단 간격 (em)
+                          <input
+                            aria-label="문단 간격"
+                            type="number"
+                            min="0"
+                            max="4"
+                            step="0.1"
+                            value={b.paragraphSpacing ?? 1}
+                            onChange={(e) =>
+                              update(locale, {
+                                blocks: text[locale].blocks.map((x) =>
+                                  x.id === b.id
+                                    ? {
+                                        ...x,
+                                        paragraphSpacing: Math.max(
+                                          0,
+                                          Math.min(4, +e.target.value),
+                                        ),
+                                      }
+                                    : x,
+                                ),
+                              })
+                            }
+                          />
+                        </label>
                         <input
                           aria-label="글자색"
                           type="color"
@@ -310,6 +404,8 @@ export default function TextEditor() {
                           textAlign: b.align,
                           color: b.color,
                           fontSize: b.size,
+                          lineHeight: b.lineHeight ?? 1.6,
+                          fontFamily: "var(--font-text)",
                         }}
                         onChange={(e) =>
                           update(locale, {
@@ -328,7 +424,7 @@ export default function TextEditor() {
                   <button
                     onClick={() =>
                       update(locale, {
-                        blocks: [...text[locale].blocks, newBlock()],
+                        blocks: [...text[locale].blocks, newBlock(locale)],
                       })
                     }
                   >

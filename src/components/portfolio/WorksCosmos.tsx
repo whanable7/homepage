@@ -4,6 +4,7 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { ArchiveWork, WorkGroup } from "@/types/archive";
 import { representativeColor, groupEdges } from "@/lib/layouts";
+import { edgeKey, groupFocus } from "@/lib/group-relations";
 import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
 import SpaceSettings from "./SpaceSettings";
@@ -36,6 +37,10 @@ export default function WorksCosmos({
     [failed, setFailed] = useState(false),
     controlsRef = useRef<OrbitControls | null>(null);
   const callbacks = useRef({ onOpen, setHover });
+  const hoveredId = useRef("");
+  useEffect(() => {
+    hoveredId.current = hover?.id || "";
+  }, [hover]);
   useEffect(() => {
     callbacks.current = { onOpen, setHover };
   }, [onOpen]);
@@ -142,6 +147,7 @@ export default function WorksCosmos({
       });
       const cloud = new THREE.Points(geometry, material);
       cloud.userData.works = subset;
+      cloud.userData.baseColors = colors;
       disk.add(cloud);
       points.push(cloud);
     }
@@ -207,6 +213,40 @@ export default function WorksCosmos({
     const ray = new THREE.Raycaster();
     ray.params.Points = { threshold: 3 };
     const mouse = new THREE.Vector2();
+    let highlightedId = "";
+    let activePairs: [string, string][] = [];
+    function highlight(id: string) {
+      highlightedId = id;
+      const focus = groupFocus(groups, id);
+      activePairs = edgePairs.filter(([a, b]) =>
+        focus.edges.has(edgeKey(a, b)),
+      );
+      const coords = activePairs.flatMap(([a, b]) => {
+        const p = positions.get(a)!,
+          q = positions.get(b)!;
+        return [p.x, p.y, p.z, q.x, q.y, q.z];
+      });
+      active.geometry.dispose();
+      active.geometry = new THREE.BufferGeometry().setAttribute(
+        "position",
+        new THREE.Float32BufferAttribute(coords, 3),
+      );
+      (lines.material as THREE.LineBasicMaterial).opacity = id ? 0.1 : 0.18;
+      for (const cloud of points) {
+        const colors = cloud.geometry.getAttribute("color");
+        const base = cloud.userData.baseColors as number[];
+        (cloud.userData.works as ArchiveWork[]).forEach((w, i) => {
+          const factor = !id ? 1 : focus.ids.has(w.id) ? 1.28 : 0.35;
+          colors.setXYZ(
+            i,
+            base[i * 3] * factor,
+            base[i * 3 + 1] * factor,
+            base[i * 3 + 2] * factor,
+          );
+        });
+        colors.needsUpdate = true;
+      }
+    }
     function pick(e: PointerEvent) {
       const rect = renderer.domElement.getBoundingClientRect();
       mouse.set(
@@ -224,22 +264,10 @@ export default function WorksCosmos({
       const work = pick(e);
       if ((work?.id || "") === lastId) return;
       lastId = work?.id || "";
+      hoveredId.current = lastId;
       callbacks.current.setHover(work);
       const rect = el.getBoundingClientRect();
       setCorner(e.clientX > rect.left + rect.width / 2 ? "left" : "right");
-      const coords: number[] = [];
-      if (work)
-        edgePairs.forEach(([a, b]) => {
-          if (a !== work.id && b !== work.id) return;
-          const p = positions.get(a),
-            q = positions.get(b);
-          if (p && q) coords.push(p.x, p.y, p.z, q.x, q.y, q.z);
-        });
-      active.geometry.dispose();
-      active.geometry = new THREE.BufferGeometry().setAttribute(
-        "position",
-        new THREE.Float32BufferAttribute(coords, 3),
-      );
     };
     const enter = () => {
         pointerInside = true;
@@ -247,9 +275,8 @@ export default function WorksCosmos({
       leave = () => {
         pointerInside = false;
         lastId = "";
+        hoveredId.current = "";
         callbacks.current.setHover(null);
-        active.geometry.dispose();
-        active.geometry = new THREE.BufferGeometry();
       };
     const press = (e: PointerEvent) => {
       down = { x: e.clientX, y: e.clientY };
@@ -319,9 +346,7 @@ export default function WorksCosmos({
       });
       linePositions.needsUpdate = true;
       lines.geometry.computeBoundingSphere();
-      const activePairs = lastId
-        ? edgePairs.filter(([a, b]) => a === lastId || b === lastId)
-        : [];
+      if (highlightedId !== hoveredId.current) highlight(hoveredId.current);
       const activeAttr = active.geometry.getAttribute("position");
       if (activeAttr && activeAttr.count === activePairs.length * 2) {
         activePairs.forEach(([a, b], i) => {

@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import {
   Cormorant_Garamond,
   Noto_Sans_KR,
-  Noto_Serif_KR,
+  Nanum_Myeongjo,
 } from "next/font/google";
 import "./globals.css";
 import { SidePanelProvider } from "@/contexts/SidePanelContext";
@@ -24,10 +24,10 @@ const notoSansKr = Noto_Sans_KR({
   display: "swap",
 });
 
-const notoSerifKr = Noto_Serif_KR({
-  variable: "--font-noto-serif",
+const nanumMyeongjo = Nanum_Myeongjo({
+  variable: "--font-nanum-myeongjo",
   subsets: ["latin"],
-  weight: ["400", "500", "600"],
+  weight: ["400", "700"],
   display: "swap",
 });
 
@@ -48,7 +48,7 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <body
-        className={`${cormorant.variable} ${notoSansKr.variable} ${notoSerifKr.variable} antialiased`}
+        className={`${cormorant.variable} ${notoSansKr.variable} ${nanumMyeongjo.variable} antialiased`}
       >
         <LocaleProvider>
           <SidePanelProvider>

@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Link from 'next/link';
-import SidePanel from './SidePanel';
-import LanguageSwitch from './LanguageSwitch';
-import { useSidePanel } from '@/contexts/SidePanelContext';
-import { useLocale } from '@/i18n';
+import Link from "next/link";
+import SidePanel from "./SidePanel";
+import LanguageSwitch from "./LanguageSwitch";
+import { useSidePanel } from "@/contexts/SidePanelContext";
+import { useLocale } from "@/i18n";
 
 export default function Header() {
   const { open } = useSidePanel();
@@ -40,7 +40,7 @@ export default function Header() {
             <Link
               href="/"
               className="text-2xl tracking-wider font-medium text-[var(--foreground)]"
-              style={{ fontFamily: 'var(--font-noto-serif), serif' }}
+              style={{ fontFamily: "var(--font-site)" }}
             >
               {t.common.logo}
             </Link>

@@ -3,7 +3,7 @@ import type { ArchiveLayout, ArchiveWork } from "@/types/archive";
 export function orderedYearWorks(
   works: ArchiveWork[],
   year: number,
-  layout: ArchiveLayout,
+  layout: Pick<ArchiveLayout, "yearOrder">,
 ) {
   const order = new Map(
     (layout.yearOrder?.[String(year)] || []).map((id, i) => [id, i]),

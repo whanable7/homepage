@@ -59,6 +59,14 @@ export async function PUT(request: NextRequest) {
           !Number.isFinite(b.size) ||
           b.size < 12 ||
           b.size > 64 ||
+          (b.lineHeight !== undefined &&
+            (!Number.isFinite(b.lineHeight) ||
+              b.lineHeight < 1 ||
+              b.lineHeight > 3)) ||
+          (b.paragraphSpacing !== undefined &&
+            (!Number.isFinite(b.paragraphSpacing) ||
+              b.paragraphSpacing < 0 ||
+              b.paragraphSpacing > 4)) ||
           !/^#[a-f0-9]{6}$/i.test(b.color)
         )
           throw new Error("본문 서식을 확인해 주세요.");

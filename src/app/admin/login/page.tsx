@@ -58,7 +58,7 @@ export default function AdminLoginPage() {
   return (
     <main className="min-h-screen flex items-center justify-center px-6 bg-gray-100">
       <div className="w-full max-w-sm bg-white p-8 rounded-lg shadow-lg">
-        <h1 className="font-[family-name:var(--font-cormorant)] text-3xl text-center mb-8 text-gray-900">
+        <h1 className="font-[family-name:var(--font-site)] text-3xl text-center mb-8 text-gray-900">
           Admin Access
         </h1>
 

@@ -10,11 +10,10 @@ import type {
   ArchiveLayout,
   ArchiveState,
   ArchiveWork,
-  Sequence,
   WorkGroup,
 } from "@/types/archive";
 import type { Document } from "@/lib/archive-store";
-import { representativeColor, groupEdges } from "@/lib/layouts";
+import { representativeColor } from "@/lib/layouts";
 import { uploadImage } from "@/lib/upload-image";
 import Modal from "@/components/common/Modal";
 import ArtworkForm from "./ArtworkForm";
@@ -23,7 +22,8 @@ import { confirmAdminNavigation } from "./useUnsavedGuard";
 import CVEditor from "./CVEditor";
 import YearOrderEditor from "./YearOrderEditor";
 import { moveWorkToYear } from "@/lib/year-order";
-import WorksEcosystem from "@/components/portfolio/WorksEcosystem";
+import GroupManager from "./GroupManager";
+import SequenceEditor from "./SequenceEditor";
 type Tab =
   | "artworks"
   | "ecosystem"
@@ -70,7 +70,6 @@ export default function ArchiveAdmin() {
     [missing, setMissing] = useState(true),
     [queue, setQueue] = useState<Queue[]>([]),
     [groupId, setGroupId] = useState(""),
-    [groupName, setGroupName] = useState(""),
     [year, setYear] = useState(new Date().getFullYear()),
     [medium, setMedium] = useState("");
   const dragging = useRef<string | null>(null),
@@ -287,7 +286,6 @@ export default function ArchiveAdmin() {
         (sort === "recent" ? Number(unset(b)) - Number(unset(a)) : 0) ||
         compareWorks(a, b, sort),
     );
-  const selectedGroup = groups.find((g) => g.id === groupId);
   function updateGroups(next: WorkGroup[]) {
     change({ ...layout!, [tab === "cosmos" ? "cosmos" : "ecosystem"]: next });
   }
@@ -373,7 +371,14 @@ export default function ArchiveAdmin() {
       </nav>
       {tab !== "texts" && tab !== "cv" && (
         <div className="admin-publish">
-          <span>저장한 작업은 미리보기에서 확인한 뒤 공개합니다.</span>
+          <span>
+            {unsaved.current
+              ? "저장하지 않은 변경이 있습니다."
+              : JSON.stringify(layout) ===
+                  JSON.stringify(doc.data.published.layout)
+                ? "공개된 분류와 같은 상태입니다."
+                : "분류를 임시 저장했습니다. 공개 전 상태입니다."}
+          </span>
           <button disabled={busy} onClick={() => act("save")}>
             분류 임시 저장
           </button>
@@ -487,363 +492,26 @@ export default function ArchiveAdmin() {
             </>
           )}
           {(tab === "ecosystem" || tab === "cosmos") && (
-            <section className="classification-tools">
-              <div className="admin-actions">
-                <select
-                  aria-label="그룹 선택"
-                  value={groupId}
-                  onChange={(e) => {
-                    setGroupId(e.target.value);
-                    setMissing(false);
-                  }}
-                >
-                  <option value="">그룹 선택</option>
-                  {groups.map((g) => (
-                    <option key={g.id} value={g.id}>
-                      {g.name || "이름 없는 그룹"} · {g.artworkIds.length}
-                    </option>
-                  ))}
-                </select>
-                <input
-                  placeholder="새 그룹 이름 · 관리자에게만 표시"
-                  value={groupName}
-                  onChange={(e) => setGroupName(e.target.value)}
-                />
-                <button
-                  onClick={() => {
-                    const id = crypto.randomUUID();
-                    updateGroups([
-                      ...groups,
-                      { id, name: groupName.trim(), artworkIds: selected },
-                    ]);
-                    setGroupId(id);
-                    setGroupName("");
-                  }}
-                >
-                  선택 작품으로 그룹 만들기
-                </button>
-                {selectedGroup && (
-                  <>
-                    <input
-                      aria-label="현재 그룹 이름"
-                      value={selectedGroup.name}
-                      onChange={(e) =>
-                        updateGroups(
-                          groups.map((g) =>
-                            g.id === groupId
-                              ? { ...g, name: e.target.value }
-                              : g,
-                          ),
-                        )
-                      }
-                    />
-                    <button
-                      disabled={
-                        selected.length !== 2 ||
-                        selected.some(
-                          (id) => !selectedGroup.artworkIds.includes(id),
-                        )
-                      }
-                      onClick={() =>
-                        updateGroups(
-                          groups.map((g) =>
-                            g.id === groupId
-                              ? {
-                                  ...g,
-                                  edges: [
-                                    ...groupEdges([g]),
-                                    [selected[0], selected[1]],
-                                  ],
-                                }
-                              : g,
-                          ),
-                        )
-                      }
-                    >
-                      선택한 두 작품 사이 선 추가
-                    </button>
-                    <button
-                      disabled={selected.length !== 2}
-                      onClick={() =>
-                        updateGroups(
-                          groups.map((g) =>
-                            g.id === groupId
-                              ? {
-                                  ...g,
-                                  edges: groupEdges([g]).filter(
-                                    ([a, b]) =>
-                                      !selected.includes(a) ||
-                                      !selected.includes(b),
-                                  ),
-                                }
-                              : g,
-                          ),
-                        )
-                      }
-                    >
-                      선택한 두 작품 사이 선 해제
-                    </button>
-                    <button
-                      onClick={() =>
-                        updateGroups(
-                          groups.map((g) =>
-                            g.id === groupId
-                              ? {
-                                  ...g,
-                                  artworkIds: [
-                                    ...new Set([...g.artworkIds, ...selected]),
-                                  ],
-                                  edges: undefined,
-                                }
-                              : g,
-                          ),
-                        )
-                      }
-                    >
-                      선택 작품 연결
-                    </button>
-                    <button
-                      onClick={() =>
-                        updateGroups(
-                          groups.map((g) =>
-                            g.id === groupId
-                              ? {
-                                  ...g,
-                                  artworkIds: g.artworkIds.filter(
-                                    (id) => !selected.includes(id),
-                                  ),
-                                  edges: undefined,
-                                }
-                              : g,
-                          ),
-                        )
-                      }
-                    >
-                      선택 작품 연결 해제
-                    </button>
-                    <button
-                      onClick={() => {
-                        updateGroups(groups.filter((g) => g.id !== groupId));
-                        setGroupId("");
-                      }}
-                    >
-                      그룹 제거
-                    </button>
-                  </>
-                )}
-              </div>
-              <details>
-                <summary>관계 미리보기</summary>
-                <WorksEcosystem
-                  works={works.filter((w) => !w.deleted_at)}
-                  groups={groups}
-                  onOpen={setEditing}
-                />
-              </details>
-              <details>
-                <summary>기존 관계 다시 설정</summary>
-                <p>
-                  현재 작업 분류를 백업한 뒤 빈 작업 분류로 돌아갑니다. 공개
-                  중인 화면은 공개 버튼을 누르기 전까지 유지합니다.
-                </p>
-                <button disabled={busy} onClick={() => act("reset")}>
-                  백업하고 작업 분류 초기화
-                </button>
-                <button disabled={busy} onClick={() => act("restore")}>
-                  최근 분류 백업 불러오기
-                </button>
-              </details>
-            </section>
+            <GroupManager
+              groups={groups}
+              works={works}
+              selected={selected}
+              groupId={groupId}
+              onSelectGroup={(id) => {
+                setGroupId(id);
+                setMissing(false);
+              }}
+              onChange={updateGroups}
+              onOpen={setEditing}
+            />
           )}
           {tab === "sequences" && (
-            <section>
-              <button
-                onClick={() => {
-                  const seq: Sequence = {
-                    id: crypto.randomUUID(),
-                    title: "새 흐름",
-                    title_en: "",
-                    steps: [],
-                  };
-                  change({ ...layout, sequences: [...layout.sequences, seq] });
-                }}
-              >
-                흐름 추가
-              </button>
-              {layout.sequences.map((seq) => (
-                <div className="sequence-editor" key={seq.id}>
-                  <div className="admin-actions">
-                    <input
-                      aria-label="흐름 이름"
-                      value={seq.title}
-                      onChange={(e) =>
-                        change({
-                          ...layout,
-                          sequences: layout.sequences.map((s) =>
-                            s.id === seq.id
-                              ? { ...s, title: e.target.value }
-                              : s,
-                          ),
-                        })
-                      }
-                    />
-                    <input
-                      aria-label="흐름 영문 이름"
-                      value={seq.title_en}
-                      onChange={(e) =>
-                        change({
-                          ...layout,
-                          sequences: layout.sequences.map((s) =>
-                            s.id === seq.id
-                              ? { ...s, title_en: e.target.value }
-                              : s,
-                          ),
-                        })
-                      }
-                    />
-                    <button
-                      onClick={() =>
-                        change({
-                          ...layout,
-                          sequences: layout.sequences.map((s) =>
-                            s.id === seq.id
-                              ? {
-                                  ...s,
-                                  steps: [
-                                    ...s.steps,
-                                    {
-                                      id: crypto.randomUUID(),
-                                      title: "새 단계",
-                                      title_en: "",
-                                      artworkIds: selected,
-                                    },
-                                  ],
-                                }
-                              : s,
-                          ),
-                        })
-                      }
-                    >
-                      선택 작품으로 단계 추가
-                    </button>
-                    <button
-                      onClick={() =>
-                        change({
-                          ...layout,
-                          sequences: layout.sequences.filter(
-                            (s) => s.id !== seq.id,
-                          ),
-                        })
-                      }
-                    >
-                      흐름 제거
-                    </button>
-                  </div>
-                  {seq.steps.map((step, i) => (
-                    <div className="admin-actions" key={step.id}>
-                      <input
-                        aria-label="단계 이름"
-                        value={step.title}
-                        onChange={(e) =>
-                          change({
-                            ...layout,
-                            sequences: layout.sequences.map((s) =>
-                              s.id === seq.id
-                                ? {
-                                    ...s,
-                                    steps: s.steps.map((t) =>
-                                      t.id === step.id
-                                        ? { ...t, title: e.target.value }
-                                        : t,
-                                    ),
-                                  }
-                                : s,
-                            ),
-                          })
-                        }
-                      />
-                      <input
-                        aria-label="단계 영문 이름"
-                        value={step.title_en}
-                        onChange={(e) =>
-                          change({
-                            ...layout,
-                            sequences: layout.sequences.map((s) =>
-                              s.id === seq.id
-                                ? {
-                                    ...s,
-                                    steps: s.steps.map((t) =>
-                                      t.id === step.id
-                                        ? { ...t, title_en: e.target.value }
-                                        : t,
-                                    ),
-                                  }
-                                : s,
-                            ),
-                          })
-                        }
-                      />
-                      <span>{step.artworkIds.length}점</span>
-                      <button
-                        onClick={() =>
-                          change({
-                            ...layout,
-                            sequences: layout.sequences.map((s) =>
-                              s.id === seq.id
-                                ? {
-                                    ...s,
-                                    steps: s.steps.map((t) =>
-                                      t.id === step.id
-                                        ? { ...t, artworkIds: selected }
-                                        : t,
-                                    ),
-                                  }
-                                : s,
-                            ),
-                          })
-                        }
-                      >
-                        선택 작품 지정
-                      </button>
-                      <button
-                        disabled={!i}
-                        onClick={() => {
-                          const steps = [...seq.steps];
-                          [steps[i - 1], steps[i]] = [steps[i], steps[i - 1]];
-                          change({
-                            ...layout,
-                            sequences: layout.sequences.map((s) =>
-                              s.id === seq.id ? { ...s, steps } : s,
-                            ),
-                          });
-                        }}
-                      >
-                        ↑
-                      </button>
-                      <button
-                        onClick={() =>
-                          change({
-                            ...layout,
-                            sequences: layout.sequences.map((s) =>
-                              s.id === seq.id
-                                ? {
-                                    ...s,
-                                    steps: s.steps.filter(
-                                      (t) => t.id !== step.id,
-                                    ),
-                                  }
-                                : s,
-                            ),
-                          })
-                        }
-                      >
-                        단계 제거
-                      </button>
-                    </div>
-                  ))}
-                </div>
-              ))}
-            </section>
+            <SequenceEditor
+              layout={layout}
+              works={works.filter((w) => !w.deleted_at)}
+              selected={selected}
+              onChange={change}
+            />
           )}
           {tab === "strata" && (
             <div className="admin-actions">

@@ -10,6 +10,7 @@ import { imageRatio, strataLayout } from "@/lib/layouts";
 import type { ArchiveWork, PublishedArchive } from "@/types/archive";
 import { orderedYearWorks } from "@/lib/year-order";
 import ArtworkModal from "@/components/artwork/ArtworkModal";
+import SequenceCanvas from "./SequenceCanvas";
 const Ecosystem = dynamic(() => import("./WorksEcosystem"), { ssr: false });
 const Cosmos = dynamic(() => import("./WorksCosmos"), { ssr: false });
 const views = ["cosmos", "ecosystem", "strata", "sequences", "years"] as const;
@@ -245,21 +246,12 @@ export default function WorksBrowser({
           snapshot.layout.sequences.map((seq) => (
             <section className="works-sequence" key={seq.id}>
               <h2>{getLocalizedValue(locale, seq.title, seq.title_en)}</h2>
-              <ol>
-                {seq.steps.map((step) => (
-                  <li key={step.id}>
-                    <h3>
-                      {getLocalizedValue(locale, step.title, step.title_en)}
-                    </h3>
-                    <div className="works-grid">
-                      {step.artworkIds.map((id) => {
-                        const w = workMap.get(id);
-                        return w ? <div key={id}>{button(w)}</div> : null;
-                      })}
-                    </div>
-                  </li>
-                ))}
-              </ol>
+              <SequenceCanvas
+                sequence={seq}
+                works={works}
+                layout={snapshot.layout}
+                onOpen={setSelected}
+              />
             </section>
           ))
         ) : (

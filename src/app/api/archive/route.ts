@@ -11,6 +11,7 @@ import { ConflictError, mutateDocument } from "@/lib/archive-store";
 import { getPortfolio } from "@/lib/data";
 import { validateYearOrder, currentYearOrder } from "@/lib/year-order";
 import type { ArchiveLayout } from "@/types/archive";
+import { validateSequencePositions } from "@/lib/sequence-layout";
 export async function GET() {
   if (!(await isAuthenticated()))
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -140,6 +141,7 @@ export async function PUT(request: NextRequest) {
         )
           throw new Error("흐름의 작품을 확인해 주세요.");
       }
+      validateSequencePositions(sequence);
     }
     for (const groups of [value.ecosystem, value.cosmos])
       if (new Set(groups.map((g) => g.id)).size !== groups.length)

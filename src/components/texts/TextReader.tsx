@@ -4,20 +4,26 @@ import type { ArchiveText, TextBlock } from "@/types/archive";
 export function TextBody({
   blocks,
   protectedCopy = false,
+  language,
 }: {
   blocks: TextBlock[];
   protectedCopy?: boolean;
+  language?: "ko" | "en";
 }) {
+  const { locale } = useLocale();
   return (
     <div
       className={protectedCopy ? "text-body protected-copy" : "text-body"}
+      lang={language || locale}
       onCopy={protectedCopy ? (e) => e.preventDefault() : undefined}
       onCut={protectedCopy ? (e) => e.preventDefault() : undefined}
     >
       {blocks.map((b) => {
         const style = {
           textAlign: b.align,
-          fontSize: `min(${b.size}px, ${b.style === "heading" ? 7 : 5}vw)`,
+          fontSize: `${b.size}px`,
+          lineHeight: b.lineHeight ?? 1.6,
+          marginBlock: `${b.paragraphSpacing ?? 1}em`,
           color: b.color,
         };
         return b.style === "heading" ? (
