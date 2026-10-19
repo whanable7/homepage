@@ -180,31 +180,3 @@
   }
 }
 
-@font-face {
-  font-family: "Preview Noto Latin";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/noto-sans-kr-400-extended-82410dc965b8.woff2")
-    format("woff2");
-  unicode-range: U+0000-024F, U+2000-206F;
-}
-
-@font-face {
-  font-family: "Preview Noto Latin";
-  font-style: normal;
-  font-weight: 500;
-  font-display: swap;
-  src: url("/fonts/noto-sans-kr-500-extended-2ffbb68d2470.woff2")
-    format("woff2");
-  unicode-range: U+0000-024F, U+2000-206F;
-}
-
-@font-face {
-  font-family: "Preview Nanum Latin";
-  font-style: normal;
-  font-weight: 400;
-  font-display: swap;
-  src: url("/fonts/nanum-myeongjo-400-e28336ce777f.woff2") format("woff2");
-  unicode-range: U+0000-024F, U+2000-206F;
-}
