@@ -21,6 +21,9 @@
 }
 
 body {
+  --font-cormorant: "Cormorant Garamond";
+  --font-noto-sans: "Noto Sans KR";
+  --font-nanum-myeongjo: "Nanum Myeongjo";
   --font-site: var(--font-cormorant), var(--font-noto-sans), serif;
   --font-text: var(--font-cormorant), var(--font-nanum-myeongjo), serif;
   background: var(--background);

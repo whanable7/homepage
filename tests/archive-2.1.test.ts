@@ -1,6 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
+import { createHash } from "node:crypto";
 import type { ArchiveWork, Sequence, WorkGroup } from "../src/types/archive";
 import {
   changeGroupMembers,
@@ -12,6 +13,33 @@ import {
   sequenceKey,
   validateSequencePositions,
 } from "../src/lib/sequence-layout";
+
+test("self-hosted font references exist, retain their content hashes, and do not fetch fonts during builds", async () => {
+  const css = await readFile("src/app/fonts.css", "utf8");
+  const files = [...css.matchAll(/url\(['"]?\/fonts\/([^'"\)]+)['"]?\)/g)].map(
+    (m) => m[1],
+  );
+  assert.equal(new Set(files).size, 8);
+  for (const name of files) {
+    const bytes = await readFile("public/fonts/" + name);
+    assert.equal(bytes.subarray(0, 4).toString(), "wOF2");
+    assert.ok(
+      name.includes(
+        createHash("sha256").update(bytes).digest("hex").slice(0, 12),
+      ),
+    );
+  }
+  for (const family of ["cormorantgaramond", "notosanskr", "nanummyeongjo"])
+    assert.match(
+      await readFile(`public/fonts/LICENSE-${family}.txt`, "utf8"),
+      /SIL OPEN FONT LICENSE/,
+    );
+  assert.ok(
+    !(await readFile("src/app/layout.tsx", "utf8")).includes(
+      "next/font/google",
+    ),
+  );
+});
 
 test("membership editing preserves deliberate links, including a deliberately empty map", () => {
   const g: WorkGroup = {
