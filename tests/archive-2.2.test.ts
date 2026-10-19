@@ -44,3 +44,28 @@ test("whole view fits tall and wide saved arrangements without changing coordina
     assert.ok(scale > 0 && scale <= 1);
   }
 });
+
+test("nearby fractional columns and overlapping crossbars are drawn once without moving artworks", () => {
+  const nodes = [
+    { x: 200, y: -150, width: 100, height: 80, step: { id: "a" } },
+    { x: 200.42, y: -300, width: 100, height: 80, step: { id: "a" } },
+    { x: 202.4, y: -460, width: 100, height: 80, step: { id: "a" } },
+    { x: 450, y: -150, width: 100, height: 80, step: { id: "a" } },
+  ];
+  const before = JSON.stringify(nodes),
+    lines = sequenceConnections(nodes, 600);
+  assert.equal(JSON.stringify(nodes), before);
+  const vertical = lines.filter((l) => l.x1 === l.x2 && l.x1 < 250);
+  assert.equal(new Set(vertical.map((l) => l.x1)).size, 1);
+  const separate = sequenceConnections(
+    [
+      { ...nodes[0], x: 200 },
+      { ...nodes[1], x: 215 },
+    ],
+    600,
+  );
+  assert.equal(
+    new Set(separate.filter((l) => l.x1 === l.x2).map((l) => l.x1)).size,
+    2,
+  );
+});

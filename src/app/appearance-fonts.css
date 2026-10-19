@@ -1,0 +1,78 @@
+@font-face {
+  font-family: "Noto Serif KR";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/notoserifkr-400-500-2340d8470974.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Site Noto Serif Latin";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/notoserifkr-400-500-2340d8470974.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/inter-400-500-1458fe617f74.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Source Serif 4";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/sourceserif4-400-500-2c753804697a.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Pretendard";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/pretendard-400-500-929979712651.woff2") format("woff2");
+}
+@font-face {
+  font-family: "Site Pretendard Latin";
+  font-style: normal;
+  font-weight: 400 500;
+  font-display: swap;
+  src: url("/fonts/pretendard-400-500-929979712651.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}
+@font-face {
+  font-family: "Site Noto Latin";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/noto-sans-kr-400-extended-82410dc965b8.woff2")
+    format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}
+@font-face {
+  font-family: "Site Noto Latin";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/noto-sans-kr-500-extended-2ffbb68d2470.woff2")
+    format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}
+@font-face {
+  font-family: "Site Nanum Latin";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/nanum-myeongjo-400-e28336ce777f.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}
+@font-face {
+  font-family: "Site Nanum Latin";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/nanum-myeongjo-700-f03554c253c7.woff2") format("woff2");
+  unicode-range: U+0000-024F, U+2000-206F;
+}

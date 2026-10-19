@@ -24,8 +24,8 @@ body {
   --font-cormorant: "Cormorant Garamond";
   --font-noto-sans: "Noto Sans KR";
   --font-nanum-myeongjo: "Nanum Myeongjo";
-  --font-site: var(--font-cormorant), var(--font-noto-sans), serif;
-  --font-text: var(--font-cormorant), var(--font-nanum-myeongjo), serif;
+  --font-site: "Site Noto Latin", "Noto Sans KR", sans-serif;
+  --font-text: "Site Noto Latin", "Nanum Myeongjo", serif;
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-site);
@@ -598,29 +598,6 @@ html {
 .slideshow-caption > p span {
   color: var(--text-secondary);
   margin-left: 10px;
-}
-.slideshow-dots {
-  display: flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 5px;
-}
-.slideshow-dots button {
-  width: 32px;
-  height: 38px;
-  display: grid;
-  place-items: center;
-  background: none;
-  border: 0;
-}
-.slideshow-dots button span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--border);
-}
-.slideshow-dots button[aria-current] span {
-  background: var(--foreground);
 }
 .archive-admin {
   max-width: 1500px;
@@ -1550,4 +1527,55 @@ html {
 }
 .sequence-view-controls small {
   color: var(--text-secondary);
+}
+
+/* Site typography settings; explicit text-block formatting remains intact. */
+body {
+  font-size: var(--site-body-size, 16px);
+  letter-spacing: var(--site-body-spacing, 0em);
+  line-height: var(--site-line-height, 1.6);
+}
+.site-name {
+  font-family: var(--font-site);
+  font-size: var(--site-name-size, 22px);
+  font-weight: var(--site-name-weight, 500);
+  letter-spacing: var(--site-name-spacing, 0.1em);
+  white-space: nowrap;
+}
+.works-tabs button,
+.side-panel-nav a {
+  font-size: var(--site-menu-size, 15px) !important;
+  letter-spacing: var(--site-menu-spacing, 0.03em);
+}
+.text-body {
+  font-size: var(--site-text-size, 20px);
+}
+.landing-slideshow {
+  padding-bottom: max(12px, env(safe-area-inset-bottom));
+}
+.slideshow-slide {
+  padding: 20px 4.5vw;
+}
+.slideshow-slide > div {
+  max-width: 1520px;
+}
+.slideshow-caption {
+  padding: 12px 24px 16px;
+}
+@media (max-width: 640px) {
+  .slideshow-slide {
+    padding: 18px 3.5vw;
+  }
+  .site-header-inner {
+    padding-inline: 16px;
+  }
+  .site-header-identity {
+    gap: 12px;
+  }
+}
+
+.site-language-switch {
+  font-size: var(--site-menu-size, 15px);
+  letter-spacing: var(--site-menu-spacing, 0.03em);
+  white-space: nowrap;
 }

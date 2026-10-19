@@ -135,6 +135,10 @@ export async function PUT(request: NextRequest) {
         throw new Error("흐름의 단계를 확인해 주세요.");
       for (const step of sequence.steps) {
         if (
+          (step.anchorX !== undefined &&
+            (!Number.isFinite(step.anchorX) ||
+              step.anchorX < 70 ||
+              step.anchorX > 50000)) ||
           !titlesValid(step) ||
           !Array.isArray(step.artworkIds) ||
           step.artworkIds.some((id) => !ids.has(id))

@@ -3,29 +3,30 @@ import { useEffect, useState, type CSSProperties } from "react";
 import Link from "next/link";
 import styles from "./preview.module.css";
 
-const families = [
-  "Noto Sans KR",
-  "Nanum Myeongjo",
-  "Cormorant Garamond",
-] as const;
-const defaults = {
-  ko: "Noto Sans KR",
-  en: "Cormorant Garamond",
-  name: 24,
-  menu: 14,
-  body: 18,
-  spacing: 0.05,
-  menuSpacing: 0,
-  bodySpacing: 0,
-  line: 1.6,
-  weight: 500,
-  textKo: "Nanum Myeongjo",
-  textEn: "Cormorant Garamond",
-  textSize: 20,
-};
-type Settings = typeof defaults;
-export default function TypographyPreview() {
+import { useAppearance } from "@/contexts/AppearanceContext";
+import { useRouter } from "next/navigation";
+import { useUnsavedGuard } from "@/components/admin/useUnsavedGuard";
+import {
+  fontOptions,
+  fontStack,
+  latinFamily,
+  type Appearance,
+  type AppearanceState,
+} from "@/lib/appearance";
+import type { Document } from "@/lib/archive-store";
+const families = fontOptions.map((f) => f.name);
+type Settings = Appearance;
+export default function TypographyPreview({
+  adminMode = false,
+}: {
+  adminMode?: boolean;
+}) {
+  const router = useRouter();
+  const defaults = useAppearance();
   const [settings, setSettings] = useState<Settings>(defaults);
+  const [doc, setDoc] = useState<Document<AppearanceState> | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [message, setMessage] = useState("");
   const [language, setLanguage] = useState<"ko" | "en">("ko");
   const [current, setCurrent] = useState(false);
   const [loaded, setLoaded] = useState("글꼴 파일 확인 중…");
@@ -33,35 +34,50 @@ export default function TypographyPreview() {
   const [sample, setSample] = useState(
     "풍경을 바라보는 일은 시간의 층을 읽는 일과 닮아 있다.\n작품과 작품 사이를 지나며 익숙했던 세계의 다른 표면을 발견한다.",
   );
+  useUnsavedGuard(
+    adminMode &&
+      !!doc &&
+      JSON.stringify(settings) !== JSON.stringify(doc.data.draft),
+  );
+  useEffect(() => {
+    if (!adminMode) return;
+    let active = true;
+    fetch("/api/appearance", { cache: "no-store" })
+      .then(async (r) => {
+        const data = await r.json();
+        if (!r.ok) throw new Error(data.error);
+        if (active) {
+          setDoc(data);
+          setSettings(data.data.draft);
+        }
+      })
+      .catch((e) => {
+        if (active) setMessage(e.message);
+      });
+    return () => {
+      active = false;
+    };
+  }, [adminMode]);
   useEffect(() => {
     let active = true;
-    Promise.all([
-      document.fonts.load('400 18px "Noto Sans KR"', "박정환 작품 abc"),
-      document.fonts.load('500 24px "Noto Sans KR"', "박정환 works"),
-      document.fonts.load('400 18px "Nanum Myeongjo"', "풍경과 시간"),
-      document.fonts.load('400 20px "Cormorant Garamond"', "Jungwhan Works"),
-      document.fonts.load('500 24px "Cormorant Garamond"', "Jungwhan"),
-    ])
+    const chosen = [settings.ko, settings.en, settings.textKo, settings.textEn];
+    Promise.all(
+      [...new Set(chosen)].map((f) =>
+        document.fonts.load(
+          `400 20px "${f}"`,
+          fontOptions.find((x) => x.name === f)?.ko
+            ? "정환 작품 abc"
+            : "Jungwhan Works",
+        ),
+      ),
+    )
       .then((results) => {
-        if (active) {
-          try {
-            const raw = localStorage.getItem("jungwhan-typography-preview-v1");
-            if (raw) {
-              const parsed = JSON.parse(raw);
-              if (
-                families.includes(parsed.ko) &&
-                parsed.ko !== "Cormorant Garamond" &&
-                families.includes(parsed.en)
-              )
-                setSettings({ ...defaults, ...parsed });
-            }
-          } catch {}
+        if (active)
           setLoaded(
-            results.every((fonts) => fonts.length > 0)
-              ? "실제 글꼴 파일 3종 로드 완료"
-              : "일부 글꼴을 불러오지 못했습니다. 새로고침해 주세요.",
+            results.every((x) => x.length)
+              ? "선택한 실제 글꼴 파일 로드 완료"
+              : "일부 글꼴을 불러오지 못했습니다.",
           );
-        }
       })
       .catch(() => {
         if (active)
@@ -70,26 +86,50 @@ export default function TypographyPreview() {
     return () => {
       active = false;
     };
-  }, []);
+  }, [settings.ko, settings.en, settings.textKo, settings.textEn]);
+  async function act(action: "save" | "apply" | "restore") {
+    if (!doc || busy) return;
+    setBusy(true);
+    setMessage("");
+    try {
+      const r = await fetch("/api/appearance", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ action, revision: doc.revision, settings }),
+      });
+      const data = await r.json();
+      if (!r.ok) throw new Error(data.error);
+      setDoc(data);
+      setSettings(data.data.draft);
+      setCurrent(false);
+      setMessage(
+        action === "apply"
+          ? "글꼴 설정을 사이트에 적용했습니다. 작품 분류와 글의 공개 상태는 그대로입니다."
+          : action === "restore"
+            ? "이전 설정을 불러왔습니다. 사이트 적용 전 상태입니다."
+            : "글꼴 설정을 임시 저장했습니다.",
+      );
+      if (action === "apply") router.refresh();
+    } catch (e) {
+      setMessage(e instanceof Error ? e.message : "설정 저장 실패");
+    } finally {
+      setBusy(false);
+    }
+  }
   const change = (patch: Partial<Settings>) => {
     const next = { ...settings, ...patch };
     setSettings(next);
     setCopied("");
     try {
       localStorage.setItem(
-        "jungwhan-typography-preview-v1",
+        "jungwhan-typography-preview-v2",
         JSON.stringify(next),
       );
     } catch {}
   };
-  const s = current ? defaults : settings;
-  const latin = (family: string) =>
-    family === "Noto Sans KR"
-      ? "Preview Noto Latin"
-      : family === "Nanum Myeongjo"
-        ? "Preview Nanum Latin"
-        : family;
-  const siteFamily = `"${latin(s.en)}", "${s.ko}", serif`;
+  const s = current ? doc?.data.published || defaults : settings;
+  const latin = latinFamily;
+  const siteFamily = fontStack(s.en, s.ko);
   const range = (
     label: string,
     key:
@@ -134,7 +174,7 @@ export default function TypographyPreview() {
         onChange={(e) => change({ [key]: e.target.value })}
       >
         {families
-          .filter((f) => !korean || f !== "Cormorant Garamond")
+          .filter((f) => !korean || fontOptions.find((x) => x.name === f)?.ko)
           .map((f) => (
             <option key={f} value={f}>
               {f}
@@ -144,12 +184,17 @@ export default function TypographyPreview() {
     </label>
   );
   const summary = `사이트 한글: ${settings.ko}\n사이트 영문: ${settings.en}\n작가 이름: ${settings.name}px / 굵기 ${settings.weight} / 자간 ${settings.spacing}em\n메뉴: ${settings.menu}px / 자간 ${settings.menuSpacing}em\n일반 본문: ${settings.body}px / 자간 ${settings.bodySpacing}em / 줄간격 ${settings.line * 100}%\nTEXTS 한글: ${settings.textKo}\nTEXTS 영문: ${settings.textEn}\nTEXTS: ${settings.textSize}px`;
+  const Container = adminMode ? "section" : "main";
   return (
-    <main className={styles.page}>
+    <Container className={styles.page}>
       <div className={styles.heading}>
         <div>
-          <h1>글꼴 조정실</h1>
-          <p>이 화면에서만 바뀝니다. 공식 사이트에는 적용하지 않습니다.</p>
+          <h1>{adminMode ? "설정 · 글꼴과 문자" : "글꼴 조정실"}</h1>
+          <p>
+            {adminMode
+              ? "조절한 모습 확인 → 임시 저장 → 사이트 적용. 작품 분류는 함께 공개되지 않습니다."
+              : "이 화면에서만 바뀝니다. 공식 사이트에는 적용하지 않습니다."}
+          </p>
         </div>
         <Link href="/works">작품 미리보기 ↗</Link>
       </div>
@@ -162,8 +207,8 @@ export default function TypographyPreview() {
           {familySelect("한글", "ko", true)}
           {familySelect("영문", "en", false)}
           <p>
-            영문은 앞에서 선택한 영문 글꼴, 한글은 한글 글꼴로 표시합니다. 세
-            글꼴 모두 이 사이트에서 직접 제공합니다.
+            영문은 앞에서 선택한 영문 글꼴, 한글은 한글 글꼴로 표시합니다. 선택
+            가능한 모든 글꼴을 이 사이트에서 직접 제공합니다.
           </p>
           <h2>작가 이름</h2>
           {range("크기", "name", 18, 48, 1, "px")}
@@ -192,7 +237,7 @@ export default function TypographyPreview() {
           {range("본문 크기", "textSize", 16, 30, 1, "px")}
           <button
             onClick={() => {
-              change(defaults);
+              change(doc?.data.published || defaults);
               setCurrent(false);
             }}
           >
@@ -211,6 +256,34 @@ export default function TypographyPreview() {
             선택한 설정 복사
           </button>
           <p role="status">{copied}</p>
+          {adminMode && (
+            <div className="appearance-actions">
+              <button disabled={busy || !doc} onClick={() => act("save")}>
+                글꼴 임시 저장
+              </button>
+              <button disabled={busy || !doc} onClick={() => act("apply")}>
+                글꼴 사이트 적용
+              </button>
+              <button
+                disabled={busy || !doc?.data.previous.length}
+                onClick={() => act("restore")}
+              >
+                이전 설정 불러오기
+              </button>
+              <button
+                disabled={busy || !doc}
+                onClick={() => {
+                  if (doc) {
+                    setSettings(doc.data.draft);
+                    setMessage("저장한 설정으로 돌아왔습니다.");
+                  }
+                }}
+              >
+                조절 취소
+              </button>
+            </div>
+          )}
+          <p role="status">{message}</p>
           <details>
             <summary>설정 내용</summary>
             <pre>{summary}</pre>
@@ -256,7 +329,7 @@ export default function TypographyPreview() {
               >
                 {language === "ko" ? "박정환" : "Jungwhan"}
               </span>
-              <span>KR / EN</span>
+              <span>한글 / EN</span>
             </header>
             <nav
               style={{
@@ -340,6 +413,6 @@ export default function TypographyPreview() {
           </p>
         </section>
       </div>
-    </main>
+    </Container>
   );
 }

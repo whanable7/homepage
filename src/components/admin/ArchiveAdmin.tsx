@@ -22,6 +22,7 @@ import { confirmAdminNavigation } from "./useUnsavedGuard";
 import CVEditor from "./CVEditor";
 import YearOrderEditor from "./YearOrderEditor";
 import { moveWorkToYear } from "@/lib/year-order";
+import TypographyPreview from "@/app/typography-preview/preview";
 import GroupManager from "./GroupManager";
 import SequenceEditor from "./SequenceEditor";
 type Tab =
@@ -33,7 +34,8 @@ type Tab =
   | "years"
   | "slideshow"
   | "texts"
-  | "cv";
+  | "cv"
+  | "settings";
 const tabs: Record<Tab, string> = {
   artworks: "작품",
   ecosystem: "ecosystem",
@@ -44,6 +46,7 @@ const tabs: Record<Tab, string> = {
   slideshow: "첫 화면",
   texts: "texts",
   cv: "cv",
+  settings: "설정",
 };
 type Queue = {
   id: string;
@@ -369,7 +372,7 @@ export default function ArchiveAdmin() {
           </button>
         ))}
       </nav>
-      {tab !== "texts" && tab !== "cv" && (
+      {tab !== "texts" && tab !== "cv" && tab !== "settings" && (
         <div className="admin-publish">
           <span>
             {unsaved.current
@@ -402,7 +405,9 @@ export default function ArchiveAdmin() {
       <p role="status" className="admin-message">
         {message}
       </p>
-      {tab === "texts" ? (
+      {tab === "settings" ? (
+        <TypographyPreview adminMode />
+      ) : tab === "texts" ? (
         <TextEditor />
       ) : tab === "cv" ? (
         <CVEditor />

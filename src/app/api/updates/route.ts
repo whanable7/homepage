@@ -2,7 +2,14 @@ import { NextResponse } from "next/server";
 import { createHash } from "node:crypto";
 import { readDocument } from "@/lib/archive-store";
 export async function GET() {
-  const names = ["archive", "about", "texts", "news", "exhibitions"],
+  const names = [
+      "archive",
+      "about",
+      "texts",
+      "news",
+      "exhibitions",
+      "appearance",
+    ],
     documents = await Promise.all(names.map((name) => readDocument(name, {})));
   return NextResponse.json(
     {

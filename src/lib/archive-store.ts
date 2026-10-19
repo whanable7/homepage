@@ -128,6 +128,8 @@ export async function readDocument<T>(
       updatedAt: "",
       data: await seed(name, fallback),
     };
+  if (!result && name === "appearance")
+    return { revision: "seed", updatedAt: "", data: fallback };
   if (!result || !result.stream)
     throw new Error(`아카이브 ${name} 초기 이관을 먼저 완료해 주세요.`);
   const document = (await new Response(result.stream).json()) as Document<T>;
@@ -169,6 +171,22 @@ export async function mutateDocument<T>(
         await writeFile(tmp, JSON.stringify(next), { mode: 0o600 });
         await rename(tmp, path.join(localDirectory(), `${name}.json`));
       } else {
+        if (name === "appearance" && current.revision === "seed") {
+          try {
+            await put(pathname(name), JSON.stringify(next), {
+              access: "private",
+              token: token(),
+              addRandomSuffix: false,
+              allowOverwrite: false,
+              contentType: "application/json",
+            });
+            return next;
+          } catch (error) {
+            const latest = await readDocument(name, fallback);
+            if (latest.revision !== "seed") throw new ConflictError();
+            throw error;
+          }
+        }
         if (!current.etag || current.etag.startsWith("W/"))
           throw new Error(
             "저장 버전을 확인할 수 없습니다. 새로 불러온 뒤 다시 시도해 주세요.",

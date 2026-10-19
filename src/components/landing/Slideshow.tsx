@@ -172,26 +172,6 @@ export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
           {getLocalizedValue(locale, current.title, current.title_en)}{" "}
           <span>{current.year}</span>
         </p>
-        {multiple && (
-          <div className="slideshow-dots">
-            {artworks.map((w, i) => (
-              <button
-                key={w.id}
-                aria-label={`${locale === "ko" ? "작품" : "Artwork"} ${i + 1}`}
-                aria-current={i === index ? "true" : undefined}
-                onClick={() => {
-                  setPaused(true);
-                  if (busy.current) return;
-                  setAnimate(false);
-                  setPosition(i + 1);
-                  setCaptionIndex(i);
-                }}
-              >
-                <span />
-              </button>
-            ))}
-          </div>
-        )}
       </div>
     </section>
   );
