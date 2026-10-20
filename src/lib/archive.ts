@@ -96,6 +96,51 @@ export async function saveArchiveDraft(
     revision,
   );
 }
+/** Apply only home selections; private classifications and unpublished edits stay private. */
+export async function publishFeatured(revision: string) {
+  const portfolio = (await getPortfolio()) as ArchiveWork[];
+  return mutateDocument(
+    "archive",
+    await archiveSeed(),
+    (state) => {
+      const publishedIds = new Set(state.published.works.map((w) => w.id));
+      if (
+        portfolio.some(
+          (w) =>
+            w.is_featured &&
+            !w.deleted_at &&
+            w.status !== "draft" &&
+            !publishedIds.has(w.id),
+        )
+      )
+        throw new Error(
+          "아직 공개하지 않은 대표 작품이 있습니다. 작품을 먼저 공개한 뒤 다시 시도해 주세요.",
+        );
+      const current = new Map(portfolio.map((w) => [w.id, w]));
+      return {
+        ...state,
+        published: {
+          ...state.published,
+          works: state.published.works.map((w) => {
+            const source = current.get(w.id);
+            return {
+              ...w,
+              is_featured: !!(
+                source?.is_featured &&
+                !source.deleted_at &&
+                source.status !== "draft"
+              ),
+              featured_order: source?.featured_order ?? w.featured_order,
+            };
+          }),
+          revision: crypto.randomUUID(),
+          publishedAt: new Date().toISOString(),
+        },
+      };
+    },
+    revision,
+  );
+}
 export async function publishArchive(
   revision: string,
   confirmEmptyRelations = false,

@@ -17,6 +17,31 @@ export const getPortfolio = async (): Promise<RecordData[]> =>
   );
 export const getPortfolioById = async (id: string) =>
   (await getPortfolio()).find((a) => a.id === id && !a.deleted_at);
+export async function reorderFeaturedArtworks(ids: unknown) {
+  if (
+    !Array.isArray(ids) ||
+    ids.some((id) => typeof id !== "string") ||
+    new Set(ids).size !== ids.length
+  )
+    throw new Error("순서를 확인해 주세요.");
+  const order = new Map(ids.map((id, index) => [id, index]));
+  const saved = await mutateRecords("portfolio", (records) => {
+    if (
+      ids.some(
+        (id) =>
+          !records.some((w) => w.id === id && w.is_featured && !w.deleted_at),
+      )
+    )
+      throw new Error("대표 이미지 목록이 바뀌었습니다. 다시 불러와 주세요.");
+    const updatedAt = new Date().toISOString();
+    return records.map((w) =>
+      order.has(w.id)
+        ? { ...w, featured_order: order.get(w.id), updated_at: updatedAt }
+        : w,
+    );
+  });
+  return saved.data.filter((w) => order.has(w.id));
+}
 export const getFeaturedArtworks = async () =>
   (await getPortfolio())
     .filter((a) => a.is_featured && a.status !== "draft" && !a.deleted_at)
