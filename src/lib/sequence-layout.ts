@@ -1,6 +1,5 @@
 import type { ArchiveLayout, ArchiveWork, Sequence } from "@/types/archive";
 import { imageRatio } from "./layouts";
-import { orderedYearWorks } from "./year-order";
 
 export const sequenceKey = (stepId: string, workId: string) =>
   `${stepId}:${workId}`;
@@ -8,59 +7,75 @@ export const sequenceKey = (stepId: string, workId: string) =>
 export function sequenceLayout(
   sequence: Sequence,
   works: ArchiveWork[],
-  layout?: Pick<ArchiveLayout, "yearOrder">,
+  _layout?: Pick<ArchiveLayout, "yearOrder">,
 ) {
-  const chronological = [...new Set(works.map((w) => w.year))]
-    .sort((a, b) => a - b)
-    .flatMap((year) => orderedYearWorks(works, year, layout || {}));
-  const rank = new Map(chronological.map((w, i) => [w.id, i]));
+  // Keep the existing caller signature; year ordering no longer controls a flow.
+  void _layout;
   const workMap = new Map(
     works.filter((w) => !w.deleted_at).map((w) => [w.id, w]),
   );
-  const entries = sequence.steps
-    .flatMap((step, stepIndex) =>
-      [...new Set(step.artworkIds)]
-        .filter((id) => workMap.has(id))
-        .map((id) => ({
-          step,
-          stepIndex,
-          work: workMap.get(id)!,
-          key: sequenceKey(step.id, id),
-        })),
-    )
-    .sort(
-      (a, b) =>
-        (rank.get(a.work.id) ?? Infinity) - (rank.get(b.work.id) ?? Infinity) ||
-        a.stepIndex - b.stepIndex,
-    );
-  const nodes = entries.map((entry, i) => {
+  const entries = sequence.steps.flatMap((step, stepIndex) =>
+    [...new Set(step.artworkIds)]
+      .filter((id) => workMap.has(id))
+      .map((id) => ({
+        step,
+        stepIndex,
+        work: workMap.get(id)!,
+        key: sequenceKey(step.id, id),
+      })),
+  );
+  const nodes = entries.map((entry) => {
     const saved = sequence.positions?.[entry.key];
-    const memberIndex = entries
-      .filter((e) => e.step.id === entry.step.id)
-      .findIndex((e) => e.key === entry.key);
     const ratio = imageRatio(entry.work);
     const width = Math.min(182, 152 * ratio),
       height = width / ratio;
-    const side = entry.stepIndex % 2 ? 1 : -1;
     return {
       ...entry,
       width,
       height,
-      x: saved?.x ?? 130 + i * 225,
-      y: saved?.y ?? side * (135 + Math.floor(memberIndex / 3) * 125),
+      x: saved?.x ?? 0,
+      y: saved?.y ?? 0,
     };
   });
   const placed = nodes.filter((n) => sequence.positions?.[n.key]);
-  for (const n of nodes.filter((n) => !sequence.positions?.[n.key])) {
-    while (
-      placed.some(
-        (other) =>
-          Math.abs(n.x - other.x) < (n.width + other.width) / 2 + 30 &&
-          Math.abs(n.y - other.y) < (n.height + other.height) / 2 + 24,
+  let right = Math.max(0, ...placed.map((n) => n.x + n.width / 2));
+  for (const [stepIndex, step] of sequence.steps.entries()) {
+    const members = nodes.filter((n) => n.step.id === step.id);
+    const saved = members.filter((n) => sequence.positions?.[n.key]);
+    const pending = members.filter((n) => !sequence.positions?.[n.key]);
+    let x = saved.length
+      ? Math.max(...saved.map((n) => n.x + n.width / 2)) + 140
+      : (step.anchorX ?? (right ? right + 140 : 130));
+    // A stage grows in shared columns on both sides of the axis, never in a
+    // year-based diagonal. Limit each column to four works above and four below.
+    for (let start = 0; start < pending.length; start += 8) {
+      const column = pending.slice(start, start + 8);
+      const edges = [80, 80];
+      for (const [index, n] of column.entries()) {
+        const sideIndex = Math.floor(index / 4);
+        const side = (stepIndex % 2 ? 1 : -1) * (sideIndex ? -1 : 1);
+        n.y = side * (edges[sideIndex] + n.height / 2);
+        edges[sideIndex] += n.height + 28;
+      }
+      while (
+        column.some((n) =>
+          placed.some(
+            (other) =>
+              Math.abs(x - other.x) < (n.width + other.width) / 2 + 30 &&
+              Math.abs(n.y - other.y) < (n.height + other.height) / 2 + 24,
+          ),
+        )
       )
-    )
-      n.x += 225;
-    placed.push(n);
+        x += 225;
+      for (const n of column) n.x = x;
+      placed.push(...column);
+      x += 225;
+    }
+    right = Math.max(
+      right,
+      step.anchorX ?? 0,
+      ...members.map((n) => n.x + n.width / 2),
+    );
   }
   const minY = Math.min(-220, ...nodes.map((n) => n.y - n.height / 2 - 55));
   const maxY = Math.max(220, ...nodes.map((n) => n.y + n.height / 2 + 55));
@@ -213,7 +228,7 @@ export function fitSequence(
   );
 }
 
-/** Freeze legacy fallback positions before adding anything; new steps grow to the right. */
+/** Freeze existing positions before adding anything; new steps grow to the right. */
 export function addSequenceStep(
   sequence: Sequence,
   ids: string[],
@@ -258,48 +273,27 @@ export function addSequenceMembers(
   const positions = Object.fromEntries(
     model.nodes.map((n) => [n.key, { x: n.x, y: n.y }]),
   );
-  const members = model.nodes.filter((n) => n.step.id === stepId);
-  const side = members[0]
-    ? members[0].y < 0
-      ? -1
-      : 1
-    : sequence.steps.indexOf(step) % 2
-      ? 1
-      : -1;
-  let x = members.length
-    ? Math.max(...members.map((n) => n.x))
-    : (step.anchorX ??
-      Math.max(0, ...model.nodes.map((n) => n.x + n.width / 2)) + 200);
-  let edge = Math.max(
-    80,
-    ...members
-      .filter((n) => (n.y < 0 ? -1 : 1) === side)
-      .map((n) => Math.abs(n.y) + n.height / 2 + 34),
-  );
   const additions = [...new Set(ids)].filter(
     (id) =>
       !step.artworkIds.includes(id) &&
       works.some((w) => w.id === id && !w.deleted_at),
   );
-  for (const id of additions) {
-    const w = works.find((w) => w.id === id)!;
-    const ratio = imageRatio(w),
-      height = Math.min(182, 152 * ratio) / ratio;
-    // Keep large batches inside the stored coordinate range; continue in the next column.
-    if (edge + height > 2800) {
-      x += 225;
-      edge = 80;
-    }
-    positions[sequenceKey(stepId, id)] = { x, y: side * (edge + height / 2) };
-    edge += height + 34;
-  }
-  return {
+  const next = {
     ...sequence,
     positions,
     steps: sequence.steps.map((s) =>
       s.id === stepId
         ? { ...s, artworkIds: [...s.artworkIds, ...additions] }
         : s,
+    ),
+  };
+  return {
+    ...next,
+    positions: Object.fromEntries(
+      sequenceLayout(next, works, layout).nodes.map((n) => [
+        n.key,
+        { x: n.x, y: n.y },
+      ]),
     ),
   };
 }

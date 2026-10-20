@@ -79,7 +79,7 @@ test("focus includes all directly matching groups but does not recursively flood
   assert.deepEqual([...groupFocus(groups, "d", "one").ids], ["a", "b", "c"]);
 });
 
-test("legacy sequence layouts retain their prior year order and manual positions, and reject invalid coordinates", async () => {
+test("sequence layouts follow stage membership order instead of years, preserve manual positions and reject invalid coordinates", async () => {
   const base: ArchiveWork = JSON.parse(
     await readFile("src/data/preview_archive.json", "utf8"),
   ).works[0];
@@ -105,7 +105,7 @@ test("legacy sequence layouts retain their prior year order and manual positions
   const seeded = sequenceLayout(sequence, works, layout);
   assert.deepEqual(
     seeded.nodes.map((n) => n.work.id),
-    ["b", "c", "a"],
+    ["a", "c", "b"],
   );
   sequence.positions = Object.fromEntries(
     seeded.nodes.map((n) => [n.key, { x: n.x, y: n.y }]),
