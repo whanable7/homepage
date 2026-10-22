@@ -1,7 +1,7 @@
+import { mutateContent } from "@/lib/public-content";
 import { NextRequest, NextResponse } from "next/server";
 import { head, get } from "@vercel/blob";
 import { isAuthenticated } from "@/lib/auth";
-import { mutateDocument } from "@/lib/archive-store";
 import type { ArchiveFile } from "@/types/archive";
 export async function POST(request: NextRequest) {
   if (!(await isAuthenticated()))
@@ -43,7 +43,7 @@ export async function POST(request: NextRequest) {
       contentType: "application/pdf",
       created_at: new Date().toISOString(),
     };
-    await mutateDocument("files", [] as ArchiveFile[], (items) => [
+    await mutateContent("files", [] as ArchiveFile[], (items) => [
       ...items,
       record,
     ]);

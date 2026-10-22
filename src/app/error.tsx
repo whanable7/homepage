@@ -1,27 +1,28 @@
 "use client";
-
-import Header from "@/components/common/Header";
+import Link from "next/link";
 import { useLocale } from "@/i18n";
-
-export default function ArchiveError({ reset }: { reset: () => void }) {
+export default function PageError({
+  reset,
+}: {
+  error: Error;
+  reset: () => void;
+}) {
   const { locale } = useLocale();
   return (
-    <main className="works-page">
-      <Header />
-      <section className="px-6 pt-[28vh] pb-24 text-center" role="alert">
-        <h1 className="text-base font-normal">
-          {locale === "ko"
-            ? "자료를 잠시 불러오지 못했습니다."
-            : "We could not load this page."}
-        </h1>
-        <button
-          type="button"
-          onClick={reset}
-          className="mt-8 min-h-11 border-b border-[var(--text-secondary)] px-2 text-sm"
-        >
-          {locale === "ko" ? "다시 불러오기" : "Try again"}
-        </button>
-      </section>
+    <main className="min-h-screen flex flex-col items-center justify-center gap-6 px-6 text-center">
+      <p>
+        {locale === "ko"
+          ? "잠시 내용을 불러오지 못했습니다. 조금 뒤 다시 시도해 주세요."
+          : "We couldn't load this page. Please try again shortly."}
+      </p>
+      <button
+        type="button"
+        className="border border-current px-5 py-2"
+        onClick={reset}
+      >
+        {locale === "ko" ? "다시 불러오기" : "Try again"}
+      </button>
+      <Link href="/">{locale === "ko" ? "첫 화면으로" : "Home"}</Link>
     </main>
   );
 }

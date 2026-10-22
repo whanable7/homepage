@@ -6,6 +6,7 @@ import {
   ConflictError,
 } from "./archive-store";
 import { getPortfolio } from "./data";
+import { mutateContent } from "./public-content";
 import { strataLayout } from "./layouts";
 import { currentYearOrder } from "./year-order";
 import { removesAllRelations } from "./archive-publication";
@@ -68,8 +69,8 @@ export async function archiveSeed(
   return structuredClone(value);
 }
 export async function getArchive() {
-  const initial = await archiveSeed(),
-    doc = await readDocument("archive", initial);
+  const doc = await readDocument("archive", {} as ArchiveState, archiveSeed);
+  const initial = doc.data;
   if (isLocalStore() && doc.revision === "seed") {
     try {
       return await mutateDocument(
@@ -89,10 +90,55 @@ export async function saveArchiveDraft(
   layout: ArchiveLayout,
   revision: string,
 ) {
-  return mutateDocument(
+  return mutateContent(
     "archive",
     await archiveSeed(),
     (state) => ({ ...state, draft: layout }),
+    revision,
+  );
+}
+/** Apply only home selections; private classifications and unpublished edits stay private. */
+export async function publishFeatured(revision: string) {
+  const portfolio = (await getPortfolio()) as ArchiveWork[];
+  return mutateContent(
+    "archive",
+    await archiveSeed(portfolio),
+    (state) => {
+      const publishedIds = new Set(state.published.works.map((w) => w.id));
+      if (
+        portfolio.some(
+          (w) =>
+            w.is_featured &&
+            !w.deleted_at &&
+            w.status !== "draft" &&
+            !publishedIds.has(w.id),
+        )
+      )
+        throw new Error(
+          "아직 공개하지 않은 대표 작품이 있습니다. 작품을 먼저 공개한 뒤 다시 시도해 주세요.",
+        );
+      const current = new Map(portfolio.map((w) => [w.id, w]));
+      return {
+        ...state,
+        published: {
+          ...state.published,
+          works: state.published.works.map((w) => {
+            const source = current.get(w.id);
+            return {
+              ...w,
+              is_featured: !!(
+                source?.is_featured &&
+                !source.deleted_at &&
+                source.status !== "draft"
+              ),
+              featured_order: source?.featured_order ?? w.featured_order,
+            };
+          }),
+          revision: crypto.randomUUID(),
+          publishedAt: new Date().toISOString(),
+        },
+      };
+    },
     revision,
   );
 }
@@ -104,9 +150,9 @@ export async function publishArchive(
     (w) => !w.deleted_at,
   );
   const works = allWorks.filter((w) => w.status !== "draft");
-  return mutateDocument(
+  return mutateContent(
     "archive",
-    await archiveSeed(),
+    await archiveSeed(allWorks),
     (state) => {
       if (
         removesAllRelations(state.published.layout, state.draft) &&

@@ -1,5 +1,6 @@
 import { NextResponse, type NextRequest } from "next/server";
 import { SESSION_COOKIE, verifySession } from "@/lib/session";
+import { adminReturnTo } from "@/lib/admin-return-to";
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname;
   if (
@@ -29,10 +30,20 @@ export async function middleware(request: NextRequest) {
     !["GET", "HEAD", "OPTIONS"].includes(request.method) &&
     !["/api/auth", "/api/contact", "/api/files/upload"].includes(pathname);
   if (adminPage || privateRead || mutation) {
-    if (!(await verifySession(request.cookies.get(SESSION_COOKIE)?.value)))
-      return adminPage
-        ? NextResponse.redirect(new URL("/admin/login", request.url))
-        : NextResponse.json({ error: "로그인이 필요합니다." }, { status: 401 });
+    if (!(await verifySession(request.cookies.get(SESSION_COOKIE)?.value))) {
+      if (adminPage) {
+        const login = new URL("/admin/login", request.url);
+        login.searchParams.set(
+          "next",
+          adminReturnTo(pathname + request.nextUrl.search),
+        );
+        return NextResponse.redirect(login);
+      }
+      return NextResponse.json(
+        { error: "로그인이 필요합니다." },
+        { status: 401 },
+      );
+    }
   }
   const response = NextResponse.next();
   if (pathname.startsWith("/api/"))

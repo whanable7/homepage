@@ -1,11 +1,12 @@
 import { Suspense } from "react";
 import Header from "@/components/common/Header";
 import WorksBrowser from "@/components/portfolio/WorksBrowser";
-import { getArchive, publicLayout } from "@/lib/archive";
+import { publicLayout } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 export const dynamic = "force-dynamic";
 export const metadata = { title: "Works | Jungwhan Park" };
 export default async function WorksPage() {
-  const { data } = await getArchive();
+  const data = { published: await getPublicArchive() };
   return (
     <main className="works-page">
       <Header />

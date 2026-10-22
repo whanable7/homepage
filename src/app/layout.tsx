@@ -1,5 +1,6 @@
 import { cookies } from "next/headers";
-import { getAppearance } from "@/lib/appearance-store";
+import { getPublicAppearance } from "@/lib/public-content";
+import { defaultAppearance } from "@/lib/appearance";
 import { appearanceStyle } from "@/lib/appearance";
 import { AppearanceProvider } from "@/contexts/AppearanceContext";
 import type { Metadata } from "next";
@@ -27,16 +28,13 @@ export default async function RootLayout({
 }>) {
   const [cookieJar, appearance] = await Promise.all([
     cookies(),
-    getAppearance(),
+    getPublicAppearance().catch(() => defaultAppearance),
   ]);
   const initialLocale = cookieJar.get("locale")?.value === "ko" ? "ko" : "en";
   return (
     <html lang={initialLocale}>
-      <body
-        className="antialiased"
-        style={appearanceStyle(appearance.data.published)}
-      >
-        <AppearanceProvider value={appearance.data.published}>
+      <body className="antialiased" style={appearanceStyle(appearance)}>
+        <AppearanceProvider value={appearance}>
           <LocaleProvider initialLocale={initialLocale}>
             <SidePanelProvider>
               <div className="flex flex-col min-h-screen">

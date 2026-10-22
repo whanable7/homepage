@@ -1,13 +1,15 @@
+import type { Exhibition } from "@/types/artwork";
+import { readPublicContent } from "@/lib/public-content";
 import Header from "@/components/common/Header";
 import AboutContent from "@/components/about/AboutContent";
-import { getPublicAbout as getAbout, getExhibitions } from "@/lib/data";
+import { getPublicAbout as getAbout } from "@/lib/data";
 
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const [aboutInfo, exhibitions] = await Promise.all([
     getAbout().catch(() => null),
-    getExhibitions().catch(() => []),
+    readPublicContent<Exhibition[]>("exhibitions").catch(() => []),
   ]);
 
   return (

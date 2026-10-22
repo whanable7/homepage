@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Button from "@/components/common/Button";
+import { adminReturnTo } from "@/lib/admin-return-to";
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -43,7 +44,11 @@ export default function AdminLoginPage() {
       });
 
       if (response.ok) {
-        router.push("/admin");
+        router.replace(
+          adminReturnTo(
+            new URLSearchParams(window.location.search).get("next"),
+          ),
+        );
       } else {
         const body = await response.json().catch(() => ({}));
         setError(body.error || "비밀번호가 올바르지 않습니다");

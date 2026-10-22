@@ -4,6 +4,7 @@ import {
   getArchive,
   saveArchiveDraft,
   publishArchive,
+  publishFeatured,
   archiveSeed,
   emptyLayout,
 } from "@/lib/archive";
@@ -23,10 +24,16 @@ export async function PUT(request: NextRequest) {
   try {
     const { action, layout, revision, confirmEmptyRelations } =
       await request.json();
-    if (!["save", "publish", "reset", "restore"].includes(action))
+    if (
+      !["save", "publish", "publish-featured", "reset", "restore"].includes(
+        action,
+      )
+    )
       throw new Error("저장 작업을 확인해 주세요.");
     if (typeof revision !== "string" || !revision)
       throw new Error("저장 버전이 필요합니다.");
+    if (action === "publish-featured")
+      return NextResponse.json(await publishFeatured(revision));
     if (action === "publish")
       return NextResponse.json(
         await publishArchive(revision, confirmEmptyRelations === true),

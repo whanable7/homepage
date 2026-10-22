@@ -3,7 +3,7 @@ import { Category, Artwork } from "@/types/artwork";
 import Header from "@/components/common/Header";
 import CategoryContent from "@/components/portfolio/CategoryContent";
 import { getCategories } from "@/lib/data";
-import { getArchive } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 
 export const dynamic = "force-dynamic";
 
@@ -22,7 +22,7 @@ export default async function CategoryPage({ params }: PageProps) {
     notFound();
   }
 
-  const artworks = ((await getArchive()).data.published.works as Artwork[])
+  const artworks = ((await getPublicArchive()).works as Artwork[])
     .filter((a) => a.category_id === category.id)
     .sort((a, b) => b.year - a.year);
 

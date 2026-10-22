@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { getPortfolio, addArtwork } from "@/lib/data";
-import { getArchive } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 
 export async function GET(request: NextRequest) {
   const { searchParams } = new URL(request.url);
@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
   let artworks = (await isAuthenticated())
     ? (await getPortfolio()).filter((a) => !a.deleted_at)
-    : (await getArchive()).data.published.works;
+    : (await getPublicArchive()).works;
 
   if (minimal) {
     artworks = artworks.map((a: Record<string, unknown>) => ({

@@ -9,6 +9,13 @@ export interface Document<T> {
   updatedAt: string;
   data: T;
 }
+const readCounts: Record<string, number> = {};
+export const archiveReadCounts = () => ({ ...readCounts });
+function recordRead(name: string) {
+  readCounts[name] = (readCounts[name] || 0) + 1;
+  if (isLocalStore() && process.env.ARCHIVE_READ_METRICS === "1")
+    console.info("[archive-read]", name);
+}
 export class ConflictError extends Error {
   constructor() {
     super(
@@ -88,9 +95,11 @@ async function seed<T>(name: string, fallback: T): Promise<T> {
 export async function readDocument<T>(
   name: string,
   fallback: T,
+  initialize?: () => Promise<T>,
 ): Promise<Document<T> & { etag?: string }> {
   if (isLocalStore()) {
     try {
+      recordRead(name);
       return JSON.parse(
         await readFile(path.join(localDirectory(), `${name}.json`), "utf8"),
       );
@@ -99,7 +108,7 @@ export async function readDocument<T>(
       return {
         revision: "seed",
         updatedAt: "",
-        data: await seed(name, fallback),
+        data: await seed(name, initialize ? await initialize() : fallback),
       };
     }
   }
@@ -112,16 +121,17 @@ export async function readDocument<T>(
       updatedAt: "",
       data: await seed(name, fallback),
     };
-  const result = await retryArchiveRead(() =>
-    get(pathname(name), {
+  const result = await retryArchiveRead(() => {
+    recordRead(name);
+    return get(pathname(name), {
       access: "private",
       token: token(),
       useCache: false,
       // Compression changes the HTTP validator to a weak ETag, which cannot guard conditional writes.
       headers: { "Accept-Encoding": "identity" },
       abortSignal: AbortSignal.timeout(6000),
-    }),
-  );
+    });
+  });
   if (!result && process.env.VERCEL_ENV === "preview")
     return {
       revision: "seed",

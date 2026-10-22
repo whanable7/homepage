@@ -76,6 +76,7 @@ export default function ArchiveAdmin() {
     [year, setYear] = useState(new Date().getFullYear()),
     [medium, setMedium] = useState("");
   const dragging = useRef<string | null>(null),
+    featuredMutation = useRef(false),
     unsaved = useRef(false),
     queueRef = useRef(queue);
   useEffect(() => {
@@ -297,7 +298,76 @@ export default function ArchiveAdmin() {
     .sort(
       (a, b) => (a.featured_order ?? a.order) - (b.featured_order ?? b.order),
     );
+  const featuredChanged =
+    JSON.stringify(ordered.map((w) => [w.id, w.featured_order ?? w.order])) !==
+    JSON.stringify(
+      [...(doc?.data.published.works || [])]
+        .filter((w) => w.is_featured)
+        .sort(
+          (a, b) =>
+            (a.featured_order ?? a.order) - (b.featured_order ?? b.order),
+        )
+        .map((w) => [w.id, w.featured_order ?? w.order]),
+    );
+  async function toggleFeatured(w: ArchiveWork) {
+    if (busy || featuredMutation.current) return;
+    featuredMutation.current = true;
+    setBusy(true);
+    setMessage("");
+    try {
+      await patch(w, { is_featured: !w.is_featured });
+      setMessage(
+        w.is_featured
+          ? "대표 해제를 저장했습니다. ‘대표 이미지만 공개’를 누르면 첫 화면에 적용됩니다."
+          : "대표 선택을 저장했습니다. ‘대표 이미지만 공개’를 누르면 첫 화면에 적용됩니다.",
+      );
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "대표 선택을 저장하지 못했습니다.",
+      );
+    } finally {
+      featuredMutation.current = false;
+      setBusy(false);
+    }
+  }
+  async function publishSlideshow() {
+    if (!doc || busy || featuredMutation.current) return;
+    featuredMutation.current = true;
+    setBusy(true);
+    setMessage("");
+    try {
+      const response = await fetch("/api/archive", {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          action: "publish-featured",
+          revision: doc.revision,
+        }),
+      });
+      const body = await response.json();
+      if (!response.ok)
+        throw new Error(body.error || "대표 이미지를 공개하지 못했습니다.");
+      setDoc(body);
+      // Keep any unsaved classification edits in the editor; this action only changes home images.
+      setMessage(
+        "대표 이미지 선택과 순서를 공개했습니다. 임시저장한 흐름과 분류는 공개하지 않았습니다.",
+      );
+    } catch (error) {
+      setMessage(
+        error instanceof Error
+          ? error.message
+          : "대표 이미지를 공개하지 못했습니다.",
+      );
+    } finally {
+      featuredMutation.current = false;
+      setBusy(false);
+    }
+  }
   async function reorder(ids: string[]) {
+    if (busy || featuredMutation.current) return;
+    featuredMutation.current = true;
     setBusy(true);
     try {
       const response = await fetch("/api/portfolio/reorder", {
@@ -305,19 +375,22 @@ export default function ArchiveAdmin() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ ids }),
       });
-      if (!response.ok) throw new Error("순서를 저장하지 못했습니다.");
-      setWorks((current) =>
-        current.map((w) => ({
-          ...w,
-          featured_order: ids.includes(w.id)
-            ? ids.indexOf(w.id)
-            : w.featured_order,
-        })),
+      const body = await response.json();
+      if (!response.ok)
+        throw new Error(body.error || "순서를 저장하지 못했습니다.");
+      if (!Array.isArray(body.works))
+        throw new Error("저장 결과를 확인하지 못했습니다. 다시 불러와 주세요.");
+      const saved = new Map<string, ArchiveWork>(
+        body.works.map((w: ArchiveWork) => [w.id, w]),
       );
-      setMessage("순서를 저장했습니다. 공개 버튼을 누르면 적용됩니다.");
+      setWorks((current) => current.map((w) => saved.get(w.id) || w));
+      setMessage(
+        "순서를 저장했습니다. ‘대표 이미지만 공개’를 누르면 첫 화면에 적용됩니다.",
+      );
     } catch (error) {
       setMessage(String(error));
     } finally {
+      featuredMutation.current = false;
       setBusy(false);
     }
   }
@@ -334,7 +407,7 @@ export default function ArchiveAdmin() {
         </Link>
         <div>
           <Link href="/works" target="_blank">
-            사이트 보기 ↗
+            공개된 사이트 보기 ↗
           </Link>
           <Link
             href="/admin/details"
@@ -375,19 +448,29 @@ export default function ArchiveAdmin() {
       {tab !== "texts" && tab !== "cv" && tab !== "settings" && (
         <div className="admin-publish">
           <span>
-            {unsaved.current
-              ? "저장하지 않은 변경이 있습니다."
-              : JSON.stringify(layout) ===
-                  JSON.stringify(doc.data.published.layout)
-                ? "공개된 분류와 같은 상태입니다."
-                : "분류를 임시 저장했습니다. 공개 전 상태입니다."}
+            {tab === "slideshow"
+              ? featuredChanged
+                ? "대표 이미지 변경을 저장했습니다. 첫 화면 적용 전 상태입니다."
+                : "공개된 대표 이미지와 같은 상태입니다."
+              : unsaved.current
+                ? "저장하지 않은 변경이 있습니다."
+                : JSON.stringify(layout) ===
+                    JSON.stringify(doc.data.published.layout)
+                  ? "공개된 분류와 같은 상태입니다."
+                  : "분류를 임시 저장했습니다. 공개 전 상태입니다."}
           </span>
-          <button disabled={busy} onClick={() => act("save")}>
-            분류 임시 저장
-          </button>
+          {tab !== "slideshow" && (
+            <button disabled={busy} onClick={() => act("save")}>
+              분류 임시 저장
+            </button>
+          )}
           <button
             disabled={busy}
             onClick={async () => {
+              if (tab === "slideshow") {
+                window.open("/admin/preview?view=slideshow", "_blank");
+                return;
+              }
               if (!(await act("save"))) return;
               window.open(
                 `/admin/preview?view=${["ecosystem", "cosmos", "strata", "sequences", "years"].includes(tab) ? tab : "ecosystem"}`,
@@ -397,9 +480,18 @@ export default function ArchiveAdmin() {
           >
             미리보기 ↗
           </button>
-          <button disabled={busy} onClick={() => act("publish")}>
-            작품·분류 공개
-          </button>
+          {tab === "slideshow" ? (
+            <button
+              disabled={busy || !featuredChanged}
+              onClick={publishSlideshow}
+            >
+              대표 이미지만 공개
+            </button>
+          ) : (
+            <button disabled={busy} onClick={() => act("publish")}>
+              작품·분류 공개
+            </button>
+          )}
         </div>
       )}
       <p role="status" className="admin-message">
@@ -562,12 +654,13 @@ export default function ArchiveAdmin() {
               {ordered.map((w, i) => (
                 <div
                   key={w.id}
-                  draggable
+                  draggable={!busy}
                   onDragStart={() => {
                     dragging.current = w.id;
                   }}
                   onDragOver={(e) => e.preventDefault()}
                   onDrop={() => {
+                    if (busy || featuredMutation.current) return;
                     const ids = ordered.map((w) => w.id),
                       from = ids.indexOf(dragging.current || "");
                     if (from < 0) return;
@@ -592,11 +685,8 @@ export default function ArchiveAdmin() {
                     ↑
                   </button>
                   <button
-                    onClick={() =>
-                      patch(w, { is_featured: false }).catch((e) =>
-                        setMessage(e.message),
-                      )
-                    }
+                    disabled={busy}
+                    onClick={() => void toggleFeatured(w)}
                   >
                     대표 해제
                   </button>
@@ -811,11 +901,8 @@ export default function ArchiveAdmin() {
                     )}
                     {tab === "slideshow" && (
                       <button
-                        onClick={() =>
-                          patch(w, { is_featured: !w.is_featured }).catch((e) =>
-                            setMessage(e.message),
-                          )
-                        }
+                        disabled={busy}
+                        onClick={() => void toggleFeatured(w)}
                       >
                         {w.is_featured ? "대표 해제" : "대표 이미지로 선택"}
                       </button>

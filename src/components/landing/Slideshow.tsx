@@ -5,7 +5,11 @@ import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
 import { cloudinaryLoader } from "@/lib/cloudinary-loader";
 import type { Artwork } from "@/types/artwork";
-export default function Slideshow({ artworks }: { artworks: Artwork[] }) {
+export default function Slideshow({
+  artworks,
+}: {
+  artworks: Omit<Artwork, "dominant_color">[];
+}) {
   const count = artworks.length,
     multiple = count > 1,
     { locale } = useLocale();

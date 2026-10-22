@@ -1,11 +1,12 @@
 import { readDocument, mutateDocument, ConflictError } from "./archive-store";
+import { mutateContent, readPublicContent } from "./public-content";
 // Legacy CMS handlers accept heterogeneous records; validate at each API boundary.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RecordData = any;
 const read = async <T>(name: string, fallback: T) =>
   (await readDocument(name, fallback)).data;
 const replace = async <T>(name: string, data: T) => {
-  await mutateDocument(name, data, () => data);
+  await mutateContent(name, data, () => data);
 };
 export const mutateRecords = (
   name: string,
@@ -17,6 +18,31 @@ export const getPortfolio = async (): Promise<RecordData[]> =>
   );
 export const getPortfolioById = async (id: string) =>
   (await getPortfolio()).find((a) => a.id === id && !a.deleted_at);
+export async function reorderFeaturedArtworks(ids: unknown) {
+  if (
+    !Array.isArray(ids) ||
+    ids.some((id) => typeof id !== "string") ||
+    new Set(ids).size !== ids.length
+  )
+    throw new Error("순서를 확인해 주세요.");
+  const order = new Map(ids.map((id, index) => [id, index]));
+  const saved = await mutateRecords("portfolio", (records) => {
+    if (
+      ids.some(
+        (id) =>
+          !records.some((w) => w.id === id && w.is_featured && !w.deleted_at),
+      )
+    )
+      throw new Error("대표 이미지 목록이 바뀌었습니다. 다시 불러와 주세요.");
+    const updatedAt = new Date().toISOString();
+    return records.map((w) =>
+      order.has(w.id)
+        ? { ...w, featured_order: order.get(w.id), updated_at: updatedAt }
+        : w,
+    );
+  });
+  return saved.data.filter((w) => order.has(w.id));
+}
 export const getFeaturedArtworks = async () =>
   (await getPortfolio())
     .filter((a) => a.is_featured && a.status !== "draft" && !a.deleted_at)
@@ -25,7 +51,7 @@ export const getFeaturedArtworks = async () =>
         (a.featured_order ?? a.order ?? 0) - (b.featured_order ?? b.order ?? 0),
     );
 export const getCategories = async () =>
-  (await read("categories", [] as RecordData[])).filter((a) => !a.deleted_at);
+  await readPublicContent<RecordData[]>("categories");
 export const getCategoryById = async (id: string) =>
   (await getCategories()).find((a) => a.id === id);
 export const getTags = async () =>
@@ -34,9 +60,7 @@ export const getTagById = async (id: string) =>
   (await getTags()).find((a) => a.id === id);
 export const getAbout = () => read("about", {} as RecordData);
 export async function getPublicAbout() {
-  const about = await getAbout();
-  if (!about.phone_visible) delete about.contact_phone;
-  return about;
+  return readPublicContent<RecordData>("about");
 }
 export const getExhibitions = async () =>
   (await read("exhibitions", [] as RecordData[])).filter((a) => !a.deleted_at);

@@ -1,10 +1,17 @@
+import { readPublicContent, mutateContent } from "./public-content";
 import { NextRequest, NextResponse } from "next/server";
-import { readDocument, mutateDocument } from "./archive-store";
+import { readDocument } from "./archive-store";
 import { isAuthenticated } from "./auth";
+import { isPublicName } from "./public-content-shape";
 type Row = Record<string, unknown> & { id: string; deleted_at?: string };
 export function recordApi(name: string) {
-  const read = async () =>
-    (await readDocument(name, [] as Row[])).data.filter((r) => !r.deleted_at);
+  const read = async () => {
+    if (isPublicName(name) && !(await isAuthenticated()))
+      return readPublicContent<Row[]>(name);
+    return (await readDocument(name, [] as Row[])).data.filter(
+      (r) => !r.deleted_at,
+    );
+  };
   return {
     list: async () => NextResponse.json(await read()),
     get: async (
@@ -30,7 +37,7 @@ export function recordApi(name: string) {
           created_at: new Date().toISOString(),
           updated_at: new Date().toISOString(),
         };
-        await mutateDocument(name, [] as Row[], (rows) => [...rows, item]);
+        await mutateContent(name, [] as Row[], (rows) => [...rows, item]);
         return NextResponse.json(item, { status: 201 });
       } catch (error) {
         return NextResponse.json(
@@ -48,7 +55,7 @@ export function recordApi(name: string) {
       const { id } = await params,
         body = await request.json();
       let result: Row | null = null;
-      await mutateDocument(name, [] as Row[], (rows) =>
+      await mutateContent(name, [] as Row[], (rows) =>
         rows.map((row) => {
           if (row.id !== id || row.deleted_at) return row;
           const updated: Row = {
@@ -74,7 +81,7 @@ export function recordApi(name: string) {
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       const { id } = await params;
       let found = false;
-      await mutateDocument(name, [] as Row[], (rows) =>
+      await mutateContent(name, [] as Row[], (rows) =>
         rows.map((row) => {
           if (row.id !== id || row.deleted_at) return row;
           found = true;
