@@ -1,11 +1,12 @@
+import type { News } from "@/types/artwork";
 import Header from "@/components/common/Header";
 import NewsContent from "@/components/news/NewsContent";
-import { getNews } from "@/lib/data";
+import { readPublicContent } from "@/lib/public-content";
 
 export const dynamic = "force-dynamic";
 
 export default async function NewsPage() {
-  const news = await getNews();
+  const news = await readPublicContent<News[]>("news");
 
   return (
     <main className="min-h-screen bg-[var(--background)]">

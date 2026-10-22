@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getArchive, publicLayout } from "@/lib/archive";
+import { publicLayout } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 export async function GET(request: NextRequest) {
-  const { data } = await getArchive(),
-    snapshot = data.published;
+  const snapshot = await getPublicArchive();
   if (request.nextUrl.searchParams.get("version"))
     return NextResponse.json(
       { revision: snapshot.revision },

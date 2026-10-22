@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
 import { getPortfolioById, updateArtwork, deleteArtwork } from "@/lib/data";
 import { ConflictError } from "@/lib/archive-store";
-import { getArchive } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 
 export async function GET(
   _request: NextRequest,
@@ -11,7 +11,7 @@ export async function GET(
   const { id } = await params;
   const artwork = (await isAuthenticated())
     ? await getPortfolioById(id)
-    : (await getArchive()).data.published.works.find((w) => w.id === id);
+    : (await getPublicArchive()).works.find((w) => w.id === id);
   if (!artwork)
     return NextResponse.json({ error: "Not found" }, { status: 404 });
   return NextResponse.json(artwork);

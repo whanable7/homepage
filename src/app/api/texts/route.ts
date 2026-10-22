@@ -1,18 +1,18 @@
+import { getPublishedTexts, mutateContent } from "@/lib/public-content";
 import { NextRequest, NextResponse } from "next/server";
-import {
-  readDocument,
-  mutateDocument,
-  ConflictError,
-} from "@/lib/archive-store";
+import { readDocument, ConflictError } from "@/lib/archive-store";
 import { isAuthenticated } from "@/lib/auth";
 import type { ArchiveText } from "@/types/archive";
 export async function GET(request: NextRequest) {
-  const doc = await readDocument("texts", [] as ArchiveText[]);
-  if (await isAuthenticated()) return NextResponse.json(doc);
+  if (await isAuthenticated())
+    return NextResponse.json(await readDocument("texts", [] as ArchiveText[]), {
+      headers: { "Cache-Control": "no-store" },
+    });
+  const texts = await getPublishedTexts();
   const locale =
     request.nextUrl.searchParams.get("locale") === "en" ? "en" : "ko";
   return NextResponse.json(
-    doc.data
+    texts
       .filter((t) => !t.deleted_at && t[locale].published)
       .map((t) => ({
         id: t.id,
@@ -72,7 +72,7 @@ export async function PUT(request: NextRequest) {
           throw new Error("본문 서식을 확인해 주세요.");
     }
     return NextResponse.json(
-      await mutateDocument(
+      await mutateContent(
         "texts",
         [] as ArchiveText[],
         (items) => {

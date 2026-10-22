@@ -1,11 +1,12 @@
 import { readDocument, mutateDocument, ConflictError } from "./archive-store";
+import { mutateContent, readPublicContent } from "./public-content";
 // Legacy CMS handlers accept heterogeneous records; validate at each API boundary.
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type RecordData = any;
 const read = async <T>(name: string, fallback: T) =>
   (await readDocument(name, fallback)).data;
 const replace = async <T>(name: string, data: T) => {
-  await mutateDocument(name, data, () => data);
+  await mutateContent(name, data, () => data);
 };
 export const mutateRecords = (
   name: string,
@@ -50,7 +51,7 @@ export const getFeaturedArtworks = async () =>
         (a.featured_order ?? a.order ?? 0) - (b.featured_order ?? b.order ?? 0),
     );
 export const getCategories = async () =>
-  (await read("categories", [] as RecordData[])).filter((a) => !a.deleted_at);
+  await readPublicContent<RecordData[]>("categories");
 export const getCategoryById = async (id: string) =>
   (await getCategories()).find((a) => a.id === id);
 export const getTags = async () =>
@@ -59,9 +60,7 @@ export const getTagById = async (id: string) =>
   (await getTags()).find((a) => a.id === id);
 export const getAbout = () => read("about", {} as RecordData);
 export async function getPublicAbout() {
-  const about = await getAbout();
-  if (!about.phone_visible) delete about.contact_phone;
-  return about;
+  return readPublicContent<RecordData>("about");
 }
 export const getExhibitions = async () =>
   (await read("exhibitions", [] as RecordData[])).filter((a) => !a.deleted_at);

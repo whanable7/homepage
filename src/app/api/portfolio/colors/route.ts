@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-import { getArchive } from "@/lib/archive";
+import { getPublicArchive } from "@/lib/public-content";
 
 export async function GET() {
-  const artworks = (await getArchive()).data.published.works;
+  const artworks = (await getPublicArchive()).works;
   const colored = artworks
     .filter((a) => a.dominant_color)
     .map((a) => ({

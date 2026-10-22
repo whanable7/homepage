@@ -6,6 +6,7 @@ import {
   ConflictError,
 } from "./archive-store";
 import { getPortfolio } from "./data";
+import { mutateContent } from "./public-content";
 import { strataLayout } from "./layouts";
 import { currentYearOrder } from "./year-order";
 import { removesAllRelations } from "./archive-publication";
@@ -68,8 +69,8 @@ export async function archiveSeed(
   return structuredClone(value);
 }
 export async function getArchive() {
-  const initial = await archiveSeed(),
-    doc = await readDocument("archive", initial);
+  const doc = await readDocument("archive", {} as ArchiveState, archiveSeed);
+  const initial = doc.data;
   if (isLocalStore() && doc.revision === "seed") {
     try {
       return await mutateDocument(
@@ -89,7 +90,7 @@ export async function saveArchiveDraft(
   layout: ArchiveLayout,
   revision: string,
 ) {
-  return mutateDocument(
+  return mutateContent(
     "archive",
     await archiveSeed(),
     (state) => ({ ...state, draft: layout }),
@@ -99,9 +100,9 @@ export async function saveArchiveDraft(
 /** Apply only home selections; private classifications and unpublished edits stay private. */
 export async function publishFeatured(revision: string) {
   const portfolio = (await getPortfolio()) as ArchiveWork[];
-  return mutateDocument(
+  return mutateContent(
     "archive",
-    await archiveSeed(),
+    await archiveSeed(portfolio),
     (state) => {
       const publishedIds = new Set(state.published.works.map((w) => w.id));
       if (
@@ -149,9 +150,9 @@ export async function publishArchive(
     (w) => !w.deleted_at,
   );
   const works = allWorks.filter((w) => w.status !== "draft");
-  return mutateDocument(
+  return mutateContent(
     "archive",
-    await archiveSeed(),
+    await archiveSeed(allWorks),
     (state) => {
       if (
         removesAllRelations(state.published.layout, state.draft) &&

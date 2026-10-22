@@ -1,22 +1,17 @@
 import { NextResponse } from "next/server";
-import { createHash } from "node:crypto";
-import { readDocument } from "@/lib/archive-store";
+import { publicVersions } from "@/lib/public-content";
 export async function GET() {
-  const names = [
-      "archive",
-      "about",
-      "texts",
-      "news",
-      "exhibitions",
-      "appearance",
-    ],
-    documents = await Promise.all(names.map((name) => readDocument(name, {})));
-  return NextResponse.json(
-    {
-      version: createHash("sha256")
-        .update(documents.map((d) => d.revision).join("|"))
-        .digest("hex"),
-    },
-    { headers: { "Cache-Control": "no-store" } },
-  );
+  try {
+    return NextResponse.json(await publicVersions(), {
+      headers: { "Cache-Control": "no-store" },
+    });
+  } catch {
+    return NextResponse.json(
+      { error: "Updates temporarily unavailable" },
+      {
+        status: 503,
+        headers: { "Cache-Control": "no-store", "Retry-After": "30" },
+      },
+    );
+  }
 }

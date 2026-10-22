@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { get } from "@vercel/blob";
 import { readDocument } from "@/lib/archive-store";
+import { getPublishedTexts, getPublicFiles } from "@/lib/public-content";
 import { isAuthenticated } from "@/lib/auth";
 import type { ArchiveText, ArchiveFile } from "@/types/archive";
 export async function GET(
@@ -9,7 +10,9 @@ export async function GET(
 ) {
   const { id } = await params,
     admin = await isAuthenticated();
-  const texts = (await readDocument("texts", [] as ArchiveText[])).data;
+  const texts = admin
+    ? (await readDocument("texts", [] as ArchiveText[])).data
+    : await getPublishedTexts();
   if (
     !admin &&
     !texts.some(
@@ -21,14 +24,15 @@ export async function GET(
     )
   )
     return new NextResponse(null, { status: 404 });
-  const record = (await readDocument("files", [] as ArchiveFile[])).data.find(
-    (f) => f.id === id,
-  );
+  const files = admin
+    ? (await readDocument("files", [] as ArchiveFile[])).data
+    : await getPublicFiles();
+  const record = files.find((f) => f.id === id);
   if (!record) return new NextResponse(null, { status: 404 });
   const result = await get(record.pathname, {
     access: "private",
     token: process.env.ARCHIVE_BLOB_READ_WRITE_TOKEN,
-    useCache: false,
+    useCache: true,
   });
   if (!result?.stream) return new NextResponse(null, { status: 404 });
   return new NextResponse(result.stream, {

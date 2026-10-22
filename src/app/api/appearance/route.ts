@@ -1,6 +1,7 @@
+import { mutateContent } from "@/lib/public-content";
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
-import { ConflictError, mutateDocument } from "@/lib/archive-store";
+import { ConflictError } from "@/lib/archive-store";
 import { appearanceSeed, validateAppearance } from "@/lib/appearance";
 import { getAppearance } from "@/lib/appearance-store";
 export async function GET() {
@@ -28,7 +29,7 @@ export async function PUT(request: NextRequest) {
     )
       throw new Error("저장 작업과 버전을 확인해 주세요.");
     const value = action === "restore" ? null : validateAppearance(settings);
-    const doc = await mutateDocument(
+    const doc = await mutateContent(
       "appearance",
       appearanceSeed(),
       (state) => {

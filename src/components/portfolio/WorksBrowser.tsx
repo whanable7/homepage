@@ -1,4 +1,8 @@
 "use client";
+import {
+  subscribePublicUpdates,
+  refreshPublicUpdates,
+} from "@/lib/public-update-client";
 import { useEffect, useMemo, useRef, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import dynamic from "next/dynamic";
@@ -81,15 +85,9 @@ export default function WorksBrowser({
   }, []);
   useEffect(() => {
     if (preview) return;
-    const timer = setInterval(async () => {
-      if (document.hidden) return;
-      try {
-        const res = await fetch("/api/works?version=1", { cache: "no-store" });
-        if (res.ok && (await res.json()).revision !== snapshot.revision)
-          setUpdated(true);
-      } catch {}
-    }, 30000);
-    return () => clearInterval(timer);
+    return subscribePublicUpdates(({ revision }) => {
+      if (revision !== snapshot.revision) setUpdated(true);
+    });
   }, [snapshot.revision, preview]);
   const works = useMemo(() => {
     const included = snapshot.works.filter(
@@ -139,7 +137,9 @@ export default function WorksBrowser({
     try {
       const res = await fetch("/api/works", { cache: "no-store" });
       if (!res.ok) throw new Error();
-      setSnapshot(await res.json());
+      const next = await res.json();
+      await refreshPublicUpdates();
+      setSnapshot(next);
       setUpdated(false);
     } catch {
       setError(

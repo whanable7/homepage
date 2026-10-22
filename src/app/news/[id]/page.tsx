@@ -1,8 +1,8 @@
-import Header from '@/components/common/Header';
-import NewsDetail from '@/components/news/NewsDetail';
-import { getNewsById } from '@/lib/data';
-import { News } from '@/types/artwork';
-import { notFound } from 'next/navigation';
+import Header from "@/components/common/Header";
+import NewsDetail from "@/components/news/NewsDetail";
+import { readPublicContent } from "@/lib/public-content";
+import { News } from "@/types/artwork";
+import { notFound } from "next/navigation";
 
 export const revalidate = 3600;
 
@@ -12,7 +12,9 @@ interface PageProps {
 
 export default async function NewsDetailPage({ params }: PageProps) {
   const { id } = await params;
-  const news = await getNewsById(id) as News | null;
+  const news = (await readPublicContent<News[]>("news")).find(
+    (item) => item.id === id,
+  ) as News | null;
 
   if (!news) {
     notFound();

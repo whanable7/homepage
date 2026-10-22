@@ -1,18 +1,19 @@
+import { readPublicContent } from "@/lib/public-content";
 import Header from "@/components/common/Header";
 import AboutContent from "@/components/about/CVContent";
-import { getPublicAbout as getAbout, getExhibitions } from "@/lib/data";
+import { getPublicAbout as getAbout } from "@/lib/data";
 import { AboutInfo, Exhibition } from "@/types/artwork";
 
 export const dynamic = "force-dynamic";
 
 export default async function AboutPage() {
   const aboutInfo = (await getAbout()) as AboutInfo | null;
-  const exhibitions = ((await getExhibitions()) as Exhibition[]).sort(
-    (a, b) => {
-      if (b.year !== a.year) return b.year - a.year;
-      return (a.display_order ?? 0) - (b.display_order ?? 0);
-    },
-  );
+  const exhibitions = (
+    (await readPublicContent<Exhibition[]>("exhibitions")) as Exhibition[]
+  ).sort((a, b) => {
+    if (b.year !== a.year) return b.year - a.year;
+    return (a.display_order ?? 0) - (b.display_order ?? 0);
+  });
 
   return (
     <main className="min-h-screen bg-[var(--background)]">
