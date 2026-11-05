@@ -225,6 +225,7 @@ const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
                 fill
                 sizes="100vw"
                 className="object-contain"
+                style={{ WebkitTouchCallout: "none", userSelect: "none" }}
                 priority
                 onLoad={end}
                 {...(src.includes("res.cloudinary.com")

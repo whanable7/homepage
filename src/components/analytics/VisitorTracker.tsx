@@ -56,8 +56,8 @@ export default function VisitorTracker({
       if (!w.jpTracker) {
         w.dataLayer = w.dataLayer || [];
         // gtag expects an Arguments object, not an array.
-        // eslint-disable-next-line prefer-rest-params -- Google tag's command queue consumes Arguments objects.
         w.gtag = function () {
+          // eslint-disable-next-line prefer-rest-params -- Google tag's queue consumes Arguments objects.
           w.dataLayer!.push(arguments);
         };
         w.jpTracker = {
