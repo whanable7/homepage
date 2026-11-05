@@ -9,6 +9,7 @@ import { useLocale } from "@/i18n";
 import { getLocalizedValue } from "@/lib/i18n-utils";
 import SpaceSettings from "./SpaceSettings";
 import SpacePreview from "./SpacePreview";
+import { useSpaceHover } from "./useSpaceHover";
 import {
   cosmosDefaults,
   cosmosNodes,
@@ -33,17 +34,17 @@ export default function WorksCosmos({
     physicsRef = useRef(physics),
     needsSettle = useRef(true),
     [corner, setCorner] = useState<"left" | "right">("right"),
-    [hover, setHover] = useState<ArchiveWork | null>(null),
     [failed, setFailed] = useState(false),
     controlsRef = useRef<OrbitControls | null>(null);
-  const callbacks = useRef({ onOpen, setHover });
+  const { hover, show: setHover, leave: leaveHover } = useSpaceHover();
+  const callbacks = useRef({ onOpen, setHover, leaveHover });
   const hoveredId = useRef("");
   useEffect(() => {
     hoveredId.current = hover?.id || "";
   }, [hover]);
   useEffect(() => {
-    callbacks.current = { onOpen, setHover };
-  }, [onOpen]);
+    callbacks.current = { onOpen, setHover, leaveHover };
+  }, [onOpen, setHover, leaveHover]);
   useEffect(() => {
     physicsRef.current = physics;
     needsSettle.current = true;
@@ -264,8 +265,8 @@ export default function WorksCosmos({
       const work = pick(e);
       if ((work?.id || "") === lastId) return;
       lastId = work?.id || "";
-      hoveredId.current = lastId;
-      callbacks.current.setHover(work);
+      if (work) callbacks.current.setHover(work);
+      else callbacks.current.leaveHover();
       const rect = el.getBoundingClientRect();
       setCorner(e.clientX > rect.left + rect.width / 2 ? "left" : "right");
     };
@@ -275,8 +276,7 @@ export default function WorksCosmos({
       leave = () => {
         pointerInside = false;
         lastId = "";
-        hoveredId.current = "";
-        callbacks.current.setHover(null);
+        callbacks.current.leaveHover();
       };
     const press = (e: PointerEvent) => {
       down = { x: e.clientX, y: e.clientY };
@@ -436,48 +436,48 @@ export default function WorksCosmos({
         controls={[
           {
             key: "repulsion",
-            ko: "반발력",
-            en: "repulsion",
+            ko: "팽창",
+            en: "expansion",
             min: 5,
             max: 150,
             step: 1,
           },
           {
             key: "center",
-            ko: "중심으로 당기는 힘",
-            en: "center attraction",
+            ko: "회귀",
+            en: "return",
             min: 0.005,
             max: 0.06,
             step: 0.001,
           },
           {
             key: "distance",
-            ko: "연결 길이",
-            en: "link distance",
+            ko: "성간 거리",
+            en: "stellar distance",
             min: 15,
             max: 100,
             step: 1,
           },
           {
             key: "tension",
-            ko: "연결 강도",
-            en: "link tension",
+            ko: "결속",
+            en: "cohesion",
             min: 0,
             max: 0.06,
             step: 0.002,
           },
           {
             key: "damping",
-            ko: "움직임 유지",
-            en: "motion persistence",
+            ko: "관성",
+            en: "inertia",
             min: 0.5,
             max: 0.94,
             step: 0.01,
           },
           {
             key: "rotation",
-            ko: "회전 속도",
-            en: "rotation speed",
+            ko: "은하 회전",
+            en: "galactic rotation",
             min: 0,
             max: 2,
             step: 0.1,
@@ -501,7 +501,7 @@ export default function WorksCosmos({
             <button
               key={w.id}
               onFocus={() => setHover(w)}
-              onBlur={() => setHover(null)}
+              onBlur={leaveHover}
               onClick={() => onOpen(w)}
             >
               {getLocalizedValue(locale, w.title, w.title_en)}

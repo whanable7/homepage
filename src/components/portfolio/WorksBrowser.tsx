@@ -15,6 +15,7 @@ import type { ArchiveWork, PublishedArchive } from "@/types/archive";
 import { orderedYearWorks } from "@/lib/year-order";
 import ArtworkModal from "@/components/artwork/ArtworkModal";
 import SequenceCanvas from "./SequenceCanvas";
+import ViewButton from "./ViewButton";
 const Ecosystem = dynamic(() => import("./WorksEcosystem"), { ssr: false });
 const Cosmos = dynamic(() => import("./WorksCosmos"), { ssr: false });
 const views = ["cosmos", "ecosystem", "strata", "sequences", "years"] as const;
@@ -159,18 +160,16 @@ export default function WorksBrowser({
         aria-label={locale === "ko" ? "작품 보기" : "Artwork views"}
       >
         {views.map((v) => (
-          <button
+          <ViewButton
             key={v}
-            type="button"
-            aria-current={view === v ? "page" : undefined}
+            label={labels[v]}
+            selected={view === v}
             onClick={() =>
               preview
                 ? setPreviewView(v)
                 : router.replace(`/works?view=${v}`, { scroll: false })
             }
-          >
-            {labels[v]}
-          </button>
+          />
         ))}
       </nav>
       {updated && (

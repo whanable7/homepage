@@ -39,11 +39,17 @@ export default function SpaceSettings({
             <label key={c.key}>
               <span>
                 <span>{locale === "ko" ? c.ko : c.en}</span>
-                <output aria-hidden="true">{values[c.key]}</output>
+                <output aria-hidden="true">
+                  {Math.round(
+                    ((values[c.key] - c.min) / (c.max - c.min)) * 100,
+                  )}
+                  %
+                </output>
               </span>
               <input
                 type="range"
                 aria-label={locale === "ko" ? c.ko : c.en}
+                aria-valuetext={`${Math.round(((values[c.key] - c.min) / (c.max - c.min)) * 100)}%`}
                 min={c.min}
                 max={c.max}
                 step={c.step}
@@ -52,6 +58,11 @@ export default function SpaceSettings({
               />
             </label>
           ))}
+          <p className="space-settings-note">
+            {locale === "ko"
+              ? "각 설정 범위 안의 상대 강도입니다."
+              : "Relative intensity within each setting’s range."}
+          </p>
           <div className="space-settings-actions">
             <button type="button" onClick={onReset}>
               {locale === "ko" ? "기본값으로" : "reset"}

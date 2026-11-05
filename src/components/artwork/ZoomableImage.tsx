@@ -8,6 +8,7 @@ import {
   forwardRef,
   useImperativeHandle,
 } from "react";
+import { createPortal } from "react-dom";
 import {
   TransformWrapper,
   TransformComponent,
@@ -15,311 +16,250 @@ import {
 } from "react-zoom-pan-pinch";
 import Image from "next/image";
 import { cloudinaryLoader } from "@/lib/cloudinary-loader";
+import {
+  containedImageRect,
+  magnifierGeometry,
+} from "@/lib/magnifier-geometry";
 
 export interface ZoomableImageRef {
   zoomIn: () => void;
   zoomOut: () => void;
   resetTransform: () => void;
 }
-
 interface ZoomableImageProps {
   src: string;
   alt: string;
   onScaleChange?: (scale: number) => void;
   onLongPress?: () => void;
 }
-
-const MAGNIFIER_SIZE = 400;
-const MAGNIFIER_ZOOM = 2.5;
-const MAGNIFIER_DELAY = 500;
-const LONG_PRESS_DELAY = 3000;
-
 const ZoomableImage = forwardRef<ZoomableImageRef, ZoomableImageProps>(
   ({ src, alt, onScaleChange, onLongPress }, ref) => {
-    const [showMagnifier, setShowMagnifier] = useState(false);
-    const [magnifierPos, setMagnifierPos] = useState({ x: 0, y: 0 });
-    const [imageDimensions, setImageDimensions] = useState({
-      width: 0,
-      height: 0,
-      naturalWidth: 0,
-      naturalHeight: 0,
-      containerWidth: 0,
-      containerHeight: 0,
-    });
+    const [lens, setLens] =
+      useState<ReturnType<typeof magnifierGeometry>>(null);
     const [currentScale, setCurrentScale] = useState(1);
     const isZoomed = currentScale > 1.05;
-    const imageContainerRef = useRef<HTMLDivElement>(null);
-    const imageRef = useRef<HTMLImageElement | null>(null);
-    const transformRef = useRef<ReactZoomPanPinchRef>(null);
-    const magnifierTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
-    const longPressTimerRef = useRef<ReturnType<typeof setTimeout> | null>(
-      null,
-    );
-    const touchPosRef = useRef<{ clientX: number; clientY: number } | null>(
-      null,
-    );
-
-    // 외부에서 줌 컨트롤 사용 가능하도록 노출
-    useImperativeHandle(ref, () => ({
-      zoomIn: () => transformRef.current?.zoomIn(),
-      zoomOut: () => transformRef.current?.zoomOut(),
-      resetTransform: () => transformRef.current?.resetTransform(),
-    }));
-
-    const updateImageDimensions = useCallback(() => {
-      if (imageRef.current && imageContainerRef.current) {
-        const container = imageContainerRef.current;
-        const containerRect = container.getBoundingClientRect();
-        const img = imageRef.current;
-
-        const naturalWidth = img.naturalWidth;
-        const naturalHeight = img.naturalHeight;
-
-        const containerAspect = containerRect.width / containerRect.height;
-        const imageAspect = naturalWidth / naturalHeight;
-
-        let displayWidth, displayHeight;
-        if (imageAspect > containerAspect) {
-          displayWidth = containerRect.width;
-          displayHeight = containerRect.width / imageAspect;
-        } else {
-          displayHeight = containerRect.height;
-          displayWidth = containerRect.height * imageAspect;
-        }
-
-        setImageDimensions({
-          width: displayWidth,
-          height: displayHeight,
-          naturalWidth,
-          naturalHeight,
-          containerWidth: containerRect.width,
-          containerHeight: containerRect.height,
-        });
-      }
+    const container = useRef<HTMLDivElement>(null);
+    const image = useRef<HTMLImageElement>(null);
+    const transform = useRef<ReactZoomPanPinchRef>(null);
+    const timers = useRef<ReturnType<typeof setTimeout>[]>([]);
+    const press = useRef<{ x: number; y: number; touch: boolean } | null>(null);
+    const clearTimers = useCallback(() => {
+      timers.current.forEach(clearTimeout);
+      timers.current = [];
     }, []);
-
-    const handleImageLoad = useCallback(() => {
-      const imgElement = imageContainerRef.current?.querySelector("img");
-      if (imgElement) {
-        imageRef.current = imgElement;
-        updateImageDimensions();
-      }
-    }, [updateImageDimensions]);
-
+    const end = useCallback(() => {
+      clearTimers();
+      press.current = null;
+      setLens(null);
+    }, [clearTimers]);
+    useImperativeHandle(
+      ref,
+      () => ({
+        zoomIn: () => {
+          end();
+          transform.current?.zoomIn();
+        },
+        zoomOut: () => {
+          end();
+          transform.current?.zoomOut();
+        },
+        resetTransform: () => {
+          end();
+          transform.current?.resetTransform();
+        },
+      }),
+      [end],
+    );
     useEffect(() => {
-      window.addEventListener("resize", updateImageDimensions);
-      return () => window.removeEventListener("resize", updateImageDimensions);
-    }, [updateImageDimensions]);
-
-    const updateMagnifierPosition = useCallback(
-      (clientX: number, clientY: number) => {
-        if (!imageContainerRef.current) return;
-        const container = imageContainerRef.current;
-        const rect = container.getBoundingClientRect();
-        const x = clientX - rect.left;
-        const y = clientY - rect.top;
-        setMagnifierPos({ x, y });
-      },
-      [],
-    );
-
-    const handleMouseDown = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        if (isZoomed) return;
-        updateMagnifierPosition(e.clientX, e.clientY);
-        setShowMagnifier(true);
-      },
-      [updateMagnifierPosition, isZoomed],
-    );
-
-    const handleMouseUp = useCallback(() => {
-      setShowMagnifier(false);
-    }, []);
-
-    const handleMouseMove = useCallback(
-      (e: React.MouseEvent<HTMLDivElement>) => {
-        if (!showMagnifier) return;
-        updateMagnifierPosition(e.clientX, e.clientY);
-      },
-      [showMagnifier, updateMagnifierPosition],
-    );
-
-    const handleMouseLeave = useCallback(() => {
-      setShowMagnifier(false);
-    }, []);
-
-    const clearTouchTimers = useCallback(() => {
-      if (magnifierTimerRef.current) {
-        clearTimeout(magnifierTimerRef.current);
-        magnifierTimerRef.current = null;
-      }
-      if (longPressTimerRef.current) {
-        clearTimeout(longPressTimerRef.current);
-        longPressTimerRef.current = null;
-      }
-    }, []);
-
-    const handleTouchStart = useCallback(
-      (e: React.TouchEvent<HTMLDivElement>) => {
-        if (e.touches.length !== 1 || isZoomed) return;
-        const touch = e.touches[0];
-        touchPosRef.current = {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        };
-
-        magnifierTimerRef.current = setTimeout(() => {
-          if (touchPosRef.current) {
-            updateMagnifierPosition(
-              touchPosRef.current.clientX,
-              touchPosRef.current.clientY,
-            );
-            setShowMagnifier(true);
-          }
-        }, MAGNIFIER_DELAY);
-
-        longPressTimerRef.current = setTimeout(() => {
-          setShowMagnifier(false);
-          clearTouchTimers();
-          onLongPress?.();
-        }, LONG_PRESS_DELAY);
-      },
-      [isZoomed, updateMagnifierPosition, clearTouchTimers, onLongPress],
-    );
-
-    const handleTouchMove = useCallback(
-      (e: React.TouchEvent<HTMLDivElement>) => {
-        if (e.touches.length !== 1) return;
-        const touch = e.touches[0];
-        touchPosRef.current = {
-          clientX: touch.clientX,
-          clientY: touch.clientY,
-        };
-
-        if (showMagnifier && !isZoomed) {
-          updateMagnifierPosition(touch.clientX, touch.clientY);
-        } else {
-          clearTouchTimers();
-        }
-      },
-      [showMagnifier, isZoomed, updateMagnifierPosition, clearTouchTimers],
-    );
-
-    const handleTouchEnd = useCallback(() => {
-      clearTouchTimers();
-      touchPosRef.current = null;
-      setShowMagnifier(false);
-    }, [clearTouchTimers]);
-
-    const getMagnifierStyle = useCallback(() => {
-      if (!imageDimensions.width) return {};
-      const containerRect = {
-        width: imageDimensions.containerWidth,
-        height: imageDimensions.containerHeight,
+      const resize = () => {
+        end();
       };
-
-      const imageOffsetX = (containerRect.width - imageDimensions.width) / 2;
-      const imageOffsetY = (containerRect.height - imageDimensions.height) / 2;
-
-      const relativeX = magnifierPos.x - imageOffsetX;
-      const relativeY = magnifierPos.y - imageOffsetY;
-
-      const percentX = (relativeX / imageDimensions.width) * 100;
-      const percentY = (relativeY / imageDimensions.height) * 100;
-
-      const bgWidth = imageDimensions.width * MAGNIFIER_ZOOM;
-      const bgHeight = imageDimensions.height * MAGNIFIER_ZOOM;
-
-      const bgPosX = (percentX / 100) * bgWidth - MAGNIFIER_SIZE / 2;
-      const bgPosY = (percentY / 100) * bgHeight - MAGNIFIER_SIZE / 2;
-
-      return {
-        left: magnifierPos.x - MAGNIFIER_SIZE / 2,
-        top: magnifierPos.y - MAGNIFIER_SIZE / 2,
-        width: MAGNIFIER_SIZE,
-        height: MAGNIFIER_SIZE,
-        backgroundImage: `url(${src})`,
-        backgroundSize: `${bgWidth}px ${bgHeight}px`,
-        backgroundPosition: `-${bgPosX}px -${bgPosY}px`,
-        backgroundRepeat: "no-repeat",
+      const observer = new ResizeObserver(resize);
+      if (container.current) observer.observe(container.current);
+      window.addEventListener("pointerup", end);
+      window.addEventListener("blur", end);
+      window.addEventListener("resize", resize);
+      window.addEventListener("scroll", end, true);
+      return () => {
+        observer.disconnect();
+        clearTimers();
+        window.removeEventListener("pointerup", end);
+        window.removeEventListener("blur", end);
+        window.removeEventListener("resize", resize);
+        window.removeEventListener("scroll", end, true);
       };
-    }, [magnifierPos, imageDimensions, src]);
-
+    }, [end, clearTimers]);
+    useEffect(() => {
+      clearTimers();
+      queueMicrotask(() => {
+        end();
+        setCurrentScale(1);
+      });
+    }, [src, end, clearTimers]);
+    function imageRect() {
+      const img = image.current;
+      return img
+        ? containedImageRect(
+            img.getBoundingClientRect(),
+            img.naturalWidth,
+            img.naturalHeight,
+          )
+        : null;
+    }
+    function validPoint(x: number, y: number) {
+      const r = imageRect();
+      return (
+        r &&
+        x >= r.left &&
+        x <= r.left + r.width &&
+        y >= r.top &&
+        y <= r.top + r.height
+      );
+    }
+    function showAtPoint(x: number, y: number) {
+      const r = imageRect(),
+        area = container.current?.getBoundingClientRect();
+      if (!r || !area) {
+        setLens(null);
+        return;
+      }
+      // Measure after transforms in the event, never during React's render.
+      const visible = {
+        left: Math.max(0, area.left),
+        top: Math.max(0, area.top),
+        width: Math.min(window.innerWidth, area.right) - Math.max(0, area.left),
+        height:
+          Math.min(window.innerHeight, area.bottom) - Math.max(0, area.top),
+      };
+      setLens(magnifierGeometry(r, { x, y }, visible));
+    }
     return (
-      <div
-        className="w-full h-full overflow-hidden"
-        style={{ clipPath: "inset(0)", contain: "paint" }}
-      >
+      <div ref={container} className="w-full h-full overflow-hidden">
         <TransformWrapper
-          ref={transformRef}
+          key={src}
+          ref={transform}
           initialScale={1}
           minScale={1}
           maxScale={4}
           centerOnInit
-          limitToBounds={true}
+          limitToBounds
           alignmentAnimation={{ sizeX: 0, sizeY: 0 }}
           wheel={{ smoothStep: 0.001, activationKeys: [] }}
           doubleClick={{ mode: "toggle" }}
-          panning={{ disabled: !isZoomed || showMagnifier }}
+          panning={{ disabled: !isZoomed || !!lens }}
           onTransformed={(_ref, state) => {
             setCurrentScale(state.scale);
+            if (state.scale > 1.05) end();
             onScaleChange?.(state.scale);
           }}
         >
           <TransformComponent
             wrapperStyle={{ width: "100%", height: "100%" }}
-            contentStyle={{
-              width: "100%",
-              height: "100%",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            contentStyle={{ width: "100%", height: "100%" }}
           >
             <div
-              ref={imageContainerRef}
-              className={`relative w-full h-full flex items-center justify-center ${
-                isZoomed
-                  ? "cursor-grab active:cursor-grabbing"
-                  : "cursor-crosshair"
-              }`}
-              onMouseDown={handleMouseDown}
-              onMouseUp={handleMouseUp}
-              onMouseMove={handleMouseMove}
-              onMouseLeave={handleMouseLeave}
-              onTouchStart={handleTouchStart}
-              onTouchMove={handleTouchMove}
-              onTouchEnd={handleTouchEnd}
+              className={`relative w-full h-full ${isZoomed ? "cursor-grab active:cursor-grabbing" : "cursor-crosshair"}`}
+              onPointerDown={(e) => {
+                clearTimers();
+                if (
+                  isZoomed ||
+                  e.button !== 0 ||
+                  !e.isPrimary ||
+                  !validPoint(e.clientX, e.clientY)
+                ) {
+                  end();
+                  return;
+                }
+                const start = {
+                  x: e.clientX,
+                  y: e.clientY,
+                  touch: e.pointerType !== "mouse",
+                };
+                press.current = start;
+                if (!start.touch) showAtPoint(start.x, start.y);
+                else {
+                  timers.current.push(
+                    setTimeout(() => {
+                      if (press.current === start)
+                        showAtPoint(start.x, start.y);
+                    }, 500),
+                  );
+                  if (onLongPress)
+                    timers.current.push(
+                      setTimeout(() => {
+                        if (press.current === start) {
+                          end();
+                          onLongPress();
+                        }
+                      }, 3000),
+                    );
+                }
+              }}
+              onPointerMove={(e) => {
+                const start = press.current;
+                if (!start) return;
+                if (
+                  start.touch &&
+                  Math.hypot(e.clientX - start.x, e.clientY - start.y) > 8
+                ) {
+                  end();
+                  return;
+                }
+                if (!validPoint(e.clientX, e.clientY)) {
+                  end();
+                  return;
+                }
+                if (!start.touch) showAtPoint(e.clientX, e.clientY);
+              }}
+              onPointerLeave={end}
+              onPointerCancel={end}
+              onPointerUp={end}
+              onTouchStart={(e) => {
+                if (e.touches.length > 1) end();
+              }}
             >
               <Image
+                ref={image}
                 src={src}
                 alt={alt}
                 fill
                 sizes="100vw"
                 className="object-contain"
                 priority
-                onLoad={handleImageLoad}
-                {...(src?.includes("res.cloudinary.com")
+                onLoad={end}
+                {...(src.includes("res.cloudinary.com")
                   ? { loader: cloudinaryLoader }
                   : {})}
               />
-
-              {showMagnifier && (
-                <div
-                  className="absolute rounded-lg border-2 border-white/50 shadow-lg pointer-events-none z-20"
-                  style={getMagnifierStyle()}
-                />
-              )}
             </div>
           </TransformComponent>
         </TransformWrapper>
+        {lens &&
+          createPortal(
+            <div
+              aria-hidden="true"
+              className="artwork-magnifier"
+              style={{
+                position: "fixed",
+                pointerEvents: "none",
+                zIndex: 10000,
+                left: lens.left,
+                top: lens.top,
+                width: lens.size,
+                height: lens.size,
+                backgroundImage: `url(${JSON.stringify(src)})`,
+                backgroundColor: "var(--background)",
+                backgroundSize: `${lens.backgroundWidth}px ${lens.backgroundHeight}px`,
+                backgroundPosition: `${lens.backgroundX}px ${lens.backgroundY}px`,
+                backgroundRepeat: "no-repeat",
+                boxShadow: "0 0 0 1px #ffffff80, 0 4px 24px #0003",
+              }}
+            />,
+            document.body,
+          )}
       </div>
     );
   },
 );
-
 ZoomableImage.displayName = "ZoomableImage";
-
 export default ZoomableImage;

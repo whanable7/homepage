@@ -1,3 +1,4 @@
+import { applyCosmosRepulsion } from "./cosmos-repulsion";
 import type { WorkGroup } from "@/types/archive";
 export const cosmosDefaults = {
   repulsion: 55,
@@ -49,23 +50,7 @@ export function stepCosmos(
   edges: [CosmosNode, CosmosNode][],
   p: CosmosPhysics,
 ) {
-  for (let i = 0; i < nodes.length; i++) {
-    const a = nodes[i];
-    for (let j = i + 1; j < nodes.length; j++) {
-      const b = nodes[j],
-        dx = a.x - b.x,
-        dy = a.y - b.y,
-        dz = a.z - b.z;
-      const d2 = dx * dx + dy * dy + dz * dz + 25;
-      const f = (p.repulsion * 0.03) / d2;
-      a.vx += dx * f;
-      a.vy += dy * f;
-      a.vz += dz * f * 0.1;
-      b.vx -= dx * f;
-      b.vy -= dy * f;
-      b.vz -= dz * f * 0.1;
-    }
-  }
+  applyCosmosRepulsion(nodes, p.repulsion);
   for (const [a, b] of edges) {
     const dx = b.x - a.x,
       dy = b.y - a.y,

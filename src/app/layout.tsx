@@ -11,6 +11,9 @@ import { SidePanelProvider } from "@/contexts/SidePanelContext";
 import { LocaleProvider } from "@/i18n";
 import UpdateNotice from "@/components/common/UpdateNotice";
 import Footer from "@/components/common/Footer";
+import VisitorTracker from "@/components/analytics/VisitorTracker";
+import { ANALYTICS_EXCLUSION_COOKIE } from "@/lib/analytics-policy";
+import { SESSION_COOKIE, verifySession } from "@/lib/session";
 
 export const metadata: Metadata = {
   title: "Jungwhan Park",
@@ -31,6 +34,9 @@ export default async function RootLayout({
     getPublicAppearance().catch(() => defaultAppearance),
   ]);
   const initialLocale = cookieJar.get("locale")?.value === "ko" ? "ko" : "en";
+  const analyticsExcluded =
+    cookieJar.get(ANALYTICS_EXCLUSION_COOKIE)?.value === "1" ||
+    (await verifySession(cookieJar.get(SESSION_COOKIE)?.value));
   return (
     <html lang={initialLocale}>
       <body className="antialiased" style={appearanceStyle(appearance)}>
@@ -41,6 +47,11 @@ export default async function RootLayout({
                 <div className="flex-grow">{children}</div>
                 <Footer />
                 <UpdateNotice />
+                <VisitorTracker
+                  measurementId={process.env.GA_MEASUREMENT_ID || ""}
+                  production={process.env.VERCEL_ENV === "production"}
+                  initialExcluded={analyticsExcluded}
+                />
               </div>
             </SidePanelProvider>
           </LocaleProvider>

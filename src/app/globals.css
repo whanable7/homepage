@@ -1579,3 +1579,78 @@ body {
   letter-spacing: var(--site-menu-spacing, 0.03em);
   white-space: nowrap;
 }
+
+/* Review 2.3: a thin visual capsule with a separate 44px hit target. */
+.works-tabs button {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 22px;
+  border-radius: 0;
+  background: transparent;
+  transition: color 180ms ease;
+}
+.works-tabs button[aria-current] { background: transparent; }
+.works-tab-capsule {
+  position: absolute;
+  inset-inline: 0;
+  top: 50%;
+  height: 30px;
+  transform: translateY(-50%);
+  border-radius: 15px;
+  pointer-events: none;
+}
+.works-tabs button[aria-current] .works-tab-capsule { background: var(--foreground); }
+.works-tabs button:not([aria-current]):hover { color: var(--foreground); }
+.works-tab-label { position: relative; display: block; line-height: 24px; white-space: nowrap; }
+.works-tab-baseline { display: inline-block; width: 0; height: 0; padding: 0; margin: 0; vertical-align: baseline; }
+.space-settings-note { font-size: 11px; color: var(--text-secondary); margin: 12px 0; }
+.contact-email-row { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 20px; }
+.contact-email-row button { min-height: 44px; color: var(--text-secondary); font-size: 13px; }
+.contact-email-row button:hover { color: var(--foreground); }
+.contact-email-row [role="status"] { flex-basis: 100%; font-size: 13px; color: var(--text-secondary); }
+@media (max-width: 640px) {
+  .works-tabs { gap: 2px; }
+  .works-tabs button { padding: 0 12px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .works-tabs button { transition: none; }
+}
+.visitor-statistics { max-width: 1100px; margin: 24px auto; }
+.statistics-heading { display: flex; justify-content: space-between; align-items: start; gap: 16px; }
+.visitor-statistics h1 { font-size: 22px; margin-bottom: 6px; }
+.visitor-statistics p { color: var(--text-secondary); font-size: 13px; line-height: 1.7; }
+.visitor-statistics button { min-height: 44px; padding: 8px 16px; }
+.statistics-exclusion { margin: 28px 0; border-block: 1px solid var(--border); padding: 18px 0; }
+.statistics-exclusion label { display: flex; align-items: center; gap: 10px; min-height: 44px; }
+.statistics-exclusion input { accent-color: var(--foreground); width: 18px; height: 18px; }
+.statistics-period { display: flex; flex-wrap: wrap; gap: 8px; margin: 20px 0; }
+.statistics-period button[aria-pressed="true"] { background: var(--foreground); color: var(--background); border-radius: 24px; }
+.statistics-cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin: 24px 0; }
+.statistics-cards button { border: 1px solid var(--border); text-align: left; padding: 20px; }
+.statistics-cards button[aria-pressed="true"] { border-color: var(--foreground); }
+.statistics-cards span, .statistics-cards strong, .statistics-cards small { display: block; }
+.statistics-cards strong { font-size: 28px; font-weight: 500; margin: 10px 0; }
+.statistics-cards small { color: var(--text-secondary); }
+.visitor-statistics figure { margin: 32px 0; }
+.visitor-statistics figcaption { font-size: 15px; }
+.visitor-statistics figcaption span { font-size: 12px; color: var(--text-secondary); margin-left: 16px; }
+.visitor-statistics svg { width: 100%; display: block; }
+.statistics-empty { margin: 32px 0; padding: 28px 0; }
+.statistics-empty h2 { font-size: 18px; margin-bottom: 12px; }
+.statistics-empty ol { list-style: decimal; padding-left: 24px; font-size: 13px; line-height: 1.8; }
+.visitor-statistics details { margin: 20px 0; }
+.visitor-statistics summary { cursor: pointer; min-height: 44px; display: list-item; padding: 12px 0; }
+.visitor-statistics table { width: 100%; border-collapse: collapse; font-size: 13px; }
+.visitor-statistics th, .visitor-statistics td { padding: 8px; border-bottom: 1px solid var(--border); text-align: right; }
+.visitor-statistics th:first-child { text-align: left; }
+.statistics-footnote { margin: 12px 0; }
+@media (max-width: 500px) {
+  .statistics-cards { gap: 6px; }
+  .statistics-cards button { padding: 12px 8px; }
+  .statistics-cards strong { font-size: 22px; }
+  .statistics-period button { padding: 8px 10px; font-size: 13px; }
+  .visitor-statistics figcaption span { display: block; margin: 8px 0; }
+}
