@@ -25,6 +25,8 @@ import { moveWorkToYear } from "@/lib/year-order";
 import TypographyPreview from "@/app/typography-preview/preview";
 import GroupManager from "./GroupManager";
 import SequenceEditor from "./SequenceEditor";
+import VisitorStatistics from "./VisitorStatistics";
+import { setBrowserAnalyticsExcluded } from "@/lib/analytics-browser";
 type Tab =
   | "artworks"
   | "ecosystem"
@@ -35,6 +37,7 @@ type Tab =
   | "slideshow"
   | "texts"
   | "cv"
+  | "statistics"
   | "settings";
 const tabs: Record<Tab, string> = {
   artworks: "작품",
@@ -46,6 +49,7 @@ const tabs: Record<Tab, string> = {
   slideshow: "첫 화면",
   texts: "texts",
   cv: "cv",
+  statistics: "방문 통계",
   settings: "설정",
 };
 type Queue = {
@@ -96,6 +100,7 @@ export default function ArchiveAdmin() {
       router.replace("/admin/login");
       return;
     }
+    setBrowserAnalyticsExcluded(true);
     const [a, b] = await Promise.all([
       fetch("/api/portfolio", { cache: "no-store" }),
       fetch("/api/archive", { cache: "no-store" }),
@@ -106,6 +111,10 @@ export default function ArchiveAdmin() {
     setDoc(data);
     setLayout(data.data.draft);
   }, [router]);
+  useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("tab") === "cv")
+      setTab("cv");
+  }, []);
   useEffect(() => {
     load().catch((e) => setMessage(e.message));
   }, [load]);
@@ -445,59 +454,64 @@ export default function ArchiveAdmin() {
           </button>
         ))}
       </nav>
-      {tab !== "texts" && tab !== "cv" && tab !== "settings" && (
-        <div className="admin-publish">
-          <span>
-            {tab === "slideshow"
-              ? featuredChanged
-                ? "대표 이미지 변경을 저장했습니다. 첫 화면 적용 전 상태입니다."
-                : "공개된 대표 이미지와 같은 상태입니다."
-              : unsaved.current
-                ? "저장하지 않은 변경이 있습니다."
-                : JSON.stringify(layout) ===
-                    JSON.stringify(doc.data.published.layout)
-                  ? "공개된 분류와 같은 상태입니다."
-                  : "분류를 임시 저장했습니다. 공개 전 상태입니다."}
-          </span>
-          {tab !== "slideshow" && (
-            <button disabled={busy} onClick={() => act("save")}>
-              분류 임시 저장
-            </button>
-          )}
-          <button
-            disabled={busy}
-            onClick={async () => {
-              if (tab === "slideshow") {
-                window.open("/admin/preview?view=slideshow", "_blank");
-                return;
-              }
-              if (!(await act("save"))) return;
-              window.open(
-                `/admin/preview?view=${["ecosystem", "cosmos", "strata", "sequences", "years"].includes(tab) ? tab : "ecosystem"}`,
-                "_blank",
-              );
-            }}
-          >
-            미리보기 ↗
-          </button>
-          {tab === "slideshow" ? (
+      {tab !== "texts" &&
+        tab !== "cv" &&
+        tab !== "settings" &&
+        tab !== "statistics" && (
+          <div className="admin-publish">
+            <span>
+              {tab === "slideshow"
+                ? featuredChanged
+                  ? "대표 이미지 변경을 저장했습니다. 첫 화면 적용 전 상태입니다."
+                  : "공개된 대표 이미지와 같은 상태입니다."
+                : unsaved.current
+                  ? "저장하지 않은 변경이 있습니다."
+                  : JSON.stringify(layout) ===
+                      JSON.stringify(doc.data.published.layout)
+                    ? "공개된 분류와 같은 상태입니다."
+                    : "분류를 임시 저장했습니다. 공개 전 상태입니다."}
+            </span>
+            {tab !== "slideshow" && (
+              <button disabled={busy} onClick={() => act("save")}>
+                분류 임시 저장
+              </button>
+            )}
             <button
-              disabled={busy || !featuredChanged}
-              onClick={publishSlideshow}
+              disabled={busy}
+              onClick={async () => {
+                if (tab === "slideshow") {
+                  window.open("/admin/preview?view=slideshow", "_blank");
+                  return;
+                }
+                if (!(await act("save"))) return;
+                window.open(
+                  `/admin/preview?view=${["ecosystem", "cosmos", "strata", "sequences", "years"].includes(tab) ? tab : "ecosystem"}`,
+                  "_blank",
+                );
+              }}
             >
-              대표 이미지만 공개
+              미리보기 ↗
             </button>
-          ) : (
-            <button disabled={busy} onClick={() => act("publish")}>
-              작품·분류 공개
-            </button>
-          )}
-        </div>
-      )}
+            {tab === "slideshow" ? (
+              <button
+                disabled={busy || !featuredChanged}
+                onClick={publishSlideshow}
+              >
+                대표 이미지만 공개
+              </button>
+            ) : (
+              <button disabled={busy} onClick={() => act("publish")}>
+                작품·분류 공개
+              </button>
+            )}
+          </div>
+        )}
       <p role="status" className="admin-message">
         {message}
       </p>
-      {tab === "settings" ? (
+      {tab === "statistics" ? (
+        <VisitorStatistics />
+      ) : tab === "settings" ? (
         <TypographyPreview adminMode />
       ) : tab === "texts" ? (
         <TextEditor />

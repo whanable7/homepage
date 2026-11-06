@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { checkPassword, isAuthenticated } from "@/lib/auth";
 import { createSession, SESSION_COOKIE, SESSION_SECONDS } from "@/lib/session";
+import { ANALYTICS_EXCLUSION_COOKIE } from "@/lib/analytics-policy";
 export async function POST(request: NextRequest) {
   try {
     const { password } = await request.json();
@@ -18,6 +19,12 @@ export async function POST(request: NextRequest) {
       sameSite: "strict",
       path: "/",
       maxAge: SESSION_SECONDS,
+    });
+    (await cookies()).set(ANALYTICS_EXCLUSION_COOKIE, "1", {
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "lax",
+      path: "/",
+      maxAge: 31536000,
     });
     return NextResponse.json(
       { success: true },

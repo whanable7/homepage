@@ -19,6 +19,7 @@ import type { ArchiveWork, WorkGroup } from "@/types/archive";
 import { WorkImage } from "./WorksBrowser";
 import SpaceSettings from "./SpaceSettings";
 import SpacePreview from "./SpacePreview";
+import { useSpaceHover } from "./useSpaceHover";
 type Edge = SimulationLinkDatum<EcosystemNode>;
 const defaults = {
   repulsion: 224,
@@ -59,7 +60,7 @@ export default function WorksEcosystem({
     px: number;
     py: number;
   } | null>(null);
-  const [hover, setHover] = useState<ArchiveWork | null>(null);
+  const { hover, show: setHover, leave: leaveHover } = useSpaceHover();
   const focus = groupFocus(groups, hover?.id, focusedGroupId);
   const [corner, setCorner] = useState<"left" | "right">("right");
   const [physics, setPhysics] = useState(defaults);
@@ -134,22 +135,16 @@ export default function WorksEcosystem({
     let frame = 0;
     const draw = () => {
       const { size: screen, zoom: z, pan: shift } = displayRef.current;
-      const left = Math.min(
-        ...model.nodes.map((n) => n.x - n.width / 2),
-        model.width / 2 - 80,
-      );
-      const right = Math.max(
-        ...model.nodes.map((n) => n.x + n.width / 2),
-        model.width / 2 + 80,
-      );
-      const top = Math.min(
-        ...model.nodes.map((n) => n.y - n.height / 2),
-        model.height / 2 - 60,
-      );
-      const bottom = Math.max(
-        ...model.nodes.map((n) => n.y + n.height / 2),
-        model.height / 2 + 60,
-      );
+      let left = model.width / 2 - 80,
+        right = model.width / 2 + 80;
+      let top = model.height / 2 - 60,
+        bottom = model.height / 2 + 60;
+      for (const n of model.nodes) {
+        left = Math.min(left, n.x - n.width / 2);
+        right = Math.max(right, n.x + n.width / 2);
+        top = Math.min(top, n.y - n.height / 2);
+        bottom = Math.max(bottom, n.y + n.height / 2);
+      }
       const fit = Math.min(
         (screen.width - 24) / (right - left + 30),
         (screen.height - 68) / (bottom - top + 30),
@@ -262,32 +257,32 @@ export default function WorksEcosystem({
   const controls = [
     {
       key: "repulsion",
-      ko: "반발력",
-      en: "Repulsion",
+      ko: "산포",
+      en: "dispersion",
       min: 20,
       max: 300,
       step: 1,
     },
     {
       key: "center",
-      ko: "중심으로 당기는 힘",
-      en: "Center attraction",
+      ko: "군락",
+      en: "clustering",
       min: 0.005,
       max: 0.15,
       step: 0.005,
     },
     {
       key: "distance",
-      ko: "연결 길이",
-      en: "Link distance",
+      ko: "서식 간격",
+      en: "habitat spacing",
       min: 50,
       max: 220,
       step: 1,
     },
     {
       key: "tension",
-      ko: "연결 강도",
-      en: "Link tension",
+      ko: "얽힘",
+      en: "entanglement",
       min: 0.05,
       max: 1,
       step: 0.05,
@@ -403,9 +398,9 @@ export default function WorksEcosystem({
                   setHover(w);
                 }
               }}
-              onPointerLeave={() => setHover(null)}
+              onPointerLeave={leaveHover}
               onFocus={() => setHover(w)}
-              onBlur={() => setHover(null)}
+              onBlur={leaveHover}
               onPointerDown={(e) => {
                 suppressedClick.current = false;
                 if (e.pointerType !== "mouse" && !explore) return;
@@ -441,7 +436,10 @@ export default function WorksEcosystem({
               }}
               aria-label={getLocalizedValue(locale, w.title, w.title_en)}
             >
-              <WorkImage work={w} sizes="100px" />
+              <WorkImage
+                work={w}
+                sizes={works.length > 300 ? "32px" : "100px"}
+              />
             </button>
           );
         })}

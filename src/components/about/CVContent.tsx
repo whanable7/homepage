@@ -20,7 +20,7 @@ export default function CVContent({
         })
       | null;
   const localized = (a: string | undefined, b: string | undefined) =>
-    getLocalizedValue(locale, a || "", b || "");
+    getLocalizedValue(locale, a || b || "", b || a || "");
   const birthplace = localized(
       [about?.birth_city, about?.birth_country].filter(Boolean).join(", "),
       [about?.birth_city_en, about?.birth_country_en]
@@ -58,7 +58,8 @@ export default function CVContent({
                   (a, b) =>
                     (ids.includes(a.id) ? ids.indexOf(a.id) : 9999) -
                       (ids.includes(b.id) ? ids.indexOf(b.id) : 9999) ||
-                    b.year - a.year,
+                    (parseInt(String(b.year), 10) || 0) -
+                      (parseInt(String(a.year), 10) || 0),
                 )
                 .map((e) => ({ ...e, year: String(e.year) }) as unknown as Item)
             : (about as unknown as Record<string, Item[]>)?.[key] || [];
@@ -97,11 +98,20 @@ export default function CVContent({
                       .map((line, j) => (
                         <p key={j}>{line}</p>
                       ))}
-                    {key === "projects" && item.description && (
-                      <p>{localized(item.description, item.description_en)}</p>
-                    )}
-                    {/^https?:\/\//.test(item.url || "") && (
-                      <a href={item.url} target="_blank" rel="noreferrer">
+                    {key === "projects" &&
+                      (item.description || item.description_en) && (
+                        <p>
+                          {localized(item.description, item.description_en)}
+                        </p>
+                      )}
+                    {/^https?:\/\//.test(
+                      item.url || item.external_url || "",
+                    ) && (
+                      <a
+                        href={item.url || item.external_url}
+                        target="_blank"
+                        rel="noreferrer"
+                      >
                         ↗
                       </a>
                     )}
