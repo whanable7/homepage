@@ -401,7 +401,11 @@ export default function AdminPage() {
     const response = await fetch("/api/about", {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        ...data,
+        _revision: (aboutInfo as (AboutInfo & { _revision?: string }) | null)
+          ?._revision,
+      }),
     });
 
     if (response.ok) {
@@ -611,38 +615,11 @@ export default function AdminPage() {
           )}
 
           {activeTab === "exhibitions" && (
-            <>
-              <div className="flex justify-between items-center mb-6">
-                <h2 className="text-lg font-medium text-gray-900">전시 목록</h2>
-                <Button
-                  onClick={() => {
-                    setEditingExhibition(null);
-                    setIsExhibitionFormOpen(true);
-                  }}
-                >
-                  + 새 전시
-                </Button>
-              </div>
-              {exhibitionsLoading ? (
-                <div className="space-y-4">
-                  {[...Array(3)].map((_, i) => (
-                    <div
-                      key={i}
-                      className="h-16 bg-gray-200 animate-pulse rounded"
-                    />
-                  ))}
-                </div>
-              ) : (
-                <ExhibitionTable
-                  exhibitions={exhibitions}
-                  onEdit={(exhibition) => {
-                    setEditingExhibition(exhibition);
-                    setIsExhibitionFormOpen(true);
-                  }}
-                  onDelete={setDeletingExhibition}
-                />
-              )}
-            </>
+            <section>
+              <h2>전시 기록 관리</h2>
+              <p>개인전·단체전·팝업 전시는 CV 메뉴에서 함께 추가·수정합니다.</p>
+              <a href="/admin?tab=cv">CV 기록 관리로 이동 →</a>
+            </section>
           )}
 
           {activeTab === "news" && (

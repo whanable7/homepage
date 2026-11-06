@@ -25,6 +25,11 @@ export function recordApi(name: string) {
       });
     },
     create: async (request: NextRequest) => {
+      if (name === "exhibitions")
+        return NextResponse.json(
+          { error: "CV 메뉴에서 전시 기록을 관리해 주세요." },
+          { status: 409 },
+        );
       if (!(await isAuthenticated()))
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
       try {
@@ -52,6 +57,11 @@ export function recordApi(name: string) {
     ) => {
       if (!(await isAuthenticated()))
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      if (name === "exhibitions")
+        return NextResponse.json(
+          { error: "CV 메뉴에서 전시 기록을 관리해 주세요." },
+          { status: 409 },
+        );
       const { id } = await params,
         body = await request.json();
       let result: Row | null = null;
@@ -79,6 +89,11 @@ export function recordApi(name: string) {
     ) => {
       if (!(await isAuthenticated()))
         return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+      if (name === "exhibitions")
+        return NextResponse.json(
+          { error: "CV 메뉴에서 전시 기록을 관리해 주세요." },
+          { status: 409 },
+        );
       const { id } = await params;
       let found = false;
       await mutateContent(name, [] as Row[], (rows) =>

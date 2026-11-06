@@ -83,7 +83,7 @@ export async function readPublicContent<T>(name: PublicName): Promise<T> {
     if (pending.get(key) === task) pending.delete(key);
   }
 }
-async function invalidatePublicContent(name: PublicName) {
+export async function refreshPublicContent(name: PublicName) {
   const key = tag(name);
   // Let an older local fill finish before expiring it; it must not overwrite a new publication.
   await pending.get(key)?.catch(() => undefined);
@@ -96,6 +96,11 @@ async function invalidatePublicContent(name: PublicName) {
   }
 }
 /** Writes still use raw strong ETags. Invalidation happens only after a committed public change. */
+export class PublicationRefreshError extends Error {
+  constructor(public revision: string) {
+    super("저장은 완료했지만 공개 화면 갱신이 필요합니다.");
+  }
+}
 export async function mutateContent<T>(
   name: string,
   fallback: T,
@@ -116,11 +121,9 @@ export async function mutateContent<T>(
   );
   if (changed) {
     try {
-      await invalidatePublicContent(name as PublicName);
+      await refreshPublicContent(name as PublicName);
     } catch {
-      throw new Error(
-        `저장은 완료했지만 공개 화면 갱신을 끝내지 못했습니다. 새로 불러온 뒤 공개를 다시 눌러 주세요. 저장 버전: ${saved.revision}`,
-      );
+      throw new PublicationRefreshError(saved.revision);
     }
   }
   return saved;

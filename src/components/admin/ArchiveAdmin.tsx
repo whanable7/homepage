@@ -112,6 +112,10 @@ export default function ArchiveAdmin() {
     setLayout(data.data.draft);
   }, [router]);
   useEffect(() => {
+    if (new URLSearchParams(window.location.search).get("tab") === "cv")
+      setTab("cv");
+  }, []);
+  useEffect(() => {
     load().catch((e) => setMessage(e.message));
   }, [load]);
   useEffect(() => {

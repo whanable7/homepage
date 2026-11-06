@@ -1,258 +1,511 @@
 "use client";
-import { useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { useUnsavedGuard } from "./useUnsavedGuard";
-import { cvLabels, orderedSections } from "@/lib/cv";
-type Item = Record<string, string>;
-type CVData = {
-  cv_section_order?: string[];
-  cv_exhibition_order?: string[];
-  projects?: Item[];
-  [key: string]: unknown;
+import { cvLabels } from "@/lib/cv";
+import {
+  cvFields,
+  exhibitionSections,
+  type CVRow,
+  type CVCommand,
+} from "@/lib/cv-editor";
+type Snapshot = {
+  order: string[];
+  sections: Record<string, CVRow[]>;
+  deleted: { section: string; row: CVRow }[];
+  revisions: { about: string; exhibitions: string };
+};
+type Edit = {
+  section: string;
+  id: string;
+  fields: Record<string, string>;
+  revision: string;
 };
 export default function CVEditor() {
-  const [about, setAbout] = useState<CVData | null>(null),
-    [exhibitions, setExhibitions] = useState<Item[]>([]),
+  const [data, setData] = useState<Snapshot | null>(null),
+    [order, setOrder] = useState<string[]>([]),
+    [rowOrder, setRowOrder] = useState<Record<string, string[]>>({}),
+    [edit, setEdit] = useState<Edit | null>(null),
     [message, setMessage] = useState(""),
     [busy, setBusy] = useState(false),
-    drag = useRef<string | null>(null),
-    baseline = useRef("");
-  useUnsavedGuard(!!about && JSON.stringify(about) !== baseline.current);
-  useEffect(() => {
-    Promise.all([
-      fetch("/api/about").then((r) => r.json()),
-      fetch("/api/exhibitions").then((r) => r.json()),
-    ])
-      .then(([a, b]) => {
-        baseline.current = JSON.stringify(a);
-        setAbout(a);
-        setExhibitions(b);
-      })
-      .catch(() => setMessage("CV 정보를 불러오지 못했습니다."));
+    [conflict, setConflict] = useState(false),
+    [deleting, setDeleting] = useState<{ section: string; row: CVRow } | null>(
+      null,
+    ),
+    [refreshPending, setRefreshPending] = useState(false);
+  const drag = useRef<string | null>(null);
+  const dirty =
+    !!edit ||
+    !!deleting ||
+    (!!data &&
+      (JSON.stringify(order) !== JSON.stringify(data.order) ||
+        Object.keys(rowOrder).length > 0));
+  useUnsavedGuard(dirty);
+  const load = useCallback(async () => {
+    const response = await fetch("/api/admin/cv", { cache: "no-store" });
+    if (!response.ok) throw new Error("CV를 불러오지 못했습니다.");
+    const next: Snapshot = await response.json();
+    setData(next);
+    setOrder(next.order);
+    setRowOrder({});
+    return next;
   }, []);
-  if (!about) return <p>{message || "불러오는 중…"}</p>;
-  const order = orderedSections(about.cv_section_order);
-  function moveSection(from: string, to: string) {
-    if (!about) return;
-    const next = [...order],
-      a = next.indexOf(from),
-      b = next.indexOf(to);
-    if (a < 0 || b < 0) return;
-    next.splice(a, 1);
-    next.splice(b, 0, from);
-    setAbout({ ...about, cv_section_order: next });
-  }
-  async function save() {
+  useEffect(() => {
+    load().catch(() =>
+      setMessage("CV를 불러오지 못했습니다. 다시 불러오기를 눌러주세요."),
+    );
+  }, [load]);
+  async function send(
+    command: Omit<CVCommand, "revision"> & { revision?: string },
+  ) {
+    if (!data || busy) return;
     setBusy(true);
+    setMessage("");
     try {
-      const response = await fetch("/api/about", {
-        method: "PUT",
+      const doc =
+        exhibitionSections.includes(command.section || "") &&
+        ["save", "delete", "restore"].includes(command.action)
+          ? "exhibitions"
+          : "about";
+      const r = await fetch("/api/admin/cv", {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(about),
+        body: JSON.stringify({
+          ...command,
+          revision: command.revision ?? data.revisions[doc],
+        }),
       });
-      if (!response.ok) throw new Error();
-      const saved = await response.json();
-      baseline.current = JSON.stringify(saved);
-      setAbout(saved);
-      setMessage("CV를 저장했습니다.");
-    } catch {
-      setMessage("CV 저장에 실패했습니다. 입력 내용은 그대로 남아 있습니다.");
+      const result = await r.json();
+      if (!r.ok) {
+        if (r.status === 409) setConflict(true);
+        throw new Error(result.error || "저장하지 못했습니다.");
+      }
+      setEdit(null);
+      setDeleting(null);
+      setConflict(false);
+      setRefreshPending(!!result.refreshPending);
+      setMessage(result.message || "저장했습니다. 공개 CV에도 반영됩니다.");
+      try {
+        await load();
+      } catch {
+        setMessage("저장은 완료했습니다. 목록을 다시 불러와 확인해주세요.");
+        setData(null);
+      }
+    } catch (e) {
+      setMessage((e as Error).message + " 입력 내용은 유지했습니다.");
     } finally {
       setBusy(false);
     }
   }
+  async function reload() {
+    setBusy(true);
+    try {
+      await load();
+      setEdit(null);
+      setDeleting(null);
+      setConflict(false);
+      setMessage("최신 목록을 불러왔습니다.");
+    } catch {
+      setMessage("목록을 불러오지 못했습니다. 입력 내용은 유지했습니다.");
+    } finally {
+      setBusy(false);
+    }
+  }
+  const idle = !edit && !deleting && !busy;
+  const orderDirty =
+    !!data && JSON.stringify(order) !== JSON.stringify(data.order);
+  const canEdit = idle && !orderDirty && Object.keys(rowOrder).length === 0;
+  function begin(section: string, row?: CVRow) {
+    if (!canEdit || !data) return;
+    setConflict(false);
+    setMessage("");
+    setEdit({
+      section,
+      id: row?.id || crypto.randomUUID(),
+      fields: Object.fromEntries(
+        Object.entries(row || {}).map(([k, v]) => [k, String(v ?? "")]),
+      ),
+      revision:
+        data.revisions[
+          exhibitionSections.includes(section) ? "exhibitions" : "about"
+        ],
+    });
+  }
+  function move(ids: string[], i: number, step: number) {
+    const next = [...ids];
+    [next[i], next[i + step]] = [next[i + step], next[i]];
+    return next;
+  }
   return (
-    <section>
-      <div className="admin-actions">
-        <h2>CV 순서와 프로젝트</h2>
+    <section className="cv-editor">
+      <h2>CV 기록 관리</h2>
+      <p>
+        각 항목에서 기록을 추가하거나 수정하세요. 저장한 내용은 공개 CV에도
+        반영됩니다. 기간과 순서는 한글·영문에 함께 적용됩니다.
+      </p>
+      <p role="status" className="cv-message">
+        {message}
+      </p>
+      {!data && (
+        <button disabled={busy} onClick={reload}>
+          다시 불러오기
+        </button>
+      )}
+      {refreshPending && (
         <button
           disabled={busy}
-          onClick={() => {
-            setAbout(JSON.parse(baseline.current));
-            setMessage("작성 중인 변경을 취소했습니다.");
+          onClick={async () => {
+            setBusy(true);
+            try {
+              const r = await fetch("/api/admin/cv", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ action: "refresh" }),
+              });
+              if (!r.ok) throw new Error();
+              setRefreshPending(false);
+              setMessage("공개 화면을 갱신했습니다.");
+            } catch {
+              setMessage("갱신하지 못했습니다. 기록은 이미 저장되어 있습니다.");
+            } finally {
+              setBusy(false);
+            }
           }}
         >
-          작성 취소
+          공개 화면 갱신 재시도
         </button>
-        <button onClick={save} disabled={busy}>
-          CV 저장
-        </button>
-      </div>
-      <p role="status">{message}</p>
-      <p>
-        항목을 끌어서 옮기거나 화살표를 누르세요. 순서는 한국어와 영어에 함께
-        적용됩니다.
-      </p>
-      {order.map((key, index) => {
-        const isExhibition = ["solo", "group", "popup"].includes(key),
-          items = isExhibition
-            ? exhibitions
-                .filter((e) => e.type === key)
-                .sort((a, b) => {
-                  const ids = about.cv_exhibition_order || [];
-                  return (
-                    (ids.includes(a.id) ? ids.indexOf(a.id) : 9999) -
-                    (ids.includes(b.id) ? ids.indexOf(b.id) : 9999)
-                  );
-                })
-            : ((about[key] || []) as Item[]);
-        const reorder = (from: number, to: number) => {
-          const next = [...items];
-          [next[from], next[to]] = [next[to], next[from]];
-          if (isExhibition) {
-            const other = [
-              ...new Set([
-                ...(about.cv_exhibition_order || []),
-                ...exhibitions.map((e) => e.id),
-              ]),
-            ].filter((id) => !items.some((item) => item.id === id));
-            setAbout({
-              ...about,
-              cv_exhibition_order: [...next.map((e) => e.id), ...other],
-            });
-          } else setAbout({ ...about, [key]: next });
-        };
-        return (
-          <section
-            className="cv-admin-section"
-            key={key}
-            draggable
-            onDragStart={(e) => {
-              if ((e.target as Element).closest("input,textarea,button"))
-                return;
-              drag.current = key;
-            }}
-            onDragOver={(e) => e.preventDefault()}
-            onDrop={() => {
-              if (drag.current) moveSection(drag.current, key);
-              drag.current = null;
-            }}
-          >
-            <div className="admin-actions">
-              <h3>
-                {cvLabels[key][0]} / {cvLabels[key][1]}
-              </h3>
-              <button
-                aria-label="항목 위로"
-                disabled={!index}
-                onClick={() => moveSection(key, order[index - 1])}
-              >
-                ↑
-              </button>
-              <button
-                aria-label="항목 아래로"
-                disabled={index === order.length - 1}
-                onClick={() => moveSection(key, order[index + 1])}
-              >
-                ↓
-              </button>
-              {key === "projects" && (
-                <button
-                  onClick={() =>
-                    setAbout({
-                      ...about,
-                      projects: [
-                        ...(about.projects || []),
-                        {
-                          id: crypto.randomUUID(),
-                          year: "",
-                          title: "",
-                          title_en: "",
-                          role: "",
-                          role_en: "",
-                          organization: "",
-                          organization_en: "",
-                          location: "",
-                          location_en: "",
-                          description: "",
-                          description_en: "",
-                          url: "",
-                        },
-                      ],
-                    })
+      )}
+      {conflict && (
+        <div className="cv-warning">
+          <p>
+            다른 창에서 먼저 저장했습니다. 입력 내용을 복사해 보관한 뒤 최신
+            목록을 불러와 다시 수정해주세요.
+          </p>
+          <button disabled={busy} onClick={reload}>
+            현재 입력을 버리고 최신 목록 불러오기
+          </button>
+        </div>
+      )}
+      {data && (
+        <>
+          <div className="admin-actions">
+            <h3>항목 순서</h3>
+            <button
+              disabled={!idle || !orderDirty}
+              onClick={() => send({ action: "sections", ids: order })}
+            >
+              항목 순서 저장
+            </button>
+            <button
+              disabled={!idle || !orderDirty}
+              onClick={() => setOrder(data.order)}
+            >
+              순서 취소
+            </button>
+          </div>
+          {order.map((section, index) => {
+            const rows = data.sections[section] || [],
+              ids = rowOrder[section] || rows.map((r) => r.id),
+              labels = cvLabels[section],
+              active = edit?.section === section;
+            return (
+              <section
+                className="cv-admin-section"
+                key={section}
+                draggable={idle && Object.keys(rowOrder).length === 0}
+                onDragStart={(e) => {
+                  if ((e.target as Element).closest("input,textarea,button")) {
+                    e.preventDefault();
+                    return;
                   }
-                >
-                  프로젝트 추가
-                </button>
-              )}
-            </div>
-            {items.map((item, i) => (
-              <div className="cv-admin-item" key={item.id || i}>
+                  drag.current = section;
+                }}
+                onDragOver={(e) => {
+                  if (idle) e.preventDefault();
+                }}
+                onDrop={() => {
+                  if (!idle || !drag.current) return;
+                  const next = order.filter((k) => k !== drag.current);
+                  next.splice(next.indexOf(section), 0, drag.current);
+                  setOrder(next);
+                  drag.current = null;
+                }}
+              >
                 <div className="admin-actions">
-                  <span>
-                    {item.year} ·{" "}
-                    {item.title ||
-                      item.description ||
-                      item.name ||
-                      item.program ||
-                      "새 기록"}
-                  </span>
+                  <h3>
+                    {labels[0]} / {labels[1]}
+                  </h3>
                   <button
-                    aria-label="기록 위로"
-                    disabled={!i}
-                    onClick={() => reorder(i, i - 1)}
+                    aria-label={`${labels[0]} 항목 위로`}
+                    disabled={
+                      !idle || !!Object.keys(rowOrder).length || index === 0
+                    }
+                    onClick={() => setOrder(move(order, index, -1))}
                   >
                     ↑
                   </button>
                   <button
-                    aria-label="기록 아래로"
-                    disabled={i === items.length - 1}
-                    onClick={() => reorder(i, i + 1)}
+                    aria-label={`${labels[0]} 항목 아래로`}
+                    disabled={
+                      !idle ||
+                      !!Object.keys(rowOrder).length ||
+                      index === order.length - 1
+                    }
+                    onClick={() => setOrder(move(order, index, 1))}
                   >
                     ↓
                   </button>
+                  <button disabled={!canEdit} onClick={() => begin(section)}>
+                    ＋ 기록 추가
+                  </button>
                 </div>
-                {key === "projects" && (
-                  <>
-                    <div className="admin-form-grid">
-                      {[
-                        ["year", "기간 · 진행 중이면 현재까지 표기"],
-                        ["title", "프로젝트명"],
-                        ["title_en", "프로젝트명 · English"],
-                        ["role", "역할"],
-                        ["role_en", "역할 · English"],
-                        ["organization", "기관 · 협업자"],
-                        ["organization_en", "기관 · 협업자 · English"],
-                        ["location", "장소"],
-                        ["location_en", "장소 · English"],
-                        ["description", "설명"],
-                        ["description_en", "설명 · English"],
-                        ["url", "관련 링크"],
-                      ].map(([field, label]) => (
-                        <label className="admin-field" key={field}>
-                          {label}
+                {ids.length === 0 && <p>아직 등록한 기록이 없습니다.</p>}
+                {ids.map((id, i) => {
+                  const row = rows.find((r) => r.id === id)!;
+                  return (
+                    <div className="cv-record" key={id}>
+                      <span>
+                        {row.year} ·{" "}
+                        {row[cvFields[section][0][0]] ||
+                          row[cvFields[section][0][0] + "_en"] ||
+                          "제목 없음"}
+                      </span>
+                      <div className="admin-actions">
+                        <button
+                          disabled={!canEdit}
+                          onClick={() => begin(section, row)}
+                        >
+                          수정
+                        </button>
+                        <button
+                          disabled={!canEdit}
+                          onClick={() => setDeleting({ section, row })}
+                        >
+                          삭제
+                        </button>
+                        <button
+                          aria-label={`${labels[0]} 기록 ${i + 1} 위로`}
+                          disabled={
+                            !idle ||
+                            orderDirty ||
+                            Object.keys(rowOrder).some((k) => k !== section) ||
+                            !i
+                          }
+                          onClick={() =>
+                            setRowOrder({ [section]: move(ids, i, -1) })
+                          }
+                        >
+                          ↑
+                        </button>
+                        <button
+                          aria-label={`${labels[0]} 기록 ${i + 1} 아래로`}
+                          disabled={
+                            !idle ||
+                            orderDirty ||
+                            Object.keys(rowOrder).some((k) => k !== section) ||
+                            i === ids.length - 1
+                          }
+                          onClick={() =>
+                            setRowOrder({ [section]: move(ids, i, 1) })
+                          }
+                        >
+                          ↓
+                        </button>
+                      </div>
+                    </div>
+                  );
+                })}
+                {rowOrder[section] && (
+                  <div className="admin-actions">
+                    <button
+                      disabled={!idle}
+                      onClick={() => send({ action: "reorder", section, ids })}
+                    >
+                      기록 순서 저장
+                    </button>
+                    <button disabled={!idle} onClick={() => setRowOrder({})}>
+                      순서 취소
+                    </button>
+                  </div>
+                )}
+                {deleting?.section === section && (
+                  <div className="cv-warning">
+                    <p>
+                      ‘{deleting.row.year} ·{" "}
+                      {deleting.row.title ||
+                        deleting.row.description ||
+                        deleting.row.name ||
+                        deleting.row.program}
+                      ’ 기록을 삭제할까요? 아래 삭제한 기록에서 복구할 수
+                      있습니다.
+                    </p>
+                    <button
+                      disabled={busy}
+                      onClick={() =>
+                        send({ action: "delete", section, id: deleting.row.id })
+                      }
+                    >
+                      이 기록 삭제
+                    </button>
+                    <button disabled={busy} onClick={() => setDeleting(null)}>
+                      취소
+                    </button>
+                  </div>
+                )}
+                {active && edit && (
+                  <form
+                    className="cv-record-form"
+                    onSubmit={(e) => {
+                      e.preventDefault();
+                      send({
+                        action: "save",
+                        section,
+                        id: edit.id,
+                        fields: edit.fields,
+                        revision: edit.revision,
+                      });
+                    }}
+                  >
+                    <fieldset disabled={busy}>
+                      <h4>
+                        {rows.some((r) => r.id === edit.id)
+                          ? "기록 수정"
+                          : "새 기록"}
+                      </h4>
+                      <label className="admin-field">
+                        기간 · 예: 2026, 2024–2026, 2026~
+                        <input
+                          required
+                          maxLength={80}
+                          value={edit.fields.year || ""}
+                          onChange={(e) =>
+                            setEdit({
+                              ...edit,
+                              fields: { ...edit.fields, year: e.target.value },
+                            })
+                          }
+                        />
+                      </label>
+                      {cvFields[section].map(([field, label]) => (
+                        <div className="admin-form-grid" key={field}>
+                          {["", "_en"].map((suffix) => (
+                            <label className="admin-field" key={suffix}>
+                              {label} · {suffix ? "English" : "한글"}
+                              <textarea
+                                rows={field === "description" ? 3 : 2}
+                                maxLength={5000}
+                                value={edit.fields[field + suffix] || ""}
+                                onChange={(e) =>
+                                  setEdit({
+                                    ...edit,
+                                    fields: {
+                                      ...edit.fields,
+                                      [field + suffix]: e.target.value,
+                                    },
+                                  })
+                                }
+                              />
+                            </label>
+                          ))}
+                        </div>
+                      ))}
+                      {(exhibitionSections.includes(section) ||
+                        section === "projects") && (
+                        <label className="admin-field">
+                          관련 링크
                           <input
-                            value={item[field] || ""}
+                            type="url"
+                            value={
+                              edit.fields[
+                                section === "projects" ? "url" : "external_url"
+                              ] || ""
+                            }
                             onChange={(e) =>
-                              setAbout({
-                                ...about,
-                                projects: items.map((v, j) =>
-                                  j === i
-                                    ? { ...v, [field]: e.target.value }
-                                    : v,
-                                ),
+                              setEdit({
+                                ...edit,
+                                fields: {
+                                  ...edit.fields,
+                                  [section === "projects"
+                                    ? "url"
+                                    : "external_url"]: e.target.value,
+                                },
                               })
                             }
                           />
                         </label>
-                      ))}
-                    </div>
-                    <button
-                      onClick={() =>
-                        setAbout({
-                          ...about,
-                          projects: items.filter((_, j) => j !== i),
-                        })
-                      }
-                    >
-                      이 프로젝트 기록 제거
-                    </button>
-                  </>
+                      )}
+                      {section === "publications" && (
+                        <label className="admin-field">
+                          종류
+                          <select
+                            value={edit.fields.type || ""}
+                            onChange={(e) =>
+                              setEdit({
+                                ...edit,
+                                fields: {
+                                  ...edit.fields,
+                                  type: e.target.value,
+                                },
+                              })
+                            }
+                          >
+                            <option value="">미지정</option>
+                            <option value="book">책</option>
+                            <option value="catalog">도록</option>
+                            <option value="article">글</option>
+                            <option value="other">기타</option>
+                          </select>
+                        </label>
+                      )}
+                      <p>
+                        기간과 첫 번째 내용은 필요합니다. 내용은 한글·영문 중
+                        한쪽만 먼저 입력해도 됩니다.
+                      </p>
+                      <div className="admin-actions">
+                        <button type="submit" disabled={busy || conflict}>
+                          {busy ? "저장 중…" : "기록 저장"}
+                        </button>
+                        <button
+                          type="button"
+                          disabled={busy}
+                          onClick={() => {
+                            setEdit(null);
+                            setConflict(false);
+                          }}
+                        >
+                          입력 취소
+                        </button>
+                      </div>
+                    </fieldset>
+                  </form>
                 )}
+              </section>
+            );
+          })}
+          <details>
+            <summary>삭제한 기록 · {data.deleted.length}개</summary>
+            <p>
+              복구한 기록은 해당 항목의 끝에 놓입니다. 복구 후 순서를 조정할 수
+              있습니다.
+            </p>
+            {data.deleted.map(({ section, row }) => (
+              <div className="cv-record" key={section + row.id}>
+                <span>
+                  {cvLabels[section]?.[0]} · {row.year} ·{" "}
+                  {row.title || row.description || row.name || row.program}
+                </span>
+                <button
+                  disabled={!canEdit}
+                  onClick={() =>
+                    send({ action: "restore", section, id: row.id })
+                  }
+                >
+                  복구
+                </button>
               </div>
             ))}
-          </section>
-        );
-      })}
+          </details>
+        </>
+      )}
     </section>
   );
 }

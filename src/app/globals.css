@@ -1654,3 +1654,15 @@ body {
   .statistics-period button { padding: 8px 10px; font-size: 13px; }
   .visitor-statistics figcaption span { display: block; margin: 8px 0; }
 }
+
+/* CV records share one editor; controls stay usable on narrow screens. */
+.cv-editor > p { margin: 12px 0; }
+.cv-editor .cv-record { display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:12px; padding:14px 0; border-bottom:1px solid #ddd; }
+.cv-editor .cv-record > span { flex:1; min-width:180px; overflow-wrap:anywhere; }
+.cv-editor .cv-record-form { padding:20px; border:1px solid #ccc; margin:20px 0; background:#fff; }
+.cv-editor .cv-record-form textarea, .cv-editor .cv-record-form input, .cv-editor select { width:100%; box-sizing:border-box; padding:10px; background:#fff; border:1px solid #bbb; color:#191919; }
+.cv-editor .cv-record-form .admin-field { margin:12px 0; }
+.cv-editor .cv-warning { padding:16px; border:1px solid #888; margin:16px 0; }
+.cv-editor .cv-warning button { margin:8px; }
+.cv-editor button { min-height:44px; }
+.cv-editor .cv-message { white-space:pre-wrap; }

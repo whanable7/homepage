@@ -178,7 +178,7 @@ export interface AboutFormData {
   bio_paragraphs_en?: string[];
   footer_bio?: string;
   footer_bio_en?: string;
-  education: EducationItem[];
+  education?: EducationItem[];
   // CV 출생지/거주지
   birth_city?: string;
   birth_city_en?: string;

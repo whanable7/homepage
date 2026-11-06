@@ -1,3 +1,4 @@
+import { cvAboutKeys } from "@/lib/cv-editor";
 import { readPublicContent, mutateContent } from "@/lib/public-content";
 import { NextRequest, NextResponse } from "next/server";
 import { isAuthenticated } from "@/lib/auth";
@@ -22,6 +23,16 @@ export async function PUT(request: NextRequest) {
     const body = await request.json(),
       revision = body._revision;
     delete body._revision;
+    if (cvAboutKeys.some((key) => key in body))
+      return NextResponse.json(
+        { error: "CV 기록은 새 CV 관리 화면에서 저장해 주세요." },
+        { status: 409 },
+      );
+    if (typeof revision !== "string")
+      return NextResponse.json(
+        { error: "최신 작가소개 화면을 다시 불러와 주세요." },
+        { status: 409 },
+      );
     const updated = await mutateContent(
       "about",
       {},
